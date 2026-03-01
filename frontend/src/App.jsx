@@ -1,15 +1,72 @@
 import { useEffect, useState } from "react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const ROLES = ["citizen", "volunteer", "admin"];
+const ROLES = ["District Admin", "Rural User", "Panchayat Officer"];
+
+const ROLE_PAGES = {
+  "District Admin": {
+    title: "District Admin Command Center",
+    tagline: "Monitor district-level performance, priorities, and escalations.",
+    capabilities: [
+      {
+        heading: "Scheme Oversight",
+        body: "Review implementation status across multiple panchayats and track target completion.",
+      },
+      {
+        heading: "Resource Allocation",
+        body: "Prioritize funds and field teams using visible metrics and current service demand.",
+      },
+      {
+        heading: "Issue Escalation",
+        body: "Identify critical bottlenecks and push resolution workflows with clear accountability.",
+      },
+    ],
+  },
+  "Rural User": {
+    title: "Rural User Home",
+    tagline: "Access village services, updates, and announcements in one place.",
+    capabilities: [
+      {
+        heading: "Service Discovery",
+        body: "Find active schemes, eligibility details, and nearby service points quickly.",
+      },
+      {
+        heading: "Local Updates",
+        body: "Stay informed on panchayat notices, health camps, and welfare timelines.",
+      },
+      {
+        heading: "Simple Participation",
+        body: "Share local concerns and follow updates for requests raised in your community.",
+      },
+    ],
+  },
+  "Panchayat Officer": {
+    title: "Panchayat Officer Workspace",
+    tagline: "Plan local execution and keep communities informed with reliable updates.",
+    capabilities: [
+      {
+        heading: "Village Planning",
+        body: "Track local priorities and organize initiatives aligned to district goals.",
+      },
+      {
+        heading: "Public Communication",
+        body: "Publish timely and clear announcements for citizens with a consistent format.",
+      },
+      {
+        heading: "Program Tracking",
+        body: "Maintain activity status and progress snapshots for transparent governance.",
+      },
+    ],
+  },
+};
 
 function App() {
   const [mode, setMode] = useState("login");
   const [form, setForm] = useState({
     name: "",
-    email: "",
+    login_id: "",
     password: "",
-    role: "citizen",
+    role: "District Admin",
   });
   const [authUser, setAuthUser] = useState(null);
   const [health, setHealth] = useState(null);
@@ -50,7 +107,7 @@ function App() {
       const payload =
         mode === "register"
           ? form
-          : { email: form.email, password: form.password, role: form.role };
+          : { login_id: form.login_id, password: form.password, role: form.role };
 
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: "POST",
@@ -85,72 +142,29 @@ function App() {
   }
 
   if (authUser) {
+    const pageConfig = ROLE_PAGES[authUser.role] ?? ROLE_PAGES["Rural User"];
+
     return (
       <div className="page">
         <div className="bg-orb orb-1" />
         <div className="bg-orb orb-2" />
         <main className="card">
-          <p className="kicker">GramSaarthi Home</p>
-          <h1>Welcome, {authUser.name}</h1>
-          <p className="tagline">
-            Signed in as <strong>{authUser.role}</strong>
-          </p>
+          <p className="kicker">{authUser.role}</p>
+          <h1>{pageConfig.title}</h1>
+          <p className="tagline">{pageConfig.tagline}</p>
           <p className="description">
-            GramSaarthi brings governance communication, service visibility, and
-            village-level program awareness into one simple public platform.
+            Welcome, {authUser.name}. Your login ID is {authUser.login_id}.
           </p>
 
           <section className="section">
-            <h2>Why GramSaarthi</h2>
-            <p>
-              Citizens, volunteers, and administrators can access a consistent
-              digital space to understand local initiatives, priorities, and
-              public service updates.
-            </p>
-          </section>
-
-          <section className="section">
-            <h2>Core Capabilities</h2>
+            <h2>Role Capabilities</h2>
             <div className="grid">
-              <article className="tile">
-                <h3>Service Clarity</h3>
-                <p>
-                  Present schemes, initiatives, and announcements in clear,
-                  structured language for faster community adoption.
-                </p>
-              </article>
-              <article className="tile">
-                <h3>Data-Backed Planning</h3>
-                <p>
-                  Build a foundation for tracking local priorities and measuring
-                  outcomes for village-level governance.
-                </p>
-              </article>
-              <article className="tile">
-                <h3>Public Trust Interface</h3>
-                <p>
-                  Improve transparency through a modern portal available anytime
-                  for public communication and updates.
-                </p>
-              </article>
-            </div>
-          </section>
-
-          <section className="section">
-            <h2>Expected Impact</h2>
-            <div className="metric-row">
-              <div className="metric">
-                <strong>24x7</strong>
-                <span>Public availability</span>
-              </div>
-              <div className="metric">
-                <strong>Single</strong>
-                <span>Source of communication</span>
-              </div>
-              <div className="metric">
-                <strong>Faster</strong>
-                <span>Citizen information access</span>
-              </div>
+              {pageConfig.capabilities.map((item) => (
+                <article className="tile" key={item.heading}>
+                  <h3>{item.heading}</h3>
+                  <p>{item.body}</p>
+                </article>
+              ))}
             </div>
           </section>
 
@@ -174,6 +188,7 @@ function App() {
       <main className="card">
         <p className="kicker">GramSaarthi Access</p>
         <h1>Be a part of the change</h1>
+        <p className="tagline">Register and login with role-specific access.</p>
 
         <div className="auth-tabs">
           <button
@@ -206,11 +221,11 @@ function App() {
           ) : null}
 
           <label>
-            Email
+            Login ID (Email)
             <input
               type="email"
-              value={form.email}
-              onChange={(e) => updateField("email", e.target.value)}
+              value={form.login_id}
+              onChange={(e) => updateField("login_id", e.target.value)}
               required
             />
           </label>
@@ -253,16 +268,6 @@ function App() {
           <span>Backend Status</span>
           <strong>{health?.status ?? "checking"}</strong>
         </div>
-
-        {authUser ? (
-          <div className="user-box">
-            <strong>Current User</strong>
-            <p>
-              {authUser.name} ({authUser.role})
-            </p>
-            <small>{authUser.email}</small>
-          </div>
-        ) : null}
 
         {success ? <p className="success">{success}</p> : null}
         {error ? <p className="error">{error}</p> : null}

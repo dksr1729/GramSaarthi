@@ -7,6 +7,10 @@ class Settings(BaseSettings):
     app_name: str = "GramSaarthi API"
     api_v1_prefix: str = "/api"
     allowed_origins: str = "http://localhost:5173"
+    aws_region: str = "ap-south-1"
+    dynamodb_users_table: str = "gramsaarthi_users"
+    dynamodb_users_pk_name: str = "role"
+    dynamodb_users_sk_name: str = "login_id"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
