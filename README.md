@@ -122,6 +122,12 @@ Now your app is public at your EC2 public IP/domain.
 - `APP_NAME` API title
 - `API_V1_PREFIX` API prefix (default `/api`)
 - `ALLOWED_ORIGINS` comma-separated list of frontend origins
+- `BEDROCK_EMBEDDING_MODEL_ID` embedding model for vector ingestion
+- `AOSS_ENDPOINT` OpenSearch Serverless endpoint
+- `AOSS_INDEX_NAME` index name for chunk documents
+- `AOSS_VECTOR_FIELD` vector field name (default `embedding`)
+- `INGESTION_CHUNK_SIZE` chunk size in characters
+- `INGESTION_CHUNK_OVERLAP` overlap between chunks
 
 ### Frontend (`frontend/.env`)
 - `VITE_API_BASE_URL` API base URL. Recommended: `/api` (works locally via Vite proxy and in prod via Nginx).
@@ -156,10 +162,13 @@ Update `backend/.env`:
 - `BEDROCK_INFERENCE_PROFILE_ID=<inference-profile-id-or-arn>`
 - `BEDROCK_MAX_TOKENS=512`
 - `BEDROCK_TEMPERATURE=0.2`
+- `RAG_TOP_K=6`
+- `RAG_MAX_CONTEXT_CHARS=6000`
 
 Important:
 - If Bedrock returns `on-demand throughput isn’t supported`, you must use an inference profile.
 - In that case, keep `BEDROCK_NOVA_MODEL_ID` as fallback and set `BEDROCK_INFERENCE_PROFILE_ID` to the exact profile ID/ARN from Bedrock Console.
+- Chat now supports optional filter key/value pairs. Matching chunks are retrieved from AOSS and passed as RAG context to the model.
 
 ### C. Attach IAM permissions to the backend runtime role/user
 The backend identity (EC2 instance profile or IAM user) needs:
@@ -188,6 +197,21 @@ curl -N -X POST http://127.0.0.1:8000/api/chat/stream \\
   }'
 ```
 You should receive `data: {...}` streaming chunks.
+
+## 6.2) District Admin PDF Ingestion to AOSS
+
+The backend exposes:
+- `POST /api/ingestion/pdf`
+
+Rules:
+- Only `District Admin` can ingest.
+- Upload `file` as PDF.
+- Optional `filters` as JSON key/value object, max 5 keys.
+
+Frontend:
+- District Admin dashboard includes file upload.
+- After file selection, use **Add Filter** to add metadata tags.
+- Tags are attached to every chunk indexed in AOSS.
 
 ## 7) GitHub Actions CI/CD to EC2 (Auto Deploy on `main`)
 

@@ -10,6 +10,7 @@ const hasUnsafeApiHost =
   rawApiBaseUrl.includes("0.0.0.0");
 const API_BASE_URL = !rawApiBaseUrl || (!isLocalHost && hasUnsafeApiHost) ? "/api" : rawApiBaseUrl;
 const ROLES = ["District Admin", "Rural User", "Panchayat Officer"];
+const MAX_FILTERS = 5;
 
 const ROLE_PAGES = {
   "District Admin": {
@@ -89,6 +90,16 @@ function App() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatError, setChatError] = useState("");
+  const [showChatFilters, setShowChatFilters] = useState(false);
+  const [chatFilters, setChatFilters] = useState([]);
+
+  const [uploadFile, setUploadFile] = useState(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [uploadSuccess, setUploadSuccess] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [metadataFilters, setMetadataFilters] = useState([]);
+
   const chatEndRef = useRef(null);
 
   const pageConfig = useMemo(() => {
@@ -98,14 +109,29 @@ function App() {
     return ROLE_PAGES[authUser.role] ?? ROLE_PAGES["Rural User"];
   }, [authUser]);
 
+  async function parseApiResponse(response) {
+    const contentType = response.headers.get("content-type") || "";
+    const rawText = await response.text();
+
+    if (contentType.includes("application/json")) {
+      try {
+        return rawText ? JSON.parse(rawText) : {};
+      } catch {
+        return { detail: "Invalid JSON returned by server." };
+      }
+    }
+
+    return { detail: rawText || "Non-JSON response returned by server." };
+  }
+
   useEffect(() => {
     async function loadHealth() {
       try {
         const healthRes = await fetch(`${API_BASE_URL}/health`);
+        const healthData = await parseApiResponse(healthRes);
         if (!healthRes.ok) {
-          throw new Error("Unable to fetch backend data");
+          throw new Error(healthData.detail || "Unable to fetch backend data");
         }
-        const healthData = await healthRes.json();
         setHealth(healthData);
       } catch (err) {
         setHealth({ status: "failed" });
@@ -125,6 +151,13 @@ function App() {
       setChatMessages([]);
       setChatInput("");
       setChatError("");
+      setShowChatFilters(false);
+      setChatFilters([]);
+      setUploadFile(null);
+      setUploadError("");
+      setUploadSuccess("");
+      setShowFilters(false);
+      setMetadataFilters([]);
       return;
     }
 
@@ -141,10 +174,106 @@ function App() {
     ]);
     setChatInput("");
     setChatError("");
+    setShowChatFilters(false);
+    setChatFilters([]);
+    setUploadFile(null);
+    setUploadError("");
+    setUploadSuccess("");
+    setShowFilters(false);
+    setMetadataFilters([]);
   }, [authUser]);
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function updateFilterRow(index, field, value) {
+    setMetadataFilters((prev) =>
+      prev.map((item, rowIndex) => (rowIndex === index ? { ...item, [field]: value } : item)),
+    );
+  }
+
+  function addFilterRow() {
+    setMetadataFilters((prev) =>
+      prev.length >= MAX_FILTERS ? prev : [...prev, { key: "", value: "" }],
+    );
+  }
+
+  function removeFilterRow(index) {
+    setMetadataFilters((prev) => prev.filter((_, rowIndex) => rowIndex !== index));
+  }
+
+  function buildFilterPayload() {
+    const payload = {};
+
+    for (const pair of metadataFilters) {
+      const key = pair.key.trim();
+      const value = pair.value.trim();
+
+      if (!key && !value) {
+        continue;
+      }
+
+      if (!key || !value) {
+        throw new Error("For filters, both key and value are required.");
+      }
+
+      payload[key] = value;
+    }
+
+    return payload;
+  }
+
+  function buildBedrockSafeHistory(messages) {
+    const normalized = messages
+      .slice(-8)
+      .map((item) => ({
+        role: item.sender === "assistant" ? "assistant" : "user",
+        content: item.text,
+      }))
+      .filter((item) => item.content && item.content.trim().length > 0);
+
+    const firstUserIndex = normalized.findIndex((item) => item.role === "user");
+    if (firstUserIndex === -1) {
+      return [];
+    }
+
+    return normalized.slice(firstUserIndex);
+  }
+
+  function updateChatFilterRow(index, field, value) {
+    setChatFilters((prev) =>
+      prev.map((item, rowIndex) => (rowIndex === index ? { ...item, [field]: value } : item)),
+    );
+  }
+
+  function addChatFilterRow() {
+    setChatFilters((prev) =>
+      prev.length >= MAX_FILTERS ? prev : [...prev, { key: "", value: "" }],
+    );
+  }
+
+  function removeChatFilterRow(index) {
+    setChatFilters((prev) => prev.filter((_, rowIndex) => rowIndex !== index));
+  }
+
+  function buildChatFilterPayload() {
+    const payload = {};
+    for (const pair of chatFilters) {
+      const key = pair.key.trim();
+      const value = pair.value.trim();
+
+      if (!key && !value) {
+        continue;
+      }
+
+      if (!key || !value) {
+        throw new Error("For chat filters, both key and value are required.");
+      }
+
+      payload[key] = value;
+    }
+    return payload;
   }
 
   async function handleSubmit(event) {
@@ -165,7 +294,7 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const data = await response.json();
+      const data = await parseApiResponse(response);
 
       if (!response.ok) {
         throw new Error(data.detail || "Authentication failed");
@@ -208,6 +337,7 @@ function App() {
     setIsStreaming(true);
 
     try {
+      const ragFilters = buildChatFilterPayload();
       const response = await fetch(`${API_BASE_URL}/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -215,22 +345,14 @@ function App() {
           role: authUser.role,
           name: authUser.name,
           message,
-          history: chatMessages.slice(-8).map((item) => ({
-            role: item.sender === "assistant" ? "assistant" : "user",
-            content: item.text,
-          })),
+          history: buildBedrockSafeHistory(chatMessages),
+          rag_filters: ragFilters,
         }),
       });
 
       if (!response.ok || !response.body) {
-        let detail = "Unable to connect to chatbot service";
-        try {
-          const data = await response.json();
-          detail = data.detail || detail;
-        } catch {
-          // Ignore parsing errors and use default message.
-        }
-        throw new Error(detail);
+        const data = await parseApiResponse(response);
+        throw new Error(data.detail || "Unable to connect to chatbot service");
       }
 
       const reader = response.body.getReader();
@@ -295,11 +417,61 @@ function App() {
     }
   }
 
+  async function handlePdfIngestion(event) {
+    event.preventDefault();
+
+    if (!authUser || authUser.role !== "District Admin") {
+      return;
+    }
+
+    if (!uploadFile) {
+      setUploadError("Please select a PDF file to upload.");
+      setUploadSuccess("");
+      return;
+    }
+
+    setUploadError("");
+    setUploadSuccess("");
+    setUploadLoading(true);
+
+    try {
+      const filterPayload = buildFilterPayload();
+      const formData = new FormData();
+      formData.append("role", authUser.role);
+      formData.append("name", authUser.name);
+      formData.append("file", uploadFile);
+      formData.append("filters", JSON.stringify(filterPayload));
+
+      const response = await fetch(`${API_BASE_URL}/ingestion/pdf`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await parseApiResponse(response);
+      if (!response.ok) {
+        throw new Error(data.detail || "PDF ingestion failed");
+      }
+
+      setUploadSuccess(
+        `${data.message}. Indexed ${data.chunks_indexed} chunks into ${data.index_name}.`,
+      );
+      setUploadFile(null);
+      setShowFilters(false);
+      setMetadataFilters([]);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "PDF ingestion failed");
+    } finally {
+      setUploadLoading(false);
+    }
+  }
+
   function handleLogout() {
     setAuthUser(null);
     setSuccess("");
     setError("");
     setChatError("");
+    setUploadError("");
+    setUploadSuccess("");
     setChatMessages([]);
     setIsStreaming(false);
     setForm((prev) => ({ ...prev, password: "" }));
@@ -321,6 +493,96 @@ function App() {
             </p>
 
             <section className="section">
+              {authUser.role === "District Admin" ? (
+                <article className="ingestion-card">
+                  <h2>Document Ingestion (AOSS)</h2>
+                  <p className="ingestion-help">
+                    Upload a PDF. Then use Add Filter to attach up to 5 metadata tags.
+                  </p>
+
+                  <form className="ingestion-form" onSubmit={handlePdfIngestion}>
+                    <label>
+                      PDF File
+                      <input
+                        type="file"
+                        accept="application/pdf,.pdf"
+                        onChange={(event) => {
+                          const selected = event.target.files?.[0] ?? null;
+                          setUploadFile(selected);
+                          setShowFilters(false);
+                          setMetadataFilters([]);
+                        }}
+                        required
+                      />
+                    </label>
+
+                    {uploadFile ? (
+                      <button
+                        className="add-filter-btn"
+                        type="button"
+                        onClick={() => {
+                          setShowFilters(true);
+                          if (!metadataFilters.length) {
+                            setMetadataFilters([{ key: "", value: "" }]);
+                          }
+                        }}
+                      >
+                        Add Filter
+                      </button>
+                    ) : null}
+
+                    {showFilters ? (
+                      <div className="filters-block">
+                        <div className="filters-head">
+                          <h3>Metadata Filters (Optional)</h3>
+                          <button
+                            className="add-filter-btn"
+                            type="button"
+                            onClick={addFilterRow}
+                            disabled={metadataFilters.length >= MAX_FILTERS}
+                          >
+                            Add Another
+                          </button>
+                        </div>
+
+                        <div className="filters-grid">
+                          {metadataFilters.map((pair, index) => (
+                            <div className="filter-row" key={`filter-${index}`}>
+                              <input
+                                type="text"
+                                placeholder="key"
+                                value={pair.key}
+                                onChange={(event) => updateFilterRow(index, "key", event.target.value)}
+                              />
+                              <input
+                                type="text"
+                                placeholder="value"
+                                value={pair.value}
+                                onChange={(event) => updateFilterRow(index, "value", event.target.value)}
+                              />
+                              <button
+                                className="remove-filter-btn"
+                                type="button"
+                                onClick={() => removeFilterRow(index)}
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    <button className="submit-btn" type="submit" disabled={uploadLoading}>
+                      {uploadLoading ? "Uploading..." : "Upload and Ingest"}
+                    </button>
+                  </form>
+
+                  {uploadSuccess ? <p className="success upload-status">{uploadSuccess}</p> : null}
+                  {uploadError ? <p className="error upload-status">{uploadError}</p> : null}
+                </article>
+              ) : null}
+
               <h2>Role Capabilities</h2>
               <div className="grid">
                 {pageConfig.capabilities.map((item) => (
@@ -351,6 +613,60 @@ function App() {
               <span className={isStreaming ? "streaming-pill active" : "streaming-pill"}>
                 {isStreaming ? "Streaming" : "Idle"}
               </span>
+            </div>
+
+            <div className="chat-filter-box">
+              <div className="chat-filter-head">
+                <h3>RAG Filters (Optional)</h3>
+                <button
+                  className="add-filter-btn"
+                  type="button"
+                  onClick={() => {
+                    setShowChatFilters(true);
+                    if (!chatFilters.length) {
+                      setChatFilters([{ key: "", value: "" }]);
+                    }
+                  }}
+                >
+                  Add Filter
+                </button>
+              </div>
+
+              {showChatFilters ? (
+                <div className="filters-grid">
+                  {chatFilters.map((pair, index) => (
+                    <div className="filter-row" key={`chat-filter-${index}`}>
+                      <input
+                        type="text"
+                        placeholder="key"
+                        value={pair.key}
+                        onChange={(event) => updateChatFilterRow(index, "key", event.target.value)}
+                      />
+                      <input
+                        type="text"
+                        placeholder="value"
+                        value={pair.value}
+                        onChange={(event) => updateChatFilterRow(index, "value", event.target.value)}
+                      />
+                      <button
+                        className="remove-filter-btn"
+                        type="button"
+                        onClick={() => removeChatFilterRow(index)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    className="add-filter-btn"
+                    type="button"
+                    onClick={addChatFilterRow}
+                    disabled={chatFilters.length >= MAX_FILTERS}
+                  >
+                    Add Another
+                  </button>
+                </div>
+              ) : null}
             </div>
 
             <div className="chat-stream" role="log" aria-live="polite">
@@ -462,8 +778,8 @@ function App() {
             {loading
               ? "Please wait..."
               : mode === "register"
-              ? "Create account"
-              : "Login"}
+                ? "Create account"
+                : "Login"}
           </button>
         </form>
 

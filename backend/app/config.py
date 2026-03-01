@@ -15,6 +15,14 @@ class Settings(BaseSettings):
     bedrock_inference_profile_id: str = ""
     bedrock_max_tokens: int = 512
     bedrock_temperature: float = 0.2
+    bedrock_embedding_model_id: str = "amazon.titan-embed-text-v2:0"
+    aoss_endpoint: str = ""
+    aoss_index_name: str = "gramsaarthi_chunks"
+    aoss_vector_field: str = "embedding"
+    ingestion_chunk_size: int = 1200
+    ingestion_chunk_overlap: int = 200
+    rag_top_k: int = 6
+    rag_max_context_chars: int = 6000
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
