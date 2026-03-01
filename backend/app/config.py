@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     dynamodb_users_pk_name: str = "role"
     dynamodb_users_sk_name: str = "login_id"
     bedrock_nova_model_id: str = "amazon.nova-lite-v1:0"
+    bedrock_inference_profile_id: str = ""
     bedrock_max_tokens: int = 512
     bedrock_temperature: float = 0.2
 
@@ -20,6 +21,11 @@ class Settings(BaseSettings):
     @property
     def cors_origins(self) -> list[str]:
         return [origin.strip() for origin in self.allowed_origins.split(",") if origin.strip()]
+
+    @property
+    def bedrock_model_identifier(self) -> str:
+        profile_id = self.bedrock_inference_profile_id.strip()
+        return profile_id if profile_id else self.bedrock_nova_model_id
 
 
 @lru_cache(maxsize=1)

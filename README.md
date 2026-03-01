@@ -154,8 +154,13 @@ The backend now exposes a streaming chatbot endpoint:
 Update `backend/.env`:
 - `AWS_REGION=ap-south-1`
 - `BEDROCK_NOVA_MODEL_ID=amazon.nova-lite-v1:0`
+- `BEDROCK_INFERENCE_PROFILE_ID=<inference-profile-id-or-arn>`
 - `BEDROCK_MAX_TOKENS=512`
 - `BEDROCK_TEMPERATURE=0.2`
+
+Important:
+- If Bedrock returns `on-demand throughput isn’t supported`, you must use an inference profile.
+- In that case, keep `BEDROCK_NOVA_MODEL_ID` as fallback and set `BEDROCK_INFERENCE_PROFILE_ID` to the exact profile ID/ARN from Bedrock Console.
 
 ### C. Attach IAM permissions to the backend runtime role/user
 The backend identity (EC2 instance profile or IAM user) needs:
@@ -163,6 +168,7 @@ The backend identity (EC2 instance profile or IAM user) needs:
 - `bedrock:InvokeModelWithResponseStream`
 
 Resource can be restricted to the selected Nova model ARN in your region.
+If using inference profile, allow the corresponding profile resource as well.
 
 ### D. Verify credentials on server
 Use one of:

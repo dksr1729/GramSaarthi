@@ -198,7 +198,7 @@ def stream_chat(payload: ChatRequest) -> StreamingResponse:
         try:
             client = _get_bedrock_runtime_client()
             response = client.converse_stream(
-                modelId=settings.bedrock_nova_model_id,
+                modelId=settings.bedrock_model_identifier,
                 system=[{"text": system_prompt}],
                 messages=messages,
                 inferenceConfig={
