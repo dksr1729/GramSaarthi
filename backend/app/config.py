@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     dynamodb_users_table: str = "gramsaarthi_users"
     dynamodb_users_pk_name: str = "role"
     dynamodb_users_sk_name: str = "login_id"
+    bedrock_nova_model_id: str = "amazon.nova-lite-v1:0"
+    bedrock_max_tokens: int = 512
+    bedrock_temperature: float = 0.2
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

@@ -139,6 +139,51 @@ curl http://127.0.0.1:8000/api/branding
 - Restrict AWS security group ports (80/443 public, SSH limited)
 - Add structured logging and monitoring
 
+## 6.1) Configure AWS Bedrock Nova Chatbot Backend
+
+The backend now exposes a streaming chatbot endpoint:
+- `POST /api/chat/stream` (SSE response)
+
+### A. Enable Bedrock model access
+1. In AWS Console, open **Amazon Bedrock** in your target region (for example `ap-south-1`).
+2. Go to **Model access** and request access to a Nova model:
+   - `amazon.nova-lite-v1:0` (default in this repo), or another Nova model.
+3. Wait until access is approved in that region.
+
+### B. Set backend environment variables
+Update `backend/.env`:
+- `AWS_REGION=ap-south-1`
+- `BEDROCK_NOVA_MODEL_ID=amazon.nova-lite-v1:0`
+- `BEDROCK_MAX_TOKENS=512`
+- `BEDROCK_TEMPERATURE=0.2`
+
+### C. Attach IAM permissions to the backend runtime role/user
+The backend identity (EC2 instance profile or IAM user) needs:
+- `bedrock:InvokeModel`
+- `bedrock:InvokeModelWithResponseStream`
+
+Resource can be restricted to the selected Nova model ARN in your region.
+
+### D. Verify credentials on server
+Use one of:
+- EC2 Instance Profile (recommended for EC2 deployment)
+- `~/.aws/credentials`
+- environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, optional `AWS_SESSION_TOKEN`)
+
+### E. Restart backend and test
+```bash
+sudo systemctl restart gramsaarthi-backend
+curl -N -X POST http://127.0.0.1:8000/api/chat/stream \\
+  -H \"Content-Type: application/json\" \\
+  -d '{
+    "role":"Rural User",
+    "name":"Test User",
+    "message":"Tell me one scheme update summary.",
+    "history":[]
+  }'
+```
+You should receive `data: {...}` streaming chunks.
+
 ## 7) GitHub Actions CI/CD to EC2 (Auto Deploy on `main`)
 
 This repo includes:
