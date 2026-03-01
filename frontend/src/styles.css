@@ -92,6 +92,71 @@ h1 {
   max-width: 60ch;
 }
 
+.auth-tabs {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.tab {
+  border: 1px solid #8cd8ce;
+  background: #eefaf8;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #1f4a63;
+}
+
+.tab.active {
+  background: #0f766e;
+  color: #ffffff;
+  border-color: #0f766e;
+}
+
+.auth-form {
+  margin-top: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.92rem;
+  color: #27415e;
+}
+
+.auth-form input,
+.auth-form select {
+  border: 1px solid #b8cfe0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: inherit;
+  background: #ffffff;
+}
+
+.submit-btn {
+  margin-top: 4px;
+  border: 0;
+  border-radius: 10px;
+  background: #0f766e;
+  color: #fff;
+  padding: 11px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.logout-btn {
+  margin-top: 16px;
+}
+
 .section {
   margin-top: 22px;
 }
@@ -176,6 +241,24 @@ h1 {
   margin: 14px 0 2px;
   color: #4b617b;
   font-size: 0.9rem;
+}
+
+.user-box {
+  margin-top: 16px;
+  border: 1px solid #9ddccf;
+  border-radius: 12px;
+  background: #effaf8;
+  padding: 10px 12px;
+}
+
+.user-box p,
+.user-box small {
+  margin: 4px 0 0;
+}
+
+.success {
+  color: #056b5a;
+  margin-top: 12px;
 }
 
 .error {
