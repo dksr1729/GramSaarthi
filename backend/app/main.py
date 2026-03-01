@@ -82,7 +82,7 @@ def register_user(payload: RegisterRequest) -> dict[str, str]:
     try:
         existing_user = users_table.get_item(Key=key)
     except (ClientError, BotoCoreError) as exc:
-        raise HTTPException(status_code=500, detail="Unable to read users table") from exc
+        raise HTTPException(status_code=500, detail=f"Unable to read users table: {exc}") from exc
 
     if existing_user.get("Item") is not None:
         raise HTTPException(status_code=409, detail="Login ID already registered for this role")
