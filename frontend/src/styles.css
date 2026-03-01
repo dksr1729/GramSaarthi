@@ -1,0 +1,142 @@
+:root {
+  --bg-top: #ecf7ff;
+  --bg-bottom: #f8f2e8;
+  --ink: #1a2333;
+  --muted: #46566c;
+  --accent: #0f766e;
+  --accent-soft: #def4f1;
+  --card: rgba(255, 255, 255, 0.78);
+  --card-border: rgba(15, 118, 110, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", "Trebuchet MS", "Helvetica Neue", sans-serif;
+  color: var(--ink);
+  background: linear-gradient(145deg, var(--bg-top), var(--bg-bottom));
+}
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(1px);
+  opacity: 0.55;
+  animation: drift 8s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 280px;
+  height: 280px;
+  top: -40px;
+  left: -20px;
+  background: radial-gradient(circle, #ffd89f 0%, #f4b860 70%, #f4b86000 100%);
+}
+
+.orb-2 {
+  width: 320px;
+  height: 320px;
+  right: -70px;
+  bottom: -70px;
+  background: radial-gradient(circle, #93e8de 0%, #55c9ba 68%, #55c9ba00 100%);
+  animation-delay: 1s;
+}
+
+.card {
+  width: min(760px, 100%);
+  backdrop-filter: blur(10px);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(27, 43, 67, 0.1);
+  animation: riseIn 700ms ease-out;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+}
+
+h1 {
+  margin: 8px 0 6px;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.tagline {
+  margin: 0;
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  color: var(--muted);
+}
+
+.description {
+  margin-top: 14px;
+  line-height: 1.7;
+  max-width: 60ch;
+}
+
+.status-box {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid #9ddccf;
+  padding: 9px 14px;
+  font-size: 0.95rem;
+}
+
+.error {
+  color: #af1d38;
+  margin-top: 16px;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 22px;
+    border-radius: 16px;
+  }
+
+  .description {
+    font-size: 0.97rem;
+  }
+}
