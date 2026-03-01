@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const ROLES = ["District Admin", "Rural User", "Panchayat Officer"];
@@ -21,6 +21,7 @@ const ROLE_PAGES = {
         body: "Identify critical bottlenecks and push resolution workflows with clear accountability.",
       },
     ],
+    promptHint: "Ask me for district-level summaries, bottlenecks, and priority actions.",
   },
   "Rural User": {
     title: "Rural User Home",
@@ -39,6 +40,7 @@ const ROLE_PAGES = {
         body: "Share local concerns and follow updates for requests raised in your community.",
       },
     ],
+    promptHint: "Ask me about schemes, eligibility, and local announcements in simple language.",
   },
   "Panchayat Officer": {
     title: "Panchayat Officer Workspace",
@@ -57,6 +59,7 @@ const ROLE_PAGES = {
         body: "Maintain activity status and progress snapshots for transparent governance.",
       },
     ],
+    promptHint: "Ask me to draft notices, summarize field updates, and plan weekly actions.",
   },
 };
 
@@ -73,6 +76,19 @@ function App() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [chatInput, setChatInput] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatError, setChatError] = useState("");
+  const chatEndRef = useRef(null);
+
+  const pageConfig = useMemo(() => {
+    if (!authUser) {
+      return null;
+    }
+    return ROLE_PAGES[authUser.role] ?? ROLE_PAGES["Rural User"];
+  }, [authUser]);
 
   useEffect(() => {
     async function loadHealth() {
@@ -91,6 +107,33 @@ function App() {
 
     loadHealth();
   }, []);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages, isStreaming]);
+
+  useEffect(() => {
+    if (!authUser) {
+      setChatMessages([]);
+      setChatInput("");
+      setChatError("");
+      return;
+    }
+
+    const hint =
+      ROLE_PAGES[authUser.role]?.promptHint ??
+      "Ask me anything related to GramSaarthi workflows.";
+
+    setChatMessages([
+      {
+        id: `welcome-${Date.now()}`,
+        sender: "assistant",
+        text: `Hello ${authUser.name}. I am your GramSaarthi AI assistant. ${hint}`,
+      },
+    ]);
+    setChatInput("");
+    setChatError("");
+  }, [authUser]);
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -133,49 +176,204 @@ function App() {
     }
   }
 
+  async function handleChatSend(event) {
+    event.preventDefault();
+
+    const message = chatInput.trim();
+    if (!message || isStreaming || !authUser) {
+      return;
+    }
+
+    setChatError("");
+    setChatInput("");
+
+    const userMessageId = `user-${Date.now()}`;
+    const assistantMessageId = `assistant-${Date.now()}`;
+
+    const nextMessages = [
+      ...chatMessages,
+      { id: userMessageId, sender: "user", text: message },
+      { id: assistantMessageId, sender: "assistant", text: "" },
+    ];
+
+    setChatMessages(nextMessages);
+    setIsStreaming(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/chat/stream`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role: authUser.role,
+          name: authUser.name,
+          message,
+          history: chatMessages.slice(-8).map((item) => ({
+            role: item.sender === "assistant" ? "assistant" : "user",
+            content: item.text,
+          })),
+        }),
+      });
+
+      if (!response.ok || !response.body) {
+        let detail = "Unable to connect to chatbot service";
+        try {
+          const data = await response.json();
+          detail = data.detail || detail;
+        } catch {
+          // Ignore parsing errors and use default message.
+        }
+        throw new Error(detail);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const chunks = buffer.split("\n\n");
+        buffer = chunks.pop() || "";
+
+        for (const chunk of chunks) {
+          const line = chunk
+            .split("\n")
+            .find((entry) => entry.startsWith("data:"));
+          if (!line) {
+            continue;
+          }
+
+          const payloadText = line.slice(5).trim();
+          if (!payloadText) {
+            continue;
+          }
+
+          const packet = JSON.parse(payloadText);
+          if (packet.type === "delta") {
+            setChatMessages((prev) =>
+              prev.map((entry) =>
+                entry.id === assistantMessageId
+                  ? { ...entry, text: `${entry.text}${packet.text || ""}` }
+                  : entry,
+              ),
+            );
+          }
+
+          if (packet.type === "error") {
+            throw new Error(packet.message || "Chatbot streaming failed");
+          }
+        }
+      }
+    } catch (err) {
+      setChatMessages((prev) =>
+        prev.map((entry) =>
+          entry.id === assistantMessageId
+            ? {
+                ...entry,
+                text:
+                  entry.text ||
+                  "I could not generate a response. Please verify backend Bedrock configuration.",
+              }
+            : entry,
+        ),
+      );
+      setChatError(err instanceof Error ? err.message : "Streaming failed");
+    } finally {
+      setIsStreaming(false);
+    }
+  }
+
   function handleLogout() {
     setAuthUser(null);
     setSuccess("");
     setError("");
+    setChatError("");
+    setChatMessages([]);
+    setIsStreaming(false);
     setForm((prev) => ({ ...prev, password: "" }));
     setMode("login");
   }
 
-  if (authUser) {
-    const pageConfig = ROLE_PAGES[authUser.role] ?? ROLE_PAGES["Rural User"];
-
+  if (authUser && pageConfig) {
     return (
       <div className="page">
         <div className="bg-orb orb-1" />
         <div className="bg-orb orb-2" />
-        <main className="card">
-          <p className="kicker">{authUser.role}</p>
-          <h1>{pageConfig.title}</h1>
-          <p className="tagline">{pageConfig.tagline}</p>
-          <p className="description">
-            Welcome, {authUser.name}. Your login ID is {authUser.login_id}.
-          </p>
+        <main className="card app-shell">
+          <section className="left-pane">
+            <p className="kicker">{authUser.role}</p>
+            <h1>{pageConfig.title}</h1>
+            <p className="tagline">{pageConfig.tagline}</p>
+            <p className="description">
+              Welcome, {authUser.name}. Your login ID is {authUser.login_id}.
+            </p>
 
-          <section className="section">
-            <h2>Role Capabilities</h2>
-            <div className="grid">
-              {pageConfig.capabilities.map((item) => (
-                <article className="tile" key={item.heading}>
-                  <h3>{item.heading}</h3>
-                  <p>{item.body}</p>
-                </article>
-              ))}
+            <section className="section">
+              <h2>Role Capabilities</h2>
+              <div className="grid">
+                {pageConfig.capabilities.map((item) => (
+                  <article className="tile" key={item.heading}>
+                    <h3>{item.heading}</h3>
+                    <p>{item.body}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <div className="status-box">
+              <span>Backend Status</span>
+              <strong>{health?.status ?? "checking"}</strong>
             </div>
+
+            <button className="submit-btn logout-btn" onClick={handleLogout} type="button">
+              Logout
+            </button>
           </section>
 
-          <div className="status-box">
-            <span>Backend Status</span>
-            <strong>{health?.status ?? "checking"}</strong>
-          </div>
+          <section className="chat-shell" aria-label="AI chatbot panel">
+            <div className="chat-head">
+              <div>
+                <p className="chat-kicker">AI Chatbot</p>
+                <h2>Nova Assistant</h2>
+              </div>
+              <span className={isStreaming ? "streaming-pill active" : "streaming-pill"}>
+                {isStreaming ? "Streaming" : "Idle"}
+              </span>
+            </div>
 
-          <button className="submit-btn logout-btn" onClick={handleLogout} type="button">
-            Logout
-          </button>
+            <div className="chat-stream" role="log" aria-live="polite">
+              {chatMessages.map((message) => (
+                <article
+                  key={message.id}
+                  className={
+                    message.sender === "assistant" ? "bubble assistant-bubble" : "bubble user-bubble"
+                  }
+                >
+                  <p>{message.text || (isStreaming ? "Thinking..." : "")}</p>
+                </article>
+              ))}
+              <div ref={chatEndRef} />
+            </div>
+
+            {chatError ? <p className="error chat-error">{chatError}</p> : null}
+
+            <form className="chat-compose" onSubmit={handleChatSend}>
+              <input
+                type="text"
+                placeholder="Ask GramSaarthi AI anything..."
+                value={chatInput}
+                onChange={(event) => setChatInput(event.target.value)}
+                disabled={isStreaming}
+              />
+              <button className="submit-btn" disabled={isStreaming || !chatInput.trim()} type="submit">
+                {isStreaming ? "Receiving..." : "Send"}
+              </button>
+            </form>
+          </section>
         </main>
       </div>
     );
@@ -243,10 +441,7 @@ function App() {
 
           <label>
             Role
-            <select
-              value={form.role}
-              onChange={(e) => updateField("role", e.target.value)}
-            >
+            <select value={form.role} onChange={(e) => updateField("role", e.target.value)}>
               {ROLES.map((role) => (
                 <option key={role} value={role}>
                   {role}

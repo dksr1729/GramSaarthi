@@ -56,7 +56,7 @@ body {
 }
 
 .card {
-  width: min(760px, 100%);
+  width: min(1120px, 100%);
   backdrop-filter: blur(10px);
   background: var(--card);
   border: 1px solid var(--card-border);
@@ -64,6 +64,16 @@ body {
   padding: 28px;
   box-shadow: 0 10px 30px rgba(27, 43, 67, 0.1);
   animation: riseIn 700ms ease-out;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+  gap: 18px;
+}
+
+.left-pane {
+  min-width: 0;
 }
 
 .kicker {
@@ -129,7 +139,8 @@ h1 {
 }
 
 .auth-form input,
-.auth-form select {
+.auth-form select,
+.chat-compose input {
   border: 1px solid #b8cfe0;
   border-radius: 10px;
   padding: 10px 12px;
@@ -199,32 +210,6 @@ h1 {
   color: #38526f;
 }
 
-.metric-row {
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.metric {
-  border-radius: 12px;
-  background: var(--accent-soft);
-  border: 1px solid #9ddccf;
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.metric strong {
-  font-size: 1rem;
-}
-
-.metric span {
-  font-size: 0.82rem;
-  color: #32526a;
-}
-
 .status-box {
   margin-top: 18px;
   display: inline-flex;
@@ -237,25 +222,6 @@ h1 {
   font-size: 0.95rem;
 }
 
-.footnote {
-  margin: 14px 0 2px;
-  color: #4b617b;
-  font-size: 0.9rem;
-}
-
-.user-box {
-  margin-top: 16px;
-  border: 1px solid #9ddccf;
-  border-radius: 12px;
-  background: #effaf8;
-  padding: 10px 12px;
-}
-
-.user-box p,
-.user-box small {
-  margin: 4px 0 0;
-}
-
 .success {
   color: #056b5a;
   margin-top: 12px;
@@ -264,6 +230,104 @@ h1 {
 .error {
   color: #af1d38;
   margin-top: 16px;
+}
+
+.chat-shell {
+  border: 1px solid rgba(15, 118, 110, 0.22);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 14px;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  gap: 10px;
+  min-height: 620px;
+}
+
+.chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.chat-kicker {
+  margin: 0;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #2d6b63;
+  font-weight: 700;
+}
+
+.chat-head h2 {
+  margin: 4px 0 0;
+  font-size: 1.18rem;
+  color: #153747;
+}
+
+.streaming-pill {
+  font-size: 0.78rem;
+  border-radius: 999px;
+  padding: 5px 10px;
+  border: 1px solid #b8cfe0;
+  color: #27415e;
+  background: #f6fbff;
+}
+
+.streaming-pill.active {
+  border-color: #96d8cd;
+  background: #e9f9f5;
+  color: #0f766e;
+}
+
+.chat-stream {
+  border-radius: 12px;
+  border: 1px solid #dce9f2;
+  background: linear-gradient(180deg, #fcfefe, #f4faf9);
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bubble {
+  max-width: 88%;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.bubble p {
+  margin: 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.assistant-bubble {
+  align-self: flex-start;
+  background: #eef7ff;
+  border: 1px solid #cfe1f2;
+}
+
+.user-bubble {
+  align-self: flex-end;
+  background: #e7f8f4;
+  border: 1px solid #bde4dc;
+}
+
+.chat-compose {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.chat-compose .submit-btn {
+  margin-top: 0;
+}
+
+.chat-error {
+  margin: 0;
+  font-size: 0.88rem;
 }
 
 @keyframes riseIn {
@@ -287,6 +351,16 @@ h1 {
   }
 }
 
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-shell {
+    min-height: 520px;
+  }
+}
+
 @media (max-width: 640px) {
   .card {
     padding: 22px;
@@ -297,8 +371,11 @@ h1 {
     font-size: 0.97rem;
   }
 
-  .grid,
-  .metric-row {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-compose {
     grid-template-columns: 1fr;
   }
 }
