@@ -12,6 +12,8 @@ fi
 cd "$PROJECT_DIR"
 
 echo "[1/6] Sync source from origin/$BRANCH"
+# Required for non-interactive CI SSH sessions on EC2 where ownership checks can fail.
+git config --global --add safe.directory "$PROJECT_DIR"
 git fetch origin "$BRANCH"
 git checkout "$BRANCH"
 git reset --hard "origin/$BRANCH"
