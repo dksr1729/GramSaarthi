@@ -74,6 +74,10 @@ def _to_bedrock_messages(history: list[ChatHistoryItem], user_message: str) -> l
         if text:
             messages.append({"role": normalized_role, "content": [{"text": text}]})
 
+    # Bedrock Converse requires the conversation to start with a user message.
+    while messages and messages[0]["role"] != "user":
+        messages.pop(0)
+
     messages.append({"role": "user", "content": [{"text": user_message.strip()}]})
     return messages
 
@@ -195,10 +199,11 @@ def stream_chat(payload: ChatRequest) -> StreamingResponse:
     messages = _to_bedrock_messages(payload.history, payload.message)
 
     def event_stream():
+        selected_model_identifier = settings.bedrock_model_identifier
         try:
             client = _get_bedrock_runtime_client()
             response = client.converse_stream(
-                modelId=settings.bedrock_model_identifier,
+                modelId=selected_model_identifier,
                 system=[{"text": system_prompt}],
                 messages=messages,
                 inferenceConfig={
@@ -216,7 +221,13 @@ def stream_chat(payload: ChatRequest) -> StreamingResponse:
                 if "messageStop" in event:
                     yield "data: {\"type\": \"done\"}\n\n"
         except (ClientError, BotoCoreError) as exc:
-            payload = {"type": "error", "message": f"Bedrock request failed: {exc}"}
+            payload = {
+                "type": "error",
+                "message": (
+                    f"Bedrock request failed: {exc}. "
+                    f"region={settings.aws_region}, modelId={selected_model_identifier}"
+                ),
+            }
             yield f"data: {json.dumps(payload)}\n\n"
         except Exception as exc:  # pylint: disable=broad-exception-caught
             payload = {"type": "error", "message": f"Unexpected error: {exc}"}
