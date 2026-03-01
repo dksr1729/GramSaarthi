@@ -3,6 +3,8 @@
 
 # Env
 .env
+./frontend/.env
+./backend/.env
 .env.*
 !.env.example
 
