@@ -27,6 +27,7 @@ function App() {
         const healthData = await healthRes.json();
         setHealth(healthData);
       } catch (err) {
+        setHealth({ status: "failed" });
         setError(err instanceof Error ? err.message : "Something went wrong");
       }
     }
