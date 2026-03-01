@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
+const rawApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").trim();
+const isBrowser = typeof window !== "undefined";
+const isLocalHost =
+  isBrowser &&
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+const hasUnsafeApiHost =
+  /localhost|127\.0\.0\.1|:8000/.test(rawApiBaseUrl) ||
+  rawApiBaseUrl.includes("0.0.0.0");
+const API_BASE_URL = !rawApiBaseUrl || (!isLocalHost && hasUnsafeApiHost) ? "/api" : rawApiBaseUrl;
 const ROLES = ["District Admin", "Rural User", "Panchayat Officer"];
 
 const ROLE_PAGES = {
