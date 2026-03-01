@@ -45,7 +45,7 @@ App:
 cd frontend
 npm install
 cp .env.example .env
-# Set production API URL in frontend/.env before build
+# Production uses frontend/.env.production with VITE_API_BASE_URL=/api
 npm run build
 ```
 
@@ -91,8 +91,7 @@ cp .env.example .env
 ```
 
 Edit `frontend/.env`:
-- `VITE_API_BASE_URL=https://your-domain.com/api`
-  - or `http://your-ec2-public-ip/api`
+- `VITE_API_BASE_URL=/api`
 
 Build frontend:
 ```bash
@@ -125,7 +124,7 @@ Now your app is public at your EC2 public IP/domain.
 - `ALLOWED_ORIGINS` comma-separated list of frontend origins
 
 ### Frontend (`frontend/.env`)
-- `VITE_API_BASE_URL` backend API base URL, e.g. `http://localhost:8000/api`
+- `VITE_API_BASE_URL` API base URL. Recommended: `/api` (works locally via Vite proxy and in prod via Nginx).
 
 ## 5) Useful Checks
 
@@ -226,7 +225,7 @@ cp frontend/.env.example frontend/.env
 
 Edit values:
 - `backend/.env`: `ALLOWED_ORIGINS=http://<EC2_PUBLIC_IP>,https://<YOUR_DOMAIN>`
-- `frontend/.env`: `VITE_API_BASE_URL=http://<EC2_PUBLIC_IP>/api` (or domain URL)
+- `frontend/.env`: `VITE_API_BASE_URL=/api`
 
 Run first deploy once:
 ```bash

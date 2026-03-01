@@ -30,6 +30,8 @@ echo "[3/6] Frontend build"
 cd "$PROJECT_DIR/frontend"
 npm install
 cp -n .env.example .env || true
+# Force production API to same-origin Nginx proxy and avoid stale localhost values.
+echo "VITE_API_BASE_URL=/api" > .env.production
 npm run build
 
 
