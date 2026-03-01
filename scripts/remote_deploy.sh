@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_DIR="${PROJECT_DIR:-/home/ubuntu/GramSaarthi}"
+PROJECT_DIR="${PROJECT_DIR:-/home/ec2-user/GramSaarthi}"
 BRANCH="${BRANCH:-main}"
 
 if [[ ! -d "$PROJECT_DIR/.git" ]]; then
@@ -34,8 +34,7 @@ npm run build
 echo "[4/6] Install service + nginx configs"
 cd "$PROJECT_DIR"
 sudo cp deploy/gramsaarthi-backend.service /etc/systemd/system/gramsaarthi-backend.service
-sudo cp deploy/nginx-gramsaarthi.conf /etc/nginx/sites-available/gramsaarthi
-sudo ln -sf /etc/nginx/sites-available/gramsaarthi /etc/nginx/sites-enabled/gramsaarthi
+sudo cp deploy/nginx-gramsaarthi.conf /etc/nginx/conf.d/gramsaarthi.conf
 
 
 echo "[5/6] Restart services"

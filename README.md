@@ -64,13 +64,14 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000
 
 ### A. Install dependencies
 ```bash
-sudo apt update
-sudo apt install -y python3 python3-venv python3-pip nginx nodejs npm
+sudo dnf update -y
+sudo dnf install -y python3 python3-pip nginx nodejs npm git
+sudo systemctl enable --now nginx
 ```
 
 ### B. Backend setup
 ```bash
-cd /home/ubuntu/GramSaarthi/backend
+cd /home/ec2-user/GramSaarthi/backend
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -84,7 +85,7 @@ Edit `backend/.env`:
 
 ### C. Frontend setup
 ```bash
-cd /home/ubuntu/GramSaarthi/frontend
+cd /home/ec2-user/GramSaarthi/frontend
 npm install
 cp .env.example .env
 ```
@@ -100,7 +101,7 @@ npm run build
 
 ### D. Configure systemd for backend
 ```bash
-sudo cp /home/ubuntu/GramSaarthi/deploy/gramsaarthi-backend.service /etc/systemd/system/
+sudo cp /home/ec2-user/GramSaarthi/deploy/gramsaarthi-backend.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable gramsaarthi-backend
 sudo systemctl start gramsaarthi-backend
@@ -109,8 +110,7 @@ sudo systemctl status gramsaarthi-backend
 
 ### E. Configure nginx
 ```bash
-sudo cp /home/ubuntu/GramSaarthi/deploy/nginx-gramsaarthi.conf /etc/nginx/sites-available/gramsaarthi
-sudo ln -sf /etc/nginx/sites-available/gramsaarthi /etc/nginx/sites-enabled/gramsaarthi
+sudo cp /home/ec2-user/GramSaarthi/deploy/nginx-gramsaarthi.conf /etc/nginx/conf.d/gramsaarthi.conf
 sudo nginx -t
 sudo systemctl restart nginx
 ```
@@ -153,15 +153,16 @@ Flow:
 
 ### A. One-time EC2 setup
 
-Run on EC2 as `ubuntu`:
+Run on EC2 as `ec2-user`:
 ```bash
-sudo apt update
-sudo apt install -y python3 python3-venv python3-pip nginx nodejs npm git
+sudo dnf update -y
+sudo dnf install -y python3 python3-pip nginx nodejs npm git
+sudo systemctl enable --now nginx
 ```
 
 Clone your repo:
 ```bash
-cd /home/ubuntu
+cd /home/ec2-user
 git clone <your-repo-url> GramSaarthi
 cd GramSaarthi
 ```
@@ -190,7 +191,7 @@ sudo visudo -f /etc/sudoers.d/gramsaarthi-deploy
 
 Paste:
 ```text
-ubuntu ALL=(ALL) NOPASSWD: /bin/cp, /bin/ln, /usr/bin/systemctl, /usr/sbin/nginx
+ec2-user ALL=(ALL) NOPASSWD: /bin/cp, /bin/ln, /usr/bin/systemctl, /usr/sbin/nginx
 ```
 
 ### C. Configure SSH access for GitHub Actions
@@ -203,11 +204,11 @@ ssh-keygen -t ed25519 -C "gha-ec2-deploy" -f gha-ec2-deploy
 ```bash
 cat gha-ec2-deploy.pub
 ```
-Append that output to `/home/ubuntu/.ssh/authorized_keys` on EC2.
+Append that output to `/home/ec2-user/.ssh/authorized_keys` on EC2.
 
 3. In GitHub repo, add these **Actions secrets**:
 - `EC2_HOST` = your EC2 public IP or DNS
-- `EC2_USER` = `ubuntu`
+- `EC2_USER` = `ec2-user`
 - `EC2_PORT` = `22`
 - `EC2_SSH_KEY` = contents of private key file `gha-ec2-deploy`
 

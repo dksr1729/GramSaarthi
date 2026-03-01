@@ -31,8 +31,7 @@ sudo systemctl restart gramsaarthi-backend
 
 
 echo "[4/5] Install nginx config"
-sudo cp "$PROJECT_DIR/deploy/nginx-gramsaarthi.conf" /etc/nginx/sites-available/gramsaarthi
-sudo ln -sf /etc/nginx/sites-available/gramsaarthi /etc/nginx/sites-enabled/gramsaarthi
+sudo cp "$PROJECT_DIR/deploy/nginx-gramsaarthi.conf" /etc/nginx/conf.d/gramsaarthi.conf
 sudo nginx -t
 sudo systemctl restart nginx
 

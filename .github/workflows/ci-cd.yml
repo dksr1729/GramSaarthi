@@ -57,5 +57,5 @@ jobs:
           script_stop: true
           script: |
             set -euo pipefail
-            cd /home/ubuntu/GramSaarthi
-            BRANCH=main PROJECT_DIR=/home/ubuntu/GramSaarthi ./scripts/remote_deploy.sh
+            cd /home/ec2-user/GramSaarthi
+            BRANCH=main PROJECT_DIR=/home/ec2-user/GramSaarthi ./scripts/remote_deploy.sh

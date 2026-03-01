@@ -4,10 +4,10 @@ After=network.target
 
 [Service]
 Type=simple
-User=ubuntu
-WorkingDirectory=/home/ubuntu/GramSaarthi/backend
-EnvironmentFile=/home/ubuntu/GramSaarthi/backend/.env
-ExecStart=/home/ubuntu/GramSaarthi/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+User=ec2-user
+WorkingDirectory=/home/ec2-user/GramSaarthi/backend
+EnvironmentFile=/home/ec2-user/GramSaarthi/backend/.env
+ExecStart=/home/ec2-user/GramSaarthi/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
 Restart=always
 RestartSec=5
 
