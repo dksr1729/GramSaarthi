@@ -22,12 +22,13 @@ body {
 }
 
 .page {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
   padding: 24px;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .bg-orb {
@@ -70,6 +71,7 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
   gap: 18px;
+  align-items: start;
 }
 
 .left-pane {
@@ -240,7 +242,10 @@ h1 {
   display: grid;
   grid-template-rows: auto 1fr auto auto;
   gap: 10px;
+  height: 620px;
+  max-height: 620px;
   min-height: 620px;
+  min-width: 0;
 }
 
 .chat-head {
@@ -289,6 +294,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 0;
 }
 
 .bubble {
@@ -357,13 +363,19 @@ h1 {
   }
 
   .chat-shell {
-    min-height: 520px;
+    height: 560px;
+    max-height: 560px;
+    min-height: 560px;
   }
 }
 
 @media (max-width: 640px) {
+  .page {
+    padding: 14px;
+  }
+
   .card {
-    padding: 22px;
+    padding: 18px;
     border-radius: 16px;
   }
 
@@ -377,5 +389,11 @@ h1 {
 
   .chat-compose {
     grid-template-columns: 1fr;
+  }
+
+  .chat-shell {
+    height: 500px;
+    max-height: 500px;
+    min-height: 500px;
   }
 }
