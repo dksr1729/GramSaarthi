@@ -1,31 +1,55 @@
-# OS
-.DS_Store
-
-# Env
-.env
-# ./frontend/.env
-# ./backend/.env
-.env.*
-!.env.example
-
-# SSH keys
-gha-ec2-deploy
-gha-ec2-deploy.pub
-
 # Python
 __pycache__/
 *.py[cod]
-*.egg-info/
-.venv/
+*$py.class
+*.so
+.Python
 venv/
+env/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
 
 # Node
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 dist/
+dist-ssr/
+*.local
 
-# Logs
-*.log
+# Environment
+.env
+.env.local
+.env.*.local
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ChromaDB
+backend/chroma_db/
+
+# DynamoDB Local
+DynamoDBLocal*
+*.db
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db

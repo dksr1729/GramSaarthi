@@ -231,3 +231,4 @@ These challenges result in suboptimal resource allocation, missed opportunities 
 8. Blockchain-based audit trail for transparency in decision-making
 9. Integration with satellite imagery for land use and vegetation monitoring
 10. Collaborative features for knowledge sharing between Gram Panchayats
+    

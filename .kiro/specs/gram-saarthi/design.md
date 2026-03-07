@@ -2,9 +2,11 @@
 
 ## Overview
 
-GramSaarthi is implemented as a serverless, event-driven system on AWS, leveraging Amazon Bedrock for AI capabilities, Lambda for compute, API Gateway for HTTP interfaces, and DynamoDB for data persistence. The architecture follows a layered approach with clear separation between user interaction, orchestration, intelligence, and data layers.
+GramSaarthi is implemented as a modern web application with a Python FastAPI backend hosted on AWS EC2 and a React frontend served via CloudFront and S3. The system leverages Amazon Bedrock for AI capabilities and DynamoDB for data persistence. The architecture follows a layered approach with clear separation between user interaction, business logic, intelligence, and data layers.
 
-The system uses Retrieval-Augmented Generation (RAG) to provide accurate scheme information, machine learning models for water stress forecasting, and Amazon Bedrock Agents for multi-step reasoning and orchestration. Voice and SMS interfaces provide accessibility for users with varying levels of digital literacy and connectivity.
+The system features persona-based access control with three user types: District Admin, Panchayat Officer, and Rural User. Each persona has access to specific pages and features tailored to their role. The application uses Indian-themed UI with a bright, accessible design suitable for rural users.
+
+The system uses Retrieval-Augmented Generation (RAG) to provide accurate scheme information, machine learning models for water stress forecasting, and Amazon Bedrock for multi-step reasoning. The platform supports local development with cloud deployment for production.
 
 All AI outputs are explicitly marked as advisory, with confidence scores and source citations to maintain human oversight in governance decisions.
 
@@ -12,401 +14,556 @@ All AI outputs are explicitly marked as advisory, with confidence scores and sou
 
 ```mermaid
 graph TB
-    subgraph "User Interaction Layer"
-        WebUI[Web Interface]
-        VoiceUI[Voice Interface]
-        SMSUI[SMS Interface]
+    subgraph "Frontend Layer"
+        React[React Application]
+        CloudFront[CloudFront CDN]
+        S3Frontend[S3 Static Hosting]
     end
     
-    subgraph "API & Orchestration Layer"
-        APIGW[API Gateway]
-        AuthLambda[Auth Lambda]
-        OrchestratorLambda[Agent Orchestrator Lambda]
+    subgraph "Backend Layer - EC2"
+        FastAPI[FastAPI Server]
+        AuthService[Authentication Service]
+        QueryService[Query Processing Service]
+        ReportService[Report Generation Service]
+        ForecastService[Forecast Service]
+        RAGService[RAG Service]
+        ChatbotService[Chatbot Service]
     end
     
-    subgraph "Intelligence Layer"
-        BedrockAgent[Bedrock Agent]
-        RAGLambda[RAG Lambda]
-        ForecastLambda[Forecast Lambda]
-        ReportLambda[Report Lambda]
-        SustainLambda[Sustainability Lambda]
+    subgraph "AI Layer"
+        Bedrock[Amazon Bedrock]
+        VectorDB[Vector Store]
     end
     
     subgraph "Data Layer"
         DDB[(DynamoDB)]
-        S3[(S3 Buckets)]
-        VectorDB[Vector Store]
+        S3Data[(S3 Data Buckets)]
+        LocalData[Local JSON Data]
     end
     
-    subgraph "Voice Processing"
-        Transcribe[Amazon Transcribe]
-        Polly[Amazon Polly]
-    end
+    React --> CloudFront
+    CloudFront --> S3Frontend
+    React --> FastAPI
     
-    WebUI --> APIGW
-    VoiceUI --> Transcribe
-    Transcribe --> APIGW
-    SMSUI --> APIGW
+    FastAPI --> AuthService
+    FastAPI --> QueryService
+    FastAPI --> ReportService
+    FastAPI --> ForecastService
+    FastAPI --> RAGService
+    FastAPI --> ChatbotService
     
-    APIGW --> AuthLambda
-    AuthLambda --> OrchestratorLambda
+    QueryService --> Bedrock
+    RAGService --> Bedrock
+    RAGService --> VectorDB
+    ChatbotService --> Bedrock
     
-    OrchestratorLambda --> BedrockAgent
-    BedrockAgent --> RAGLambda
-    BedrockAgent --> ForecastLambda
-    BedrockAgent --> ReportLambda
-    BedrockAgent --> SustainLambda
+    AuthService --> DDB
+    ForecastService --> DDB
+    ForecastService --> S3Data
+    ReportService --> S3Data
+    RAGService --> DDB
     
-    RAGLambda --> VectorDB
-    ForecastLambda --> S3
-    ReportLambda --> S3
-    SustainLambda --> DDB
-    
-    OrchestratorLambda --> Polly
-    Polly --> VoiceUI
-    
-    RAGLambda --> DDB
-    ForecastLambda --> DDB
-    ReportLambda --> DDB
+    FastAPI --> LocalData
 ```
 
 ## Component Design
 
-### User Interaction Layer
+### Frontend Layer
 
-#### Web Interface
-- **Technology**: Static HTML/CSS/JavaScript hosted on S3 with CloudFront
+#### React Application
+- **Technology**: React 18+ with TypeScript, Vite for build tooling
+- **UI Framework**: Material-UI or Ant Design with Indian theme customization
+- **Styling**: Bright, accessible color scheme suitable for rural users
+- **State Management**: React Context API or Redux for global state
+- **Routing**: React Router for page navigation
 - **Responsibilities**: 
-  - Render user interface for query input and result display
-  - Handle user authentication flow
-  - Display forecasts, schemes, and recommendations
-  - Provide report download functionality
-- **Interface**: Communicates with API Gateway via HTTPS REST calls
+  - Render persona-specific pages and navigation
+  - Handle user authentication flow (Login/Register)
+  - Display navbar with village/mandal name after login
+  - Manage form inputs for location selection (State → Mandal → Village)
+  - Display reports, dashboards, and chatbot interface
+  - Handle file uploads for District Admin ingest page
+- **Pages by Persona**:
+  - **District Admin**: Report page, Ingest page, Dashboard, Schemes Dashboard
+  - **Panchayat Officer**: Report page, Dashboard, Schemes Dashboard
+  - **Rural User**: Report page, Dashboard
+- **Interface**: Communicates with FastAPI backend via REST API calls
 
-#### Voice Interface
-- **Technology**: Web-based audio capture with MediaRecorder API
-- **Responsibilities**:
-  - Capture audio input from user
-  - Send audio to Amazon Transcribe via API Gateway
-  - Receive text-to-speech audio from Amazon Polly
-  - Play audio responses to user
-- **Interface**: Sends audio blobs to `/voice/transcribe` endpoint, receives audio from `/voice/synthesize` endpoint
+#### CloudFront + S3 Static Hosting
+- **Purpose**: Serve React application with global CDN distribution
+- **Configuration**: 
+  - S3 bucket configured for static website hosting
+  - CloudFront distribution with S3 as origin
+  - HTTPS enforced with ACM certificate
+  - Caching strategy: index.html no-cache, assets with versioned URLs cached
+- **Benefits**: Low latency, high availability, cost-effective for static content
 
-#### SMS Interface
-- **Technology**: Amazon SNS for SMS sending, API Gateway for SMS webhook
-- **Responsibilities**:
-  - Receive SMS messages via webhook
-  - Parse command keywords (FORECAST, SCHEME, HELP)
-  - Format responses to fit SMS length constraints
-  - Send responses via SNS
-- **Interface**: Webhook endpoint `/sms/receive`, SNS topic for outbound messages
+### Backend Layer (EC2 + FastAPI)
 
-### API & Orchestration Layer
-
-#### API Gateway
-- **Configuration**: REST API with Lambda proxy integration
+#### FastAPI Server
+- **Technology**: Python 3.11+, FastAPI framework, Uvicorn ASGI server
+- **Deployment**: AWS EC2 instance (t3.medium or similar)
+- **Process Management**: Systemd service or Supervisor for auto-restart
+- **Reverse Proxy**: Nginx for SSL termination and load balancing
+- **CORS**: Configured to allow requests from CloudFront domain
+- **API Documentation**: Auto-generated Swagger UI at `/docs`
 - **Endpoints**:
-  - `POST /auth/login` - User authentication
-  - `POST /query` - General query endpoint
-  - `POST /forecast` - Water stress forecast request
-  - `POST /schemes` - Scheme search request
-  - `POST /report` - Report generation request
-  - `POST /voice/transcribe` - Voice transcription
-  - `GET /voice/synthesize` - Text-to-speech
-  - `POST /sms/receive` - SMS webhook
-- **Security**: API keys, IAM authorization, request throttling
-- **CORS**: Enabled for web interface origin
+  - `POST /api/auth/register` - User registration
+  - `POST /api/auth/login` - User authentication
+  - `GET /api/auth/me` - Get current user info
+  - `POST /api/query` - General chatbot query
+  - `GET /api/reports` - List generated reports
+  - `POST /api/reports/generate` - Generate new report
+  - `POST /api/ingest` - Upload files (District Admin only)
+  - `GET /api/dashboard/rainfall` - Get rainfall data
+  - `GET /api/dashboard/district` - Get district details
+  - `GET /api/schemes` - Get available schemes
+  - `GET /api/locations/states` - Get list of states
+  - `GET /api/locations/mandals/{state}` - Get mandals for state
+  - `GET /api/locations/villages/{mandal}` - Get villages for mandal
 
-#### Auth Lambda
-- **Runtime**: Python 3.11
+#### Authentication Service
 - **Responsibilities**:
-  - Validate user credentials against DynamoDB user table
-  - Generate JWT tokens with jurisdiction claims
-  - Verify JWT tokens on subsequent requests
-  - Implement session management
-- **Input**: `{ "username": string, "password": string }` or `{ "token": string }`
-- **Output**: `{ "token": string, "jurisdiction": string, "expiresAt": timestamp }` or `{ "valid": boolean }`
-- **Error Handling**: Returns 401 for invalid credentials, 403 for expired tokens
+  - Handle user registration with persona selection
+  - Validate credentials against DynamoDB users table
+  - Generate JWT tokens with persona and location claims
+  - Verify JWT tokens on protected endpoints
+  - Implement role-based access control (RBAC)
+  - Load location data from `resources/telangana_all_villages.json`
+- **User Model**:
+  ```python
+  {
+    "gmail": "user@example.com",  # Primary key
+    "password_hash": "bcrypt_hash",
+    "name": "User Name",
+    "persona": "District Admin | Panchayat Officer | Rural User",
+    "state": "Telangana",
+    "district": "Hyderabad",  # For District Admin
+    "mandal": "Secunderabad",  # For Panchayat Officer and Rural User
+    "village": "Village Name",  # For Panchayat Officer and Rural User
+    "created_at": "2024-01-01T00:00:00Z"
+  }
+  ```
+- **JWT Claims**: `{ "gmail": str, "persona": str, "district": str, "mandal": str, "village": str }`
+- **Location Selection Logic**:
+  - District Admin: Select only district (no mandal/village)
+  - Panchayat Officer & Rural User: Select state → mandal → village (cascading dropdowns)
 
-#### Agent Orchestrator Lambda
-- **Runtime**: Python 3.11
+#### Query Processing Service
 - **Responsibilities**:
-  - Route requests to appropriate specialized Lambda functions
-  - Invoke Amazon Bedrock Agent for complex multi-step queries
-  - Aggregate results from multiple components
-  - Manage conversation context
-  - Handle parallel execution of independent tasks
-- **Input**: `{ "query": string, "jurisdiction": string, "context": object }`
-- **Output**: `{ "response": string, "sources": array, "confidence": float, "components": array }`
-- **Integration**: Uses Bedrock Agent API with custom action groups
+  - Receive user queries from chatbot interface
+  - Route queries to appropriate backend services
+  - Invoke Amazon Bedrock for natural language understanding
+  - Aggregate results from multiple services
+  - Return formatted responses with sources
+- **Integration**: Coordinates between RAG, Forecast, and Report services
 
-### Intelligence Layer
-
-#### Amazon Bedrock Agent
-- **Model**: Claude 3 Sonnet or Haiku (configurable)
-- **Action Groups**:
-  - `ForecastActions`: Invoke water stress forecasting
-  - `SchemeActions`: Search and retrieve scheme information
-  - `ReportActions`: Generate administrative reports
-  - `SustainabilityActions`: Provide climate recommendations
-- **Knowledge Base**: Connected to vector store for RAG
-- **Prompt Template**: System prompt emphasizing advisory nature, source citation, and confidence scoring
-
-#### RAG Lambda
-- **Runtime**: Python 3.11
+#### Report Service
 - **Responsibilities**:
-  - Receive scheme queries from Bedrock Agent
-  - Generate query embeddings using Bedrock Titan Embeddings
-  - Search vector store for relevant scheme documents
-  - Retrieve top-k matching schemes (k=5)
-  - Format results with metadata (source, date, eligibility)
-- **Input**: `{ "query": string, "filters": object, "topK": int }`
-- **Output**: `{ "schemes": array, "scores": array, "sources": array }`
-- **Vector Store**: Amazon OpenSearch Serverless or FAISS in S3
-- **Embedding Model**: amazon.titan-embed-text-v1
-
-#### Forecast Lambda
-- **Runtime**: Python 3.11
-- **Responsibilities**:
-  - Load historical data for jurisdiction from S3
-  - Run water stress prediction model
-  - Generate 30-day forecast with confidence intervals
-  - Identify high-risk periods based on thresholds
-  - Cache results in DynamoDB
-- **Input**: `{ "jurisdiction": string, "startDate": date }`
-- **Output**: `{ "forecast": array, "confidence": array, "highRiskDays": array, "model": string }`
-- **Model**: Time series forecasting (Prophet or ARIMA) trained on synthetic data
-- **Data Sources**: S3 bucket with historical rainfall and groundwater CSV files
-
-#### Report Lambda
-- **Runtime**: Python 3.11
-- **Responsibilities**:
+  - Generate administrative reports based on user persona and location
   - Compile data from forecasts, schemes, and recommendations
-  - Apply administrative report template
-  - Generate PDF using ReportLab or WeasyPrint
-  - Store report in S3 with jurisdiction-based key
-  - Return presigned URL for download
-- **Input**: `{ "jurisdiction": string, "reportType": string, "dateRange": object }`
-- **Output**: `{ "reportUrl": string, "expiresAt": timestamp, "reportId": string }`
-- **Templates**: Stored in S3, support for multiple report types (monthly, quarterly, annual)
+  - Apply report templates (PDF generation)
+  - Store reports in S3 with location-based keys
+  - Return presigned URLs for download
+  - List previously generated reports for user's location
+- **Report Types**: Monthly, quarterly, annual summaries
 
-#### Sustainability Lambda
-- **Runtime**: Python 3.11
+#### Forecast Service
 - **Responsibilities**:
-  - Analyze water forecast and climate data
-  - Generate sustainability recommendations using Bedrock
-  - Link recommendations to relevant schemes via RAG
-  - Provide actionable steps and priority levels
-  - Mark all outputs as advisory
-- **Input**: `{ "jurisdiction": string, "forecast": object, "context": object }`
-- **Output**: `{ "recommendations": array, "linkedSchemes": array, "priority": string, "advisory": boolean }`
-- **Prompt Engineering**: Uses few-shot examples for consistent recommendation format
+  - Load historical rainfall and groundwater data
+  - Run water stress prediction models
+  - Generate 30-day forecasts with confidence intervals
+  - Identify high-risk periods
+  - Cache results in DynamoDB
+  - Provide data for dashboard rainfall visualization
+- **Model**: Time series forecasting (Prophet or ARIMA)
+
+#### RAG Service
+- **Responsibilities**:
+  - Process scheme-related queries
+  - Generate query embeddings using Bedrock Titan
+  - Search vector store for relevant schemes
+  - Retrieve scheme details from DynamoDB
+  - Rank results by relevance
+  - Format responses with metadata
+- **Vector Store**: FAISS or Amazon OpenSearch Serverless
+
+#### Chatbot Service
+- **Responsibilities**:
+  - Handle conversational queries from report page
+  - Maintain conversation context per user session
+  - Generate responses using Amazon Bedrock
+  - Provide scheme recommendations
+  - Answer questions about generated reports
+  - Support follow-up questions with context awareness
+- **Context Management**: Store conversation history in memory or DynamoDB
+
+### AI Layer
+
+#### Amazon Bedrock Integration
+- **Model**: Claude 3 Sonnet or Haiku (configurable)
+- **Use Cases**:
+  - Natural language query understanding
+  - Scheme recommendation generation
+  - Report summarization
+  - Chatbot conversation
+  - Sustainability recommendations
+- **Prompt Engineering**: System prompts emphasizing advisory nature and source citation
+
+#### Vector Store
+- **Technology**: FAISS (local/S3) or Amazon OpenSearch Serverless
+- **Dimensions**: 1536 (Titan Embeddings output)
+- **Index**: HNSW for approximate nearest neighbor search
+- **Documents**: Government scheme documents (synthetic/public data)
 
 ### Data Layer
 
 #### DynamoDB Tables
 
 **Users Table**
-- **Partition Key**: `userId` (string)
-- **Attributes**: `username`, `passwordHash`, `jurisdiction`, `role`, `createdAt`
-- **GSI**: `jurisdiction-index` for querying users by jurisdiction
+- **Partition Key**: `gmail` (string)
+- **Attributes**: `password_hash`, `name`, `persona`, `state`, `district`, `mandal`, `village`, `created_at`
+- **GSI**: `persona-index` for querying users by persona
+- **GSI**: `district-index` for querying users by district
 
 **Forecasts Table**
-- **Partition Key**: `jurisdiction` (string)
-- **Sort Key**: `forecastDate` (string, ISO format)
-- **Attributes**: `forecast` (list), `confidence` (list), `highRiskDays` (list), `model`, `generatedAt`
-- **TTL**: `expiresAt` (30 days from generation)
+- **Partition Key**: `location_key` (string, format: `{district}#{mandal}#{village}`)
+- **Sort Key**: `forecast_date` (string, ISO format)
+- **Attributes**: `forecast` (list), `confidence` (list), `high_risk_days` (list), `model`, `generated_at`
+- **TTL**: `expires_at` (30 days from generation)
 
 **Schemes Table**
-- **Partition Key**: `schemeId` (string)
-- **Attributes**: `name`, `description`, `eligibility`, `applicationProcess`, `deadline`, `source`, `lastUpdated`, `embedding` (for vector search fallback)
+- **Partition Key**: `scheme_id` (string)
+- **Attributes**: `name`, `description`, `eligibility`, `application_process`, `deadline`, `source`, `last_updated`, `category`
 
 **Reports Table**
-- **Partition Key**: `jurisdiction` (string)
-- **Sort Key**: `reportId` (string)
-- **Attributes**: `reportType`, `dateRange`, `s3Key`, `generatedAt`, `downloadUrl`
-- **TTL**: `expiresAt` (90 days from generation)
+- **Partition Key**: `location_key` (string)
+- **Sort Key**: `report_id` (string)
+- **Attributes**: `report_type`, `date_range`, `s3_key`, `generated_at`, `generated_by`, `download_url`
+- **TTL**: `expires_at` (90 days from generation)
 
-**Sessions Table**
-- **Partition Key**: `sessionId` (string)
-- **Attributes**: `userId`, `jurisdiction`, `context`, `createdAt`, `lastAccessedAt`
-- **TTL**: `expiresAt` (24 hours from creation)
+**ChatSessions Table**
+- **Partition Key**: `session_id` (string)
+- **Attributes**: `user_gmail`, `location_key`, `messages` (list), `created_at`, `last_accessed_at`
+- **TTL**: `expires_at` (24 hours from creation)
 
 #### S3 Buckets
+
+**Frontend Bucket** (`gramsaarthi-frontend-{env}`)
+- **Purpose**: Host React application static files
+- **Structure**: `/index.html`, `/assets/*`, `/static/*`
+- **Access**: Public read via CloudFront
 
 **Data Bucket** (`gramsaarthi-data-{env}`)
 - **Purpose**: Store historical datasets, model artifacts, templates
 - **Structure**:
-  - `/historical/rainfall/{jurisdiction}.csv`
-  - `/historical/groundwater/{jurisdiction}.csv`
+  - `/historical/rainfall/{district}/{mandal}.csv`
+  - `/historical/groundwater/{district}/{mandal}.csv`
   - `/models/forecast_model.pkl`
-  - `/templates/report_monthly.html`
-- **Access**: Lambda execution role with read-only access
+  - `/templates/report_template.html`
+  - `/uploads/{district}/` (for District Admin file uploads)
+- **Access**: EC2 instance role with read/write access
 
 **Reports Bucket** (`gramsaarthi-reports-{env}`)
 - **Purpose**: Store generated reports
-- **Structure**: `/reports/{jurisdiction}/{reportId}.pdf`
+- **Structure**: `/reports/{district}/{mandal}/{village}/{report_id}.pdf`
 - **Access**: Presigned URLs with 7-day expiration
 - **Lifecycle**: Delete objects after 90 days
 
-**Vector Store**
-- **Technology**: Amazon OpenSearch Serverless (vector engine) or FAISS index in S3
-- **Dimensions**: 1536 (Titan Embeddings output)
-- **Index**: HNSW for approximate nearest neighbor search
-- **Documents**: ~5000 government scheme documents (synthetic/public)
+#### Local JSON Data
 
-### Voice Processing Layer
-
-#### Amazon Transcribe Integration
-- **Configuration**: Streaming transcription with real-time results
-- **Language**: Hindi (hi-IN) and English (en-IN)
-- **Custom Vocabulary**: Government scheme names, rural terminology
-- **Output**: Transcription with confidence scores per word
-
-#### Amazon Polly Integration
-- **Voice**: Aditi (Hindi, female) or Raveena (English, female)
-- **Format**: MP3 audio stream
-- **SSML**: Used for emphasis on advisory disclaimers
-- **Caching**: Frequently used phrases cached in S3
+**Location Data** (`resources/telangana_all_villages.json`)
+- **Purpose**: District-mandal-village mapping for Telangana
+- **Structure**:
+  ```json
+  {
+    "Telangana": {
+      "districts": [
+        {
+          "name": "Hyderabad",
+          "mandals": [
+            {
+              "name": "Secunderabad",
+              "villages": ["Village1", "Village2", ...]
+            }
+          ]
+        }
+      ]
+    }
+  }
+  ```
+- **Usage**: Loaded at startup, cached in memory for fast access
 
 ## Data Flow Description
 
-### Query Flow (Text-Based)
+### User Registration Flow
 
-1. User submits query via web interface
-2. API Gateway receives request, validates API key
-3. Auth Lambda verifies JWT token and extracts jurisdiction
-4. Orchestrator Lambda receives authenticated request
-5. Orchestrator invokes Bedrock Agent with query and context
-6. Bedrock Agent analyzes query and determines required actions
-7. Agent invokes appropriate action groups (RAG, Forecast, Sustainability)
-8. Each Lambda executes its logic and returns results
-9. Bedrock Agent synthesizes results into coherent response
-10. Orchestrator adds advisory disclaimers and confidence scores
-11. Response returned to user via API Gateway
+1. User navigates to Register page in React app
+2. User fills form: Gmail, Password, Name, Persona (dropdown)
+3. Based on persona selection:
+   - **District Admin**: Select State → District only
+   - **Panchayat Officer/Rural User**: Select State → Mandal → Village (cascading dropdowns)
+4. React app loads location data from FastAPI `/api/locations/*` endpoints
+5. User submits registration form
+6. React app sends POST request to `/api/auth/register`
+7. FastAPI Authentication Service validates input
+8. Service checks if Gmail already exists in DynamoDB Users table
+9. If unique, service hashes password with bcrypt
+10. Service stores user record in DynamoDB with persona and location data
+11. Service returns success response
+12. React app redirects to Login page
 
-### Voice Flow
+### User Login Flow
 
-1. User speaks query into web interface
-2. Audio captured and sent to `/voice/transcribe` endpoint
-3. API Gateway triggers Transcribe Lambda
-4. Transcribe Lambda streams audio to Amazon Transcribe
-5. Transcription result sent to Orchestrator Lambda (follows Query Flow)
-6. Response text sent to Polly Lambda
-7. Polly Lambda generates speech audio
-8. Audio streamed back to user interface
-9. User hears spoken response
+1. User navigates to Login page in React app
+2. User enters Gmail and Password
+3. React app sends POST request to `/api/auth/login`
+4. FastAPI Authentication Service validates credentials against DynamoDB
+5. If valid, service generates JWT token with claims (gmail, persona, district, mandal, village)
+6. Service returns JWT token and user info
+7. React app stores token in localStorage
+8. React app redirects to appropriate landing page based on persona
+9. Navbar displays village/mandal name from user data
 
-### SMS Flow
+### Query Flow (Chatbot on Report Page)
 
-1. User sends SMS to registered number
-2. SMS provider webhook calls `/sms/receive` endpoint
-3. SMS Lambda parses message and extracts command keyword
-4. Lambda routes to appropriate component based on keyword
-5. Component generates concise response (max 160 characters)
-6. SMS Lambda sends response via SNS
-7. User receives SMS reply
+1. User types question in chatbot interface on Report page
+2. React app sends POST request to `/api/query` with JWT token and query text
+3. FastAPI verifies JWT token and extracts user context
+4. Query Processing Service receives authenticated request
+5. Service invokes Amazon Bedrock with query and user context
+6. Bedrock analyzes query and determines required information
+7. Service routes to appropriate backend services:
+   - Scheme queries → RAG Service
+   - Forecast queries → Forecast Service
+   - Report queries → Report Service
+8. Each service executes its logic and returns results
+9. Query Processing Service aggregates results
+10. Service adds advisory disclaimers and confidence scores
+11. Response returned to React app
+12. Chatbot displays formatted response with sources
 
-### Forecast Generation Flow
+### Dashboard Data Flow
 
-1. Forecast Lambda receives request with jurisdiction
-2. Lambda checks DynamoDB cache for recent forecast
-3. If cache miss, Lambda loads historical data from S3
-4. Lambda runs forecasting model (Prophet/ARIMA)
-5. Model generates 30-day predictions with confidence intervals
-6. Lambda identifies high-risk days (stress > threshold)
-7. Results stored in DynamoDB with TTL
-8. Forecast returned to caller
+1. User navigates to Dashboard page
+2. React app sends GET request to `/api/dashboard/rainfall` with JWT token
+3. FastAPI verifies JWT and extracts user's location (district/mandal/village)
+4. Forecast Service retrieves rainfall data for user's location from DynamoDB
+5. If cache miss, service loads historical data from S3
+6. Service returns rainfall time series data
+7. React app renders rainfall visualization chart
+8. Simultaneously, React app requests `/api/dashboard/district` for district details
+9. Service compiles district-level statistics
+10. React app displays district information cards
 
-### RAG Search Flow
+### Report Generation Flow
 
-1. RAG Lambda receives scheme query
-2. Lambda generates query embedding using Bedrock Titan
-3. Lambda searches vector store for top-5 similar documents
-4. Lambda retrieves full scheme details from DynamoDB
-5. Results ranked by similarity score
-6. Metadata (source, date, eligibility) added to each result
-7. Formatted results returned to Bedrock Agent
+1. User clicks "Generate Report" button on Report page
+2. React app shows report type selection modal (monthly/quarterly/annual)
+3. User selects report type and date range
+4. React app sends POST request to `/api/reports/generate` with JWT token
+5. FastAPI verifies JWT and checks user persona permissions
+6. Report Service receives request with user's location context
+7. Service compiles data:
+   - Fetches forecasts from Forecast Service
+   - Fetches relevant schemes from RAG Service
+   - Fetches recommendations from Query Service
+8. Service applies HTML template for selected report type
+9. Service generates PDF using WeasyPrint or ReportLab
+10. Service stores PDF in S3 at `/reports/{district}/{mandal}/{village}/{report_id}.pdf`
+11. Service creates presigned URL (7-day expiration)
+12. Service stores report metadata in DynamoDB Reports table
+13. Service returns report URL and metadata
+14. React app displays download link and adds report to list
+
+### File Ingest Flow (District Admin Only)
+
+1. District Admin navigates to Ingest page
+2. React app checks user persona from JWT token
+3. If not District Admin, redirect to unauthorized page
+4. Admin selects file type (CSV, PDF, Excel, etc.)
+5. Admin uploads file via drag-and-drop or file picker
+6. React app sends POST request to `/api/ingest` with file and JWT token
+7. FastAPI verifies JWT and checks persona is District Admin
+8. Ingest Service validates file format and size
+9. Service stores file in S3 at `/uploads/{district}/{filename}`
+10. Service processes file based on type:
+    - CSV: Parse and store in DynamoDB
+    - PDF: Extract text and create embeddings for RAG
+    - Excel: Convert to CSV and process
+11. Service returns processing status and file metadata
+12. React app displays success message and file list
+
+### Schemes Dashboard Flow
+
+1. User navigates to Schemes Dashboard page
+2. React app sends GET request to `/api/schemes` with JWT token
+3. FastAPI verifies JWT and extracts user's location
+4. RAG Service retrieves schemes relevant to user's location from DynamoDB
+5. Service filters schemes by eligibility criteria matching user's context
+6. Service ranks schemes by relevance and deadline proximity
+7. Service returns list of schemes with metadata
+8. React app displays schemes in card layout with:
+   - Scheme name and description
+   - Eligibility criteria
+   - Application deadline
+   - Application process link
+9. User can click scheme card to view full details
+10. User can use search/filter to find specific schemes
 
 ## Scalability Design
 
 ### Horizontal Scaling
-- All Lambda functions configured with reserved concurrency limits
-- API Gateway throttling: 1000 requests/second per jurisdiction
+- EC2 instance can be placed behind Application Load Balancer (ALB) for horizontal scaling
+- Multiple EC2 instances in Auto Scaling Group for high availability
 - DynamoDB on-demand capacity mode for automatic scaling
-- OpenSearch Serverless auto-scales based on query load
+- CloudFront CDN for frontend reduces load on origin
+
+### Vertical Scaling
+- EC2 instance type can be upgraded (t3.medium → t3.large → t3.xlarge) based on load
+- FastAPI with Uvicorn workers configured based on CPU cores
+- Connection pooling for DynamoDB and S3 clients
 
 ### Caching Strategy
 - Forecast results cached in DynamoDB for 24 hours
 - Scheme embeddings pre-computed and stored
-- Polly audio responses cached in S3 for common phrases
-- CloudFront caching for static web assets (1 hour TTL)
+- Location data (telangana_all_villages.json) loaded at startup and cached in memory
+- CloudFront caching for React static assets (1 hour TTL)
+- FastAPI response caching for frequently accessed endpoints
 
 ### Cost Optimization
-- Lambda functions use ARM64 architecture (Graviton2) for 20% cost savings
-- Bedrock model selection: Haiku for simple queries, Sonnet for complex reasoning
+- Single EC2 instance for development, scale to multiple instances for production
+- DynamoDB on-demand pricing for variable workloads
 - S3 Intelligent-Tiering for historical data
 - DynamoDB TTL for automatic cleanup of expired data
+- CloudFront free tier covers most static asset delivery
 
 ### Load Distribution
-- API Gateway regional deployment with Route 53 latency-based routing
-- Lambda functions deployed across multiple availability zones
-- DynamoDB global tables for multi-region deployment (future)
+- Application Load Balancer distributes traffic across multiple EC2 instances
+- DynamoDB handles high-throughput reads/writes automatically
+- S3 provides unlimited scalability for file storage
+- Bedrock API handles concurrent requests with built-in rate limiting
 
 ## Security & Responsible AI Considerations
 
 ### Authentication & Authorization
 - JWT tokens with 24-hour expiration
-- Jurisdiction-based access control enforced at Lambda layer
-- API Gateway resource policies restrict access to known IPs (optional)
-- Secrets Manager for storing credentials and API keys
+- Bcrypt password hashing with salt
+- Persona-based access control enforced at FastAPI route level
+- Gmail as unique identifier (primary key in DynamoDB)
+- Protected routes require valid JWT token in Authorization header
+- Role-based access control (RBAC):
+  - District Admin: Access to all 4 pages (Report, Ingest, Dashboard, Schemes)
+  - Panchayat Officer: Access to 3 pages (Report, Dashboard, Schemes)
+  - Rural User: Access to 2 pages (Report, Dashboard)
 
 ### Data Protection
-- TLS 1.2 minimum for all API communications
+- TLS 1.2 minimum for all API communications (enforced by Nginx)
 - DynamoDB encryption at rest using AWS KMS
 - S3 bucket encryption with SSE-S3
-- VPC endpoints for Lambda-to-AWS service communication (no internet)
+- EC2 instance in private subnet with security group restrictions
+- Secrets stored in AWS Secrets Manager (database credentials, API keys)
+- Environment variables for configuration (not hardcoded)
+
+### Location-Based Data Isolation
+- Users can only access data for their assigned location
+- District Admin: Access to all data within their district
+- Panchayat Officer: Access to data for their mandal and village
+- Rural User: Access to data for their village only
+- Location filtering enforced at service layer before database queries
 
 ### Responsible AI
 - All AI outputs prefixed with "Advisory: This recommendation requires human review"
 - Confidence scores displayed for all predictions and recommendations
 - Source citations included for all scheme information
-- Audit logs stored in CloudWatch Logs for 90 days
+- Audit logs stored for all AI interactions
 - No automated financial allocations or binding decisions
 - Model cards documenting training data, limitations, and intended use
 
 ### Privacy
-- No PII stored beyond session duration for voice/SMS
-- User data isolated by jurisdiction (row-level security)
+- No PII stored beyond user registration data (Gmail, Name)
+- User data isolated by location (row-level security)
 - Presigned URLs for reports expire after 7 days
-- DynamoDB streams disabled to prevent data leakage
+- Chat session data expires after 24 hours (DynamoDB TTL)
+- No tracking or analytics beyond basic access logs
+
+### API Security
+- Rate limiting on FastAPI endpoints (per user and global)
+- Input validation and sanitization for all user inputs
+- CORS configured to allow only CloudFront origin
+- SQL injection prevention (using DynamoDB, not SQL)
+- File upload validation (type, size, content scanning)
+- XSS prevention in React app (React's built-in escaping)
 
 ## Deployment Model
 
-### Infrastructure as Code
-- AWS CDK (Python) for infrastructure definition
-- Separate stacks for data layer, compute layer, and API layer
-- Environment-specific configuration (dev, staging, prod)
+### Local Development Setup
+- **Backend**: FastAPI server running on localhost:8000
+- **Frontend**: Vite dev server running on localhost:5173
+- **Database**: DynamoDB Local or AWS DynamoDB (dev account)
+- **AI Services**: Amazon Bedrock (dev account with API keys)
+- **Storage**: Local filesystem or S3 (dev bucket)
+- **Configuration**: `.env` file for environment variables
+
+### Production Deployment
+
+#### Frontend Deployment
+1. Build React app: `npm run build` (generates `/dist` folder)
+2. Upload build artifacts to S3 frontend bucket
+3. Invalidate CloudFront cache for updated files
+4. CloudFront serves static files globally with low latency
+
+#### Backend Deployment (EC2)
+1. Launch EC2 instance (t3.medium, Ubuntu 22.04 LTS)
+2. Install dependencies: Python 3.11, Nginx, Supervisor
+3. Clone application repository
+4. Install Python dependencies: `pip install -r requirements.txt`
+5. Configure Nginx as reverse proxy (port 80/443 → 8000)
+6. Set up SSL certificate with Let's Encrypt (Certbot)
+7. Configure Supervisor to manage FastAPI process
+8. Set environment variables in `/etc/environment` or systemd service file
+9. Start FastAPI with Uvicorn: `uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4`
+10. Configure security group: Allow HTTP (80), HTTPS (443), SSH (22 from specific IP)
+
+#### Infrastructure as Code
+- Terraform or AWS CDK for infrastructure provisioning
+- Separate configurations for dev, staging, prod environments
+- Version control for infrastructure code
 
 ### CI/CD Pipeline
-- GitHub Actions for automated testing and deployment
-- Lambda deployment packages built with Docker for consistent dependencies
-- Automated testing: unit tests, integration tests, load tests
-- Blue-green deployment for zero-downtime updates
+- **Repository**: GitHub or GitLab
+- **CI Tool**: GitHub Actions or GitLab CI
+- **Pipeline Stages**:
+  1. **Lint & Format**: Run linters (eslint, black, flake8)
+  2. **Test**: Run unit tests and property-based tests
+  3. **Build Frontend**: Build React app
+  4. **Deploy Frontend**: Upload to S3, invalidate CloudFront
+  5. **Deploy Backend**: SSH to EC2, pull latest code, restart service
+  6. **Health Check**: Verify endpoints are responding
+- **Deployment Strategy**: Rolling deployment with health checks
+- **Rollback**: Keep previous version, rollback on failure
 
 ### Monitoring & Observability
-- CloudWatch Logs for all Lambda functions
-- CloudWatch Metrics for API Gateway, Lambda, DynamoDB
-- X-Ray tracing for distributed request tracking
-- CloudWatch Alarms for error rates, latency, and throttling
-- Dashboard showing key metrics: requests/min, p99 latency, error rate
+- **Application Logs**: FastAPI logs to `/var/log/gramsaarthi/app.log`
+- **Access Logs**: Nginx logs to `/var/log/nginx/access.log`
+- **CloudWatch**: Ship logs to CloudWatch Logs for centralized monitoring
+- **Metrics**: Custom CloudWatch metrics for API latency, error rates
+- **Alarms**: CloudWatch Alarms for high error rates, high latency, disk space
+- **Dashboard**: CloudWatch Dashboard showing key metrics
+- **Health Endpoint**: `/api/health` for load balancer health checks
 
 ### Disaster Recovery
-- DynamoDB point-in-time recovery enabled
-- S3 versioning enabled for data and reports buckets
-- Lambda function versions and aliases for rollback
-- Automated backups of vector store daily
-- RTO: 4 hours, RPO: 24 hours
+- **Database Backups**: DynamoDB point-in-time recovery enabled
+- **S3 Versioning**: Enabled for data and reports buckets
+- **EC2 Snapshots**: Daily AMI snapshots for quick recovery
+- **Configuration Backup**: Infrastructure code in version control
+- **RTO**: 2 hours (restore from snapshot)
+- **RPO**: 24 hours (daily backups)
+
+### Environment Configuration
+- **Development**: Local setup, DynamoDB Local, mock data
+- **Staging**: Separate AWS account, full AWS services, synthetic data
+- **Production**: Production AWS account, full AWS services, real data (when available)
 
 
 ## Correctness Properties
@@ -414,140 +571,142 @@ graph TB
 A property is a characteristic or behavior that should hold true across all valid executions of a system—essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.
 
 ### Property 1: Valid Authentication Grants Access
-*For any* valid user credentials (username and password combination that exists in the Users table), when authentication is attempted, the system should return a valid JWT token with jurisdiction claims and grant access to the system.
+*For any* valid user credentials (Gmail and password combination that exists in the Users table with matching bcrypt hash), when authentication is attempted, the system should return a valid JWT token with persona and location claims and grant access to the system.
 **Validates: Requirements 1.1**
 
-### Property 2: Jurisdiction-Based Access Control
-*For any* authenticated user, when accessing data, the system should only return data belonging to that user's assigned jurisdiction and deny access to data from other jurisdictions.
+### Property 2: Persona-Based Page Access Control
+*For any* authenticated user, when accessing a page, the system should only allow access if that page is permitted for the user's persona (District Admin: 4 pages, Panchayat Officer: 3 pages, Rural User: 2 pages) and deny access otherwise.
+**Validates: Requirements 1.2**
+
+### Property 3: Location-Based Data Access Control
+*For any* authenticated user, when accessing data, the system should only return data belonging to that user's assigned location (district for District Admin, mandal/village for others) and deny access to data from other locations.
 **Validates: Requirements 1.2, 11.3**
 
-### Property 3: Invalid Authentication Denial and Logging
-*For any* invalid credentials (username/password combination not in the Users table or incorrect password), when authentication is attempted, the system should deny access and create a log entry recording the failed attempt.
+### Property 3: Location-Based Data Access Control
+*For any* authenticated user, when accessing data, the system should only return data belonging to that user's assigned location (district for District Admin, mandal/village for others) and deny access to data from other locations.
+**Validates: Requirements 1.2, 11.3**
+
+### Property 4: Invalid Authentication Denial and Logging
+*For any* invalid credentials (Gmail not in Users table or incorrect password that doesn't match bcrypt hash), when authentication is attempted, the system should deny access and create a log entry recording the failed attempt.
 **Validates: Requirements 1.3**
 
-### Property 4: Session Token Validation
+### Property 5: Session Token Validation
 *For any* session token, when used to access the system, the token should be validated for expiration and signature, and expired or invalid tokens should be rejected.
 **Validates: Requirements 1.4**
 
-### Property 5: Forecast Length Consistency
+### Property 6: Forecast Length Consistency
 *For any* water stress forecast request, the generated forecast should contain exactly 30 daily predictions with corresponding dates.
 **Validates: Requirements 2.1**
 
-### Property 6: High-Risk Period Flagging
+### Property 7: High-Risk Period Flagging
 *For any* forecast data, when water stress values exceed the critical threshold (defined in system configuration), those days should be flagged as high-risk periods in the output.
 **Validates: Requirements 2.3**
 
-### Property 7: Confidence Intervals Presence
+### Property 8: Confidence Intervals Presence
 *For any* forecast prediction, the output should include confidence interval bounds (lower and upper) for that prediction.
 **Validates: Requirements 2.4**
 
-### Property 8: Scheme Metadata Completeness
+### Property 9: Scheme Metadata Completeness
 *For any* scheme returned by the RAG engine, the output should include eligibility criteria, application process, deadlines, source document, and last update date.
 **Validates: Requirements 3.2, 3.5**
 
-### Property 9: Recommendation Actionability
+### Property 10: Recommendation Actionability
 *For any* sustainability recommendation generated, the output should include at least one actionable step describing what the user should do.
 **Validates: Requirements 4.3**
 
-### Property 10: Scheme Linking in Recommendations
+### Property 11: Scheme Linking in Recommendations
 *For any* sustainability recommendation that mentions a government scheme, the output should include a link or reference to that scheme's detailed information.
 **Validates: Requirements 4.4**
 
-### Property 11: Advisory Disclaimer Presence
+### Property 12: Advisory Disclaimer Presence
 *For any* AI-generated output (forecasts, recommendations, scheme suggestions), the response should include an advisory disclaimer stating that the output requires human review and approval.
 **Validates: Requirements 4.5, 13.1, 13.2**
 
-### Property 12: Report Data Source Inclusion
+### Property 13: Report Data Source Inclusion
 *For any* generated report, the report should include sections for forecasts, schemes, and recommendations (when applicable to the report type).
 **Validates: Requirements 5.1**
 
-### Property 13: Report Metadata Completeness
+### Property 14: Report Metadata Completeness
 *For any* information included in a generated report, that information should have associated metadata including timestamp, data source, and confidence level (where applicable).
 **Validates: Requirements 5.3, 13.3**
 
-### Property 14: Report Storage Location
-*For any* generated report, after generation completes, the report file should exist in the S3 reports bucket under the path `/reports/{jurisdiction}/{reportId}.pdf`.
+### Property 15: Report Storage Location
+*For any* generated report, after generation completes, the report file should exist in the S3 reports bucket under the path `/reports/{district}/{mandal}/{village}/{reportId}.pdf`.
 **Validates: Requirements 5.4**
 
-### Property 15: Voice Transcription Processing
-*For any* audio input submitted to the voice interface, the system should produce a text transcription and process it through the query pipeline to generate a response.
-**Validates: Requirements 6.1, 6.2**
-
-### Property 16: Text-to-Speech Conversion
-*For any* text response generated for a voice query, the system should convert it to audio using Amazon Polly and return the audio stream.
-**Validates: Requirements 6.3**
-
-### Property 17: SMS Response Length Constraint
-*For any* SMS query response, the response text should be 160 characters or fewer to fit within SMS length limits.
-**Validates: Requirements 7.2**
-
-### Property 18: SMS Command Routing
-*For any* SMS message containing a recognized command keyword (FORECAST, SCHEME, REPORT, HELP), the system should route the request to the corresponding component (Forecast Lambda, RAG Lambda, Report Lambda, or help handler).
-**Validates: Requirements 7.1**
-
-### Property 19: Ambiguous SMS Clarification
-*For any* SMS query that matches multiple possible intents or lacks required parameters, the system should respond with a clarification request including numbered options.
-**Validates: Requirements 7.4**
-
-### Property 20: SMS Interaction Logging
-*For any* SMS interaction (inbound or outbound), the system should create a log entry containing the message content, timestamp, user identifier, and processing result.
-**Validates: Requirements 7.5**
-
-### Property 21: Multi-Component Query Orchestration
-*For any* query that requires data from multiple components (e.g., forecast + schemes + recommendations), the orchestrator should invoke all necessary components and include results from each in the final response.
-**Validates: Requirements 8.1**
-
-### Property 22: Context Preservation Across Turns
-*For any* multi-turn conversation, when a follow-up query references previous context (e.g., "What about next month?"), the system should maintain the conversation context and interpret the query correctly.
+### Property 16: Chatbot Context Preservation
+*For any* multi-turn conversation in the chatbot, when a follow-up query references previous context, the system should maintain the conversation history and interpret the query correctly.
 **Validates: Requirements 8.2**
 
-### Property 23: Graceful Agent Failure Handling
-*For any* orchestrated query where one agent fails, the orchestrator should return a partial response with data from successful agents and include an error message about the failed component.
-**Validates: Requirements 8.4**
-
-### Property 24: Audit Logging Completeness
+### Property 17: Audit Logging Completeness
 *For any* system operation (authentication, query processing, report generation, AI interaction), the system should create a log entry with timestamp, user identifier, operation type, and result status.
 **Validates: Requirements 11.4, 13.5**
 
-### Property 25: PII Deletion After Session
-*For any* voice or SMS interaction containing personally identifiable information, when the session expires or ends, the PII should be deleted from all storage systems.
+### Property 18: Chat Session Data Expiration
+*For any* chat session, when the session expires (24 hours from creation), the session data should be automatically deleted from DynamoDB via TTL.
 **Validates: Requirements 11.5**
 
-### Property 26: Retry with Exponential Backoff
+### Property 19: Retry with Exponential Backoff
 *For any* transient failure (network timeout, service unavailable), the system should retry the operation with exponentially increasing delays (e.g., 1s, 2s, 4s, 8s) up to a maximum number of attempts.
 **Validates: Requirements 12.2**
 
-### Property 27: User-Friendly Error Messages
+### Property 20: User-Friendly Error Messages
 *For any* error condition, the system should return an error response that includes a user-friendly message explaining what went wrong and what the user can do (not just technical error codes).
 **Validates: Requirements 12.4**
+
+### Property 21: File Upload Validation (District Admin)
+*For any* file upload request, the system should validate that the user's persona is District Admin before accepting the upload, and reject uploads from other personas.
+**Validates: Requirements 1.2**
+
+### Property 22: Location Cascade Validation
+*For any* user registration with Panchayat Officer or Rural User persona, the system should require state, mandal, and village selections, while District Admin should only require state and district.
+**Validates: Requirements 1.1**
+
+### Property 23: Presigned URL Expiration
+*For any* generated report presigned URL, the URL should expire after exactly 7 days from generation time.
+**Validates: Requirements 5.4**
 
 ## Error Handling
 
 ### Authentication Errors
-- Invalid credentials: Return 401 with message "Invalid username or password"
+- Invalid credentials: Return 401 with message "Invalid Gmail or password"
 - Expired token: Return 403 with message "Session expired, please log in again"
 - Missing token: Return 401 with message "Authentication required"
+- Duplicate Gmail: Return 400 with message "An account with this Gmail already exists"
+- Invalid persona: Return 400 with message "Invalid persona selected"
+
+### Authorization Errors
+- Unauthorized page access: Return 403 with message "You don't have permission to access this page"
+- File upload by non-admin: Return 403 with message "Only District Admins can upload files"
+- Cross-location data access: Return 403 with message "You can only access data for your assigned location"
 
 ### Data Errors
-- Missing forecast data: Return 404 with message "Forecast data not available for this jurisdiction"
-- Invalid jurisdiction: Return 400 with message "Invalid jurisdiction identifier"
+- Missing forecast data: Return 404 with message "Forecast data not available for this location"
+- Invalid location: Return 400 with message "Invalid location identifier"
 - Scheme not found: Return 404 with message "No schemes found matching your query"
+- Report not found: Return 404 with message "Report not found or has expired"
 
 ### Service Errors
 - Bedrock timeout: Retry up to 3 times with exponential backoff, then return 503 with message "AI service temporarily unavailable, please try again"
-- DynamoDB throttling: Implement exponential backoff retry, return 429 if still failing
-- S3 access error: Return 500 with message "Unable to access data storage"
-
-### Voice/SMS Errors
-- Transcription failure: Return message "Unable to understand audio, please try again"
-- Poor audio quality: Return message "Audio quality too low, please speak clearly"
-- SMS too long: Truncate response and add "... (reply MORE for full response)"
-- Invalid SMS command: Return message "Unknown command. Reply HELP for available commands"
+- DynamoDB throttling: Implement exponential backoff retry, return 429 if still failing with message "Too many requests, please try again later"
+- S3 access error: Return 500 with message "Unable to access file storage"
+- Vector store error: Return 500 with message "Search service temporarily unavailable"
 
 ### Validation Errors
-- Missing required parameters: Return 400 with message listing missing fields
+- Missing required fields: Return 400 with message listing missing fields
 - Invalid date format: Return 400 with message "Invalid date format, use YYYY-MM-DD"
 - Invalid report type: Return 400 with message "Report type must be monthly, quarterly, or annual"
+- File too large: Return 413 with message "File size exceeds maximum limit of 10MB"
+- Invalid file type: Return 400 with message "File type not supported. Allowed types: CSV, PDF, Excel"
+
+### Network Errors
+- Connection timeout: Retry with exponential backoff, return 504 with message "Request timeout, please try again"
+- Service unavailable: Return 503 with message "Service temporarily unavailable, please try again later"
+
+### FastAPI Exception Handlers
+- Custom exception handlers for common error types
+- Structured error responses: `{ "error": { "code": str, "message": str, "details": dict } }`
+- Logging of all errors with stack traces for debugging
 
 ## Testing Strategy
 
@@ -574,8 +733,8 @@ Together, these approaches provide comprehensive coverage: unit tests catch conc
 ### Property-Based Testing Configuration
 
 **Library Selection:**
-- Python: Hypothesis (https://hypothesis.readthedocs.io/)
-- TypeScript/JavaScript: fast-check (https://fast-check.dev/)
+- Python (Backend): Hypothesis (https://hypothesis.readthedocs.io/)
+- TypeScript/JavaScript (Frontend): fast-check (https://fast-check.dev/)
 
 **Test Configuration:**
 - Minimum 100 iterations per property test (due to randomization)
@@ -588,95 +747,294 @@ Together, these approaches provide comprehensive coverage: unit tests catch conc
 from hypothesis import given, strategies as st
 import pytest
 
-# Feature: gram-saarthi, Property 5: Forecast Length Consistency
-@given(jurisdiction=st.text(min_size=1, max_size=50))
-def test_forecast_length_consistency(jurisdiction):
+# Feature: gram-saarthi, Property 6: Forecast Length Consistency
+@given(location_key=st.text(min_size=1, max_size=100))
+def test_forecast_length_consistency(location_key):
     """For any forecast request, output should contain exactly 30 daily predictions"""
-    forecast = generate_forecast(jurisdiction)
+    forecast = generate_forecast(location_key)
     assert len(forecast['predictions']) == 30
     assert all('date' in pred for pred in forecast['predictions'])
 ```
 
+**Example Property Test Structure (TypeScript with fast-check):**
+
+```typescript
+import fc from 'fast-check';
+
+// Feature: gram-saarthi, Property 2: Persona-Based Page Access Control
+test('persona-based page access control', () => {
+  fc.assert(
+    fc.property(
+      fc.record({
+        persona: fc.constantFrom('District Admin', 'Panchayat Officer', 'Rural User'),
+        page: fc.constantFrom('Report', 'Ingest', 'Dashboard', 'Schemes')
+      }),
+      ({ persona, page }) => {
+        const allowedPages = getAlowedPages(persona);
+        const hasAccess = checkPageAccess(persona, page);
+        return hasAccess === allowedPages.includes(page);
+      }
+    ),
+    { numRuns: 100 }
+  );
+});
+```
+
 **Property Test Coverage:**
-- Each correctness property (1-27) must be implemented as a property-based test
+- Each correctness property (1-23) must be implemented as a property-based test
 - Properties marked as "edge-case" in prework should be handled by generators
 - Properties marked as "example" should be unit tests, not property tests
 
 ### Unit Testing Strategy
 
 **Test Organization:**
-- Tests organized by component (auth, forecast, rag, report, voice, sms, orchestrator)
-- Each Lambda function has corresponding test file
+- Backend tests organized by service (auth, query, report, forecast, rag, chatbot)
+- Frontend tests organized by component and page
+- Each FastAPI route has corresponding test file
 - Integration tests for end-to-end flows
 
+**Backend Testing (Python + pytest):**
+- Test each FastAPI endpoint with various inputs
+- Mock external dependencies (Bedrock, DynamoDB, S3)
+- Test authentication and authorization logic
+- Test data validation and error handling
+- Use pytest fixtures for common test data
+
+**Frontend Testing (React + Jest + React Testing Library):**
+- Test component rendering and user interactions
+- Test form validation and submission
+- Test routing and navigation
+- Test persona-based page access
+- Mock API calls with MSW (Mock Service Worker)
+
 **Coverage Targets:**
-- Minimum 80% code coverage for all Lambda functions
-- 100% coverage for critical paths (authentication, data access control)
+- Minimum 80% code coverage for backend services
+- Minimum 70% code coverage for frontend components
+- 100% coverage for critical paths (authentication, authorization, data access control)
 - All error handling paths must have explicit tests
 
-**Example Unit Test Structure:**
+**Example Unit Test Structure (Backend):**
 
 ```python
 def test_invalid_credentials_denied():
     """Test that invalid credentials result in access denial"""
-    response = authenticate("invalid_user", "wrong_password")
-    assert response['status'] == 401
-    assert 'Invalid username or password' in response['message']
-    assert log_contains_failed_attempt("invalid_user")
+    response = client.post("/api/auth/login", json={
+        "gmail": "invalid@example.com",
+        "password": "wrong_password"
+    })
+    assert response.status_code == 401
+    assert "Invalid Gmail or password" in response.json()["error"]["message"]
+    assert log_contains_failed_attempt("invalid@example.com")
+```
+
+**Example Unit Test Structure (Frontend):**
+
+```typescript
+test('District Admin can access Ingest page', () => {
+  const user = { persona: 'District Admin', gmail: 'admin@example.com' };
+  render(<IngestPage />, { wrapper: createAuthWrapper(user) });
+  expect(screen.getByText('Upload Files')).toBeInTheDocument();
+});
+
+test('Panchayat Officer cannot access Ingest page', () => {
+  const user = { persona: 'Panchayat Officer', gmail: 'officer@example.com' };
+  render(<IngestPage />, { wrapper: createAuthWrapper(user) });
+  expect(screen.getByText('Unauthorized')).toBeInTheDocument();
+});
 ```
 
 ### Integration Testing
 
 **Test Scenarios:**
-- End-to-end query flow: Web UI → API Gateway → Auth → Orchestrator → RAG → Response
-- Voice flow: Audio input → Transcribe → Query processing → Polly → Audio output
-- SMS flow: SMS webhook → Parse → Route → Process → SNS response
-- Report generation: Request → Compile data → Generate PDF → Store S3 → Return URL
+- End-to-end user registration flow: Form submission → API call → DynamoDB storage → Success response
+- End-to-end login flow: Credentials → Authentication → JWT generation → Redirect to dashboard
+- End-to-end query flow: Chatbot input → API call → Bedrock processing → Response display
+- End-to-end report generation: Request → Data compilation → PDF generation → S3 storage → Download URL
+- Persona-based access control: Login as each persona → Verify accessible pages → Verify restricted pages
+- Location data cascade: Select state → Load mandals → Select mandal → Load villages
+- File upload flow (District Admin): Select file → Upload → S3 storage → Processing → Success message
+
+**Test Environment:**
+- Local FastAPI server with test database
+- Mock Bedrock responses for consistent testing
+- Test S3 bucket for file operations
+- Test DynamoDB tables with synthetic data
 
 **Test Data:**
-- Synthetic datasets for historical rainfall and groundwater
-- Mock scheme documents (100 samples) for RAG testing
-- Test user accounts with different jurisdictions
-- Sample audio files for voice testing
+- Synthetic user accounts for each persona
+- Sample location data (subset of telangana_all_villages.json)
+- Mock scheme documents for RAG testing
+- Sample historical data for forecast testing
+
+**API Integration Tests (Python + pytest):**
+
+```python
+def test_end_to_end_registration_and_login():
+    """Test complete user registration and login flow"""
+    # Register new user
+    register_response = client.post("/api/auth/register", json={
+        "gmail": "test@example.com",
+        "password": "SecurePass123",
+        "name": "Test User",
+        "persona": "Rural User",
+        "state": "Telangana",
+        "mandal": "Secunderabad",
+        "village": "Test Village"
+    })
+    assert register_response.status_code == 201
+    
+    # Login with registered credentials
+    login_response = client.post("/api/auth/login", json={
+        "gmail": "test@example.com",
+        "password": "SecurePass123"
+    })
+    assert login_response.status_code == 200
+    assert "token" in login_response.json()
+    
+    # Access protected endpoint with token
+    token = login_response.json()["token"]
+    dashboard_response = client.get(
+        "/api/dashboard/rainfall",
+        headers={"Authorization": f"Bearer {token}"}
+    )
+    assert dashboard_response.status_code == 200
+```
 
 ### Load Testing
 
+**Tool**: Locust or Apache JMeter for load testing
+
 **Scenarios:**
-- Baseline: 100 concurrent users, 1000 requests/minute
-- Peak: 1000 concurrent users, 10000 requests/minute
-- Sustained: 500 concurrent users for 1 hour
+- Baseline: 50 concurrent users, 500 requests/minute
+- Peak: 200 concurrent users, 2000 requests/minute
+- Sustained: 100 concurrent users for 30 minutes
+
+**Endpoints to Test:**
+- `/api/auth/login` - Authentication load
+- `/api/query` - Chatbot query processing
+- `/api/dashboard/rainfall` - Dashboard data retrieval
+- `/api/reports/generate` - Report generation under load
 
 **Metrics:**
 - p50, p95, p99 latency for each endpoint
 - Error rate (target: <1%)
-- Throttling rate
-- Lambda cold start frequency
+- Throughput (requests per second)
+- EC2 CPU and memory utilization
+- DynamoDB read/write capacity consumption
+
+**Example Locust Test:**
+
+```python
+from locust import HttpUser, task, between
+
+class GramSaarthiUser(HttpUser):
+    wait_time = between(1, 3)
+    
+    def on_start(self):
+        # Login and get token
+        response = self.client.post("/api/auth/login", json={
+            "gmail": "test@example.com",
+            "password": "password"
+        })
+        self.token = response.json()["token"]
+    
+    @task(3)
+    def query_chatbot(self):
+        self.client.post(
+            "/api/query",
+            json={"query": "What schemes are available?"},
+            headers={"Authorization": f"Bearer {self.token}"}
+        )
+    
+    @task(2)
+    def view_dashboard(self):
+        self.client.get(
+            "/api/dashboard/rainfall",
+            headers={"Authorization": f"Bearer {self.token}"}
+        )
+    
+    @task(1)
+    def generate_report(self):
+        self.client.post(
+            "/api/reports/generate",
+            json={"report_type": "monthly"},
+            headers={"Authorization": f"Bearer {self.token}"}
+        )
+```
 
 ### Continuous Testing
 
 **Pre-commit:**
 - Unit tests for changed files
-- Linting and code formatting
+- Linting and code formatting (black, flake8, eslint, prettier)
+- Type checking (mypy for Python, TypeScript compiler)
 
-**CI Pipeline:**
-- All unit tests
+**CI Pipeline (GitHub Actions):**
+- All unit tests (backend and frontend)
 - All property-based tests (100 iterations each)
 - Integration tests
-- Code coverage report
+- Code coverage report (fail if below 80% for backend, 70% for frontend)
+- Build frontend (ensure no build errors)
+- Security scanning (Bandit for Python, npm audit for Node)
 
 **Pre-deployment:**
 - Full test suite
 - Load testing against staging environment
 - Security scanning (SAST, dependency vulnerabilities)
+- Manual smoke testing of critical flows
+
+**Example GitHub Actions Workflow:**
+
+```yaml
+name: CI/CD Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: pytest --cov=. --cov-report=xml
+      - run: black --check .
+      - run: flake8 .
+  
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run test -- --coverage
+      - run: npm run lint
+      - run: npm run build
+```
 
 ### Test Data Management
 
 **Synthetic Data Generation:**
-- Rainfall data: Random time series with seasonal patterns
+- Rainfall data: Random time series with seasonal patterns (monsoon peaks)
 - Groundwater data: Correlated with rainfall with lag
 - Scheme documents: Template-based generation with variations
-- User accounts: Programmatically generated with different jurisdictions
+- User accounts: Programmatically generated for each persona and location combination
+- Location data: Subset of telangana_all_villages.json for testing
+
+**Test Database Setup:**
+- Separate DynamoDB tables for testing (with `-test` suffix)
+- Automated scripts to populate test data
+- Cleanup scripts to reset test data between runs
 
 **Data Refresh:**
 - Test data regenerated weekly to catch data-dependent bugs
 - Property test seeds rotated to explore different input spaces
+
+**Mock Data for Development:**
+- Mock Bedrock responses for consistent development experience
+- Mock S3 operations for local development without AWS
+- Mock DynamoDB with DynamoDB Local or moto library
