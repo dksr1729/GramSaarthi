@@ -1,0 +1,61 @@
+DUALRAG REPORT
+======================================================================
+Question: Am I eligible for Ayushman Bharat scheme
+Generated Hash: cf86cfe4361468eb
+Confidence: 90%
+
+### FINAL ANSWER
+To determine your eligibility for the Ayushman Bharat scheme, specific context regarding your personal and financial situation is required. Please provide more details such as your income level, family size, and any existing health conditions.
+
+### ELIGIBILITY
+Eligibility for the Ayushman Bharat scheme is typically based on:
+- Socio-economic status
+- Residence in rural or urban areas
+- Occupation and income level
+- Family size
+
+**Missing Context:** Specific eligibility criteria cannot be provided without additional information.
+
+### BENEFITS
+Benefits of the Ayushman Bharat scheme include:
+- Coverage for secondary and tertiary healthcare
+- Up to INR 5 lakhs per family per year
+- No cap on family size
+- Cashless and paperless access to services
+
+**Missing Context:** Detailed benefits cannot be provided without specific eligibility information.
+
+### HOW TO APPLY
+To apply for the Ayushman Bharat scheme:
+1. Visit the nearest Common Service Centre (CSC) or designated enrollment center.
+2. Provide necessary documents for verification.
+3. Complete the enrollment form.
+4. Await approval notification.
+
+**Missing Context:** Specific application steps cannot be provided without additional information.
+
+### DOCUMENTS REQUIRED
+Typical documents required for the Ayushman Bharat scheme include:
+- Proof of residence (e.g., Aadhar card, ration card)
+- Proof of income (e.g., salary slips, income tax returns)
+- Family details (e.g., ration card, school records)
+
+**Missing Context:** Specific document requirements cannot be provided without additional information.
+
+### PRACTICAL TIPS
+- Ensure all documents are up-to-date and valid.
+- Keep a copy of all submitted documents for future reference.
+- Verify the enrollment center’s operating hours and address beforehand.
+
+### HELPLINE
+For any queries or assistance regarding the Ayushman Bharat scheme, contact the national helpline:
+- Toll-free number: 14567
+- Operating hours: 24/7
+
+**Missing Context:** Specific helpline information cannot be provided without additional information.
+
+RETRIEVAL SUMMARY
+----------------------------------------------------------------------
+schemes_index docs: 0
+citizen_faq_index docs: 0
+processing_time_seconds: 2.44

@@ -104,13 +104,52 @@ function Layout() {
   )
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        minHeight: '100vh',
+        position: 'relative',
+        overflow: 'hidden',
+        background: 'linear-gradient(145deg, #ecf7ff 0%, #f8f2e8 100%)',
+      }}
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          width: 320,
+          height: 320,
+          top: -70,
+          left: -40,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(244,184,96,0.45) 0%, rgba(244,184,96,0.22) 65%, rgba(244,184,96,0) 100%)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          width: 420,
+          height: 420,
+          right: -110,
+          bottom: -110,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(85,201,186,0.42) 0%, rgba(85,201,186,0.2) 68%, rgba(85,201,186,0) 100%)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      />
       <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          background: 'linear-gradient(135deg, #FF9933 0%, #138808 100%)',
+          backgroundColor: 'rgba(255,255,255,0.94)',
+          color: '#1a2333',
+          borderBottom: '1px solid #d9e4dd',
+          boxShadow: '0 6px 24px rgba(27, 43, 67, 0.08)',
+          backdropFilter: 'blur(8px)',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
         <Toolbar>
@@ -124,7 +163,17 @@ function Layout() {
           </IconButton>
           
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="h6" noWrap component="div">
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                fontWeight: 700,
+                background: 'linear-gradient(90deg, #0f766e 0%, #2aa294 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
               {user?.village && user?.mandal ? (
                 <>
                   {user.village}, {user.mandal}
@@ -137,7 +186,7 @@ function Layout() {
                 'GramSaarthi'
               )}
             </Typography>
-            <Typography variant="caption" sx={{ opacity: 0.9 }}>
+            <Typography variant="caption" sx={{ color: '#5f7488' }}>
               {user?.name} • {user?.persona}
             </Typography>
           </Box>
@@ -150,7 +199,7 @@ function Layout() {
 
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 }, zIndex: 1 }}
       >
         <Drawer
           variant="temporary"
@@ -181,11 +230,13 @@ function Layout() {
       <Box
         component="main"
         sx={{
+          position: 'relative',
+          zIndex: 1,
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           minHeight: '100vh',
-          backgroundColor: 'background.default',
+          backgroundColor: 'transparent',
         }}
       >
         <Toolbar />

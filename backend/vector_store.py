@@ -28,18 +28,8 @@ class VectorStore:
                 anonymized_telemetry=False
             ))
 
-            # Get or create collection
-            try:
-                self.collection = self.client.get_collection(
-                    name=settings.CHROMA_COLLECTION_NAME
-                )
-                logger.info(f"Loaded existing collection: {settings.CHROMA_COLLECTION_NAME}")
-            except Exception:
-                self.collection = self.client.create_collection(
-                    name=settings.CHROMA_COLLECTION_NAME,
-                    metadata={"description": "Government schemes for GramSaarthi"}
-                )
-                logger.info(f"Created new collection: {settings.CHROMA_COLLECTION_NAME}")
+            # Get or create default collection
+            self.collection = self._get_or_create_collection(settings.CHROMA_COLLECTION_NAME)
 
             # Initialize embedding model
             self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -49,7 +39,20 @@ class VectorStore:
             logger.error(f"Failed to initialize vector store: {e}")
             raise
 
-    def add_documents(self, documents: List[Dict[str, Any]]) -> bool:
+    def _get_or_create_collection(self, collection_name: str):
+        """Get existing collection or create a new one."""
+        try:
+            collection = self.client.get_collection(name=collection_name)
+            return collection
+        except Exception:
+            collection = self.client.create_collection(
+                name=collection_name,
+                metadata={"description": f"Collection for {collection_name}"}
+            )
+            logger.info(f"Created new collection: {collection_name}")
+            return collection
+
+    def add_documents(self, documents: List[Dict[str, Any]], collection_name: Optional[str] = None) -> bool:
         """Add documents to the vector store"""
         try:
             ids = []
@@ -64,29 +67,47 @@ class VectorStore:
             # Generate embeddings
             embeddings = self.embedding_model.encode(texts).tolist()
 
+            target_collection = self.collection
+            if collection_name:
+                target_collection = self._get_or_create_collection(collection_name)
+
             # Add to collection
-            self.collection.add(
+            target_collection.add(
                 ids=ids,
                 embeddings=embeddings,
                 documents=texts,
                 metadatas=metadatas
             )
 
-            logger.info(f"Added {len(documents)} documents to vector store")
+            logger.info(f"Added {len(documents)} documents to collection: {collection_name or settings.CHROMA_COLLECTION_NAME}")
             return True
 
         except Exception as e:
             logger.error(f"Error adding documents to vector store: {e}")
             return False
 
-    def search(self, query: str, top_k: int = 5, filters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def search(
+        self,
+        query: str,
+        top_k: int = 5,
+        filters: Optional[Dict[str, Any]] = None,
+        collection_name: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
         """Search for similar documents"""
         try:
             # Generate query embedding
             query_embedding = self.embedding_model.encode([query])[0].tolist()
 
+            target_collection = self.collection
+            if collection_name:
+                try:
+                    target_collection = self.client.get_collection(name=collection_name)
+                except Exception:
+                    logger.info(f"Collection not found for search: {collection_name}")
+                    return []
+
             # Search in collection
-            results = self.collection.query(
+            results = target_collection.query(
                 query_embeddings=[query_embedding],
                 n_results=top_k,
                 where=filters if filters else None
@@ -133,9 +154,11 @@ class VectorStore:
             logger.error(f"Error deleting document from vector store: {e}")
             return False
 
-    def count_documents(self) -> int:
+    def count_documents(self, collection_name: Optional[str] = None) -> int:
         """Get total number of documents in collection"""
         try:
+            if collection_name:
+                return self._get_or_create_collection(collection_name).count()
             return self.collection.count()
         except Exception as e:
             logger.error(f"Error counting documents: {e}")

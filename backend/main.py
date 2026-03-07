@@ -1,6 +1,6 @@
-from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
+from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 from config import settings
 from models import (
     UserRegister, UserLogin, TokenResponse, QueryRequest, QueryResponse,
@@ -8,9 +8,16 @@ from models import (
 )
 from services.auth_service import auth_service
 from services.location_service import location_service
+from services.chat_service import chat_service
+from services.report_service import report_service
 from auth import get_current_user, require_persona
 import logging
 from typing import List
+from datetime import datetime
+from io import BytesIO
+from uuid import uuid4
+from pypdf import PdfReader
+from vector_store import vector_store
 
 # Configure logging
 logging.basicConfig(
@@ -18,6 +25,33 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+
+def _chunk_text(text: str, chunk_size: int = 1200, overlap: int = 200) -> List[str]:
+    """Split text into overlapping chunks for embeddings."""
+    normalized = " ".join(text.split())
+    if not normalized:
+        return []
+
+    chunks = []
+    start = 0
+    text_len = len(normalized)
+
+    while start < text_len:
+        end = min(text_len, start + chunk_size)
+        chunks.append(normalized[start:end])
+        if end >= text_len:
+            break
+        start = max(0, end - overlap)
+
+    return chunks
+
+
+def _extract_pdf_text(content: bytes) -> str:
+    """Extract text from PDF bytes."""
+    reader = PdfReader(BytesIO(content))
+    pages = [page.extract_text() or "" for page in reader.pages]
+    return "\n".join(pages).strip()
 
 # Create FastAPI app
 app = FastAPI(
@@ -167,12 +201,18 @@ async def process_query(
 ):
     """Process user query through chatbot"""
     try:
-        # TODO: Implement chatbot service
+        result = chat_service.generate_response(query_request.query)
         return QueryResponse(
-            response="This is a placeholder response. Chatbot service will be implemented.",
-            sources=["System"],
-            confidence=0.8,
+            response=result["response"],
+            sources=result.get("sources", []),
+            confidence=result.get("confidence"),
             session_id=query_request.session_id or "default"
+        )
+    except RuntimeError as e:
+        logger.error(f"Bedrock query error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Chat service is temporarily unavailable"
         )
     except Exception as e:
         logger.error(f"Query processing error: {e}")
@@ -182,13 +222,54 @@ async def process_query(
         )
 
 
+@app.post("/api/query/stream")
+async def process_query_stream(
+    query_request: QueryRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Stream chatbot response chunks as server-sent events."""
+    try:
+        token_stream, sources, confidence = chat_service.stream_response(query_request.query)
+
+        def event_stream():
+            try:
+                for token in token_stream:
+                    data = {"type": "delta", "text": token}
+                    yield f"data: {JSONResponse(content=data).body.decode('utf-8')}\n\n"
+
+                done = {
+                    "type": "done",
+                    "sources": sources,
+                    "confidence": confidence,
+                    "session_id": query_request.session_id or "default",
+                }
+                yield f"data: {JSONResponse(content=done).body.decode('utf-8')}\n\n"
+            except Exception as stream_error:
+                err = {"type": "error", "message": str(stream_error)}
+                yield f"data: {JSONResponse(content=err).body.decode('utf-8')}\n\n"
+
+        return StreamingResponse(event_stream(), media_type="text/event-stream")
+    except RuntimeError as e:
+        logger.error(f"Bedrock streaming query error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Chat service is temporarily unavailable"
+        )
+    except Exception as e:
+        logger.error(f"Streaming query processing error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to stream query"
+        )
+
+
 # Report endpoints
 @app.get("/api/reports")
 async def get_reports(current_user: dict = Depends(get_current_user)):
     """Get list of generated reports for user's location"""
     try:
-        # TODO: Implement report listing
-        return {"reports": []}
+        reports = await report_service.list_reports(current_user)
+        return {"reports": reports}
     except Exception as e:
         logger.error(f"Error getting reports: {e}")
         raise HTTPException(
@@ -204,12 +285,11 @@ async def generate_report(
 ):
     """Generate a new report"""
     try:
-        # TODO: Implement report generation
         return ReportResponse(
-            report_id="placeholder",
-            report_url="https://example.com/report.pdf",
-            expires_at="2024-12-31T23:59:59Z",
-            report_type=report_request.report_type
+            report_id="legacy-placeholder",
+            report_url="N/A",
+            expires_at=datetime.utcnow().isoformat(),
+            report_type=report_request.report_type,
         )
     except Exception as e:
         logger.error(f"Report generation error: {e}")
@@ -217,6 +297,142 @@ async def generate_report(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to generate report"
         )
+
+
+@app.post("/api/reports/query")
+async def generate_report_from_query(
+    payload: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate and persist report from query builder inputs."""
+    try:
+        query = (payload.get("query") or "").strip()
+        if not query:
+            raise HTTPException(status_code=400, detail="Query is required")
+
+        scheme_type_filter = (payload.get("scheme_type_filter") or "").strip().lower()
+        top_k = int(payload.get("top_k") or 8)
+        if top_k < 1 or top_k > 20:
+            raise HTTPException(status_code=400, detail="top_k must be between 1 and 20")
+
+        answer = await report_service.ask_question(
+            query=query,
+            scheme_type_filter=scheme_type_filter,
+            top_k=top_k,
+        )
+        return answer
+    except HTTPException:
+        raise
+    except RuntimeError as e:
+        logger.error(f"Report Bedrock error: {e}")
+        raise HTTPException(status_code=502, detail="Report service unavailable")
+    except Exception as e:
+        logger.error(f"Question query error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to run query")
+
+
+@app.post("/api/reports/generate-standard")
+async def generate_standard_report(
+    payload: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate and persist report from dedicated 10 report questions."""
+    try:
+        topic = (payload.get("topic") or "").strip()
+        if not topic:
+            raise HTTPException(status_code=400, detail="Topic is required")
+
+        scheme_type_filter = (payload.get("scheme_type_filter") or "").strip().lower()
+        top_k = int(payload.get("top_k") or 8)
+        if top_k < 1 or top_k > 20:
+            raise HTTPException(status_code=400, detail="top_k must be between 1 and 20")
+
+        report = await report_service.generate_report(
+            topic=topic,
+            current_user=current_user,
+            scheme_type_filter=scheme_type_filter,
+            top_k=top_k,
+        )
+        return report
+    except HTTPException:
+        raise
+    except RuntimeError as e:
+        logger.error(f"Standard report Bedrock error: {e}")
+        raise HTTPException(status_code=502, detail="Report service unavailable")
+    except Exception as e:
+        logger.error(f"Standard report generation error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate report")
+
+
+@app.get("/api/reports/{report_id}")
+async def get_report_by_id(
+    report_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    try:
+        report = await report_service.get_report(current_user, report_id)
+        if not report:
+            raise HTTPException(status_code=404, detail="Report not found")
+        return report
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error loading report {report_id}: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load report")
+
+
+@app.post("/api/reports/{report_id}/regenerate")
+async def regenerate_report(
+    report_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    try:
+        report = await report_service.regenerate_report(current_user, report_id)
+        return report
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Report not found")
+    except RuntimeError as e:
+        logger.error(f"Report regenerate Bedrock error: {e}")
+        raise HTTPException(status_code=502, detail="Report service unavailable")
+    except Exception as e:
+        logger.error(f"Failed to regenerate report {report_id}: {e}")
+        raise HTTPException(status_code=500, detail="Failed to regenerate report")
+
+
+@app.get("/api/reports/{report_id}/download")
+async def download_report(
+    report_id: str,
+    format: str = "txt",
+    current_user: dict = Depends(get_current_user)
+):
+    try:
+        report = await report_service.get_report(current_user, report_id)
+        if not report:
+            raise HTTPException(status_code=404, detail="Report not found")
+
+        fmt = format.lower().strip()
+        if fmt not in {"txt", "pdf", "json"}:
+            raise HTTPException(status_code=400, detail="format must be one of: txt, pdf, json")
+
+        if fmt == "json":
+            return JSONResponse(content=report)
+
+        artifact_path = report_service.ensure_report_artifact(
+            report_id=report_id,
+            report_text=report.get("report_text", ""),
+            file_format=fmt,
+        )
+
+        media_type = "text/plain" if fmt == "txt" else "application/pdf"
+        filename = f"report-{report_id}.{fmt}"
+        return FileResponse(path=artifact_path, media_type=media_type, filename=filename)
+    except HTTPException:
+        raise
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to download report {report_id}: {e}")
+        raise HTTPException(status_code=500, detail="Failed to download report")
 
 
 # Dashboard endpoints
@@ -281,17 +497,76 @@ async def get_schemes(current_user: dict = Depends(get_current_user)):
 @app.post("/api/ingest")
 async def ingest_file(
     file: UploadFile = File(...),
+    target_index: str = Form("schemes_index"),
+    document_type: str = Form("official_guidelines"),
+    scheme_name: str = Form(""),
+    scheme_type: str = Form(""),
+    ministry: str = Form(""),
+    state_scope: str = Form("Central"),
     current_user: dict = Depends(require_persona([PersonaEnum.DISTRICT_ADMIN]))
 ):
     """Upload and ingest files (District Admin only)"""
     try:
-        # TODO: Implement file ingestion
+        if not file.filename or not file.filename.lower().endswith(".pdf"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Only PDF files are supported for ingestion"
+            )
+
+        allowed_indexes = {"schemes_index", "citizen_faq_index"}
+        if target_index not in allowed_indexes:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid target index"
+            )
+
+        content = await file.read()
+        extracted_text = _extract_pdf_text(content)
+        chunks = _chunk_text(extracted_text)
+
+        if not chunks:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Could not extract text from PDF"
+            )
+
+        file_id = str(uuid4())
+        documents = []
+        for i, chunk in enumerate(chunks):
+            documents.append({
+                "id": f"{file_id}-{i}",
+                "text": chunk,
+                "metadata": {
+                    "file_id": file_id,
+                    "filename": file.filename,
+                    "target_index": target_index,
+                    "document_type": document_type,
+                    "scheme_name": scheme_name,
+                    "scheme_type": scheme_type,
+                    "ministry": ministry,
+                    "state_scope": state_scope,
+                    "uploaded_by": current_user.get("gmail", ""),
+                }
+            })
+
+        inserted = vector_store.add_documents(documents, collection_name=target_index)
+        if not inserted:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to ingest document"
+            )
+
         return {
-            "file_id": "placeholder",
+            "file_id": file_id,
             "filename": file.filename,
-            "status": "processing",
-            "message": "File uploaded successfully"
+            "status": "completed",
+            "target_index": target_index,
+            "chunks_ingested": len(chunks),
+            "index_count": vector_store.count_documents(collection_name=target_index),
+            "message": "Document ingested into local ChromaDB successfully"
         }
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"File ingest error: {e}")
         raise HTTPException(

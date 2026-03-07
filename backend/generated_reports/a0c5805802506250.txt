@@ -1,0 +1,183 @@
+DUALRAG REPORT
+======================================================================
+Question: what is PMAY
+Generated Hash: a0c5805802506250
+Confidence: 90%
+
+FINAL ANSWER
+----------------------------------------------------------------------
+FINAL ANSWER
+
+**What is PMAY**
+
+- **PMAY** stands for Pradhan Mantri Awas Yojana.
+- It is a housing scheme launched by the Government of India.
+- The primary goal is to provide affordable housing to urban and rural poor.
+- The scheme aims to achieve "Housing for All" by 2022.
+
+**Key Points:**
+
+- **Target Group:** Low-income and economically weaker sections (EWS) of the society.
+- **Financial Assistance:** Provides financial support for the construction or purchase of houses.
+- **Implementation:** Managed by the Ministry of Housing and Urban Affairs.
+- **Benefits:** Includes access to basic amenities like water, sanitation, and electricity.
+
+**Missing Context:**
+
+- Specific details on eligibility criteria, application process, and financial support amounts are not provided.
+
+ELIGIBILITY
+----------------------------------------------------------------------
+Section: ELIGIBILITY
+
+Topic: What is PMAY
+
+Task: Who is eligible? Include exclusions if relevant.
+
+- **Missing Context**: Information regarding the eligibility criteria for PMAY (Pradhan Mantri Awas Yojana) is not available. Specific details on who qualifies and any exclusions are not provided.
+
+BENEFITS
+----------------------------------------------------------------------
+Section: BENEFITS  
+Topic: What is PMAY  
+Task: List key benefits with practical details.
+
+- **Missing Context:** No context found on PMAY (Pradhan Mantri Awas Yojana). To provide detailed benefits, information on the scheme's objectives, target beneficiaries, and specific benefits is needed.
+
+HOW TO APPLY
+----------------------------------------------------------------------
+**HOW TO APPLY**
+
+**What is PMAY**
+
+**Step-by-Step Application Flow:**
+
+1. **Understand Eligibility:**
+   - Ensure you meet the eligibility criteria for PMAY (Pradhan Mantri Awas Yojana).
+
+2. **Gather Required Documents:**
+   - Missing context: Specific documents needed for PMAY application are not provided.
+
+3. **Visit the Official PMAY Website:**
+   - Go to the official PMAY portal.
+
+4. **Register on the Portal:**
+   - Create an account by providing necessary personal details.
+
+5. **Fill Application Form:**
+   - Complete the online application form with accurate information.
+
+6. **Upload Supporting Documents:**
+   - Upload the required documents as specified on the portal.
+
+7. **Submit the Application:**
+   - Review the application and submit it.
+
+8. **Track Application Status:**
+   - Use the portal to monitor the status of your application.
+
+9. **Await Approval:**
+   - Wait for the authorities to review and approve your application.
+
+10. **Receive Notification:**
+    - Get notified about the status of your application via the portal or other communication methods.
+
+**Missing Context:**
+- Specific documents required for PMAY application.
+- Detailed information on the review process and timeline.
+
+DOCUMENTS REQUIRED
+----------------------------------------------------------------------
+Section: DOCUMENTS REQUIRED
+
+Topic: What is PMAY
+
+Task: List required documents clearly.
+
+Missing Context: Information on the specific documents required for PMAY (Pradhan Mantri Awas Yojana) is not provided. 
+
+If context were available, it would typically include documents such as:
+
+- Proof of identity (e.g., Aadhaar card, voter ID, passport)
+- Proof of residence (e.g., utility bills, ration card)
+- Income certificate
+- Bank account details
+- Land ownership documents (if applicable)
+- Any other relevant documents as specified by the local authorities
+
+Please provide the necessary context for a more accurate list of required documents.
+
+DEADLINES
+----------------------------------------------------------------------
+Context missing: Information regarding PMAY (Pradhan Mantri Awas Yojana) timelines, deadlines, or validity periods is not available.
+
+FINANCIAL DETAILS
+----------------------------------------------------------------------
+Section: FINANCIAL DETAILS
+
+Topic: What is PMAY
+
+- **PMAY (Pradhan Mantri Awas Yojana)**: A scheme launched by the Government of India to provide affordable housing to urban and rural poor.
+  
+- **Subsidy/Assistance**:
+  - **Financial Assistance**: Direct financial support provided to beneficiaries to help them build, improve, or buy a house.
+  - **Interest Subsidy**: Beneficiaries can avail loans at a reduced interest rate to construct or buy a house.
+  
+- **Loan Support**:
+  - **Eligible Loan Amount**: Varies based on the location and size of the house.
+  - **Interest Subsidy Duration**: Typically for the entire loan tenure, up to a maximum of 15 years.
+  
+- **Limits**:
+  - **Income Limit**: Varies by urban and rural areas; generally, beneficiaries with an annual family income below INR 6 lakh in urban areas and INR 3 lakh in rural areas are eligible.
+  - **House Size**: Maximum built-up area of 90 sq. meters in urban areas and 120 sq. meters in rural areas.
+
+- **Missing Context**: Specific details on the exact subsidy amount, interest rates, and other financial parameters are not provided.
+
+COMMON PITFALLS
+----------------------------------------------------------------------
+Section: COMMON PITFALLS
+
+Topic: What is PMAY
+
+Task: What mistakes cause rejection or delays?
+
+- **Incomplete Documentation**: Missing or incomplete forms and documents can lead to delays or rejections.
+- **Incorrect Information**: Providing inaccurate or outdated information can cause issues.
+- **Failure to Meet Eligibility Criteria**: Not fulfilling the eligibility requirements can result in rejection.
+- **Late Submission**: Submitting applications after the deadline can lead to delays.
+- **Non-compliance with Guidelines**: Not adhering to the guidelines and rules set by the PMAY scheme can cause rejection.
+- **Lack of Financial Proof**: Failing to provide necessary financial documents can result in delays.
+- **Inadequate Site Inspection**: Not ensuring the proposed site meets the scheme's criteria can lead to rejection.
+- **Poor Communication**: Lack of clear communication with the authorities can cause delays.
+
+Context Missing: Detailed information on specific PMAY guidelines and requirements.
+
+PRACTICAL TIPS
+----------------------------------------------------------------------
+No context found. Please provide more information about PMAY (Pradhan Mantri Awas Yojana) and its application process in rural and urban contexts.
+
+HELPLINE
+----------------------------------------------------------------------
+Section: HELPLINE
+
+Topic: What is PMAY
+
+- **PMAY (Pradhan Mantri Awas Yojana)**: A scheme launched by the Government of India to provide affordable housing to urban and rural poor.
+
+**Official Help Channels**:
+- **PMAY Website**: [pmayg.nic.in](https://pmayg.nic.in)
+- **PMAY Helpline Number**: 1800-11-6008
+- **PMAY Toll-Free Number**: 1800-11-6008
+
+**Where to Verify Latest Updates**:
+- **Official PMAY Website**: [pmayg.nic.in](https://pmayg.nic.in)
+- **Ministry of Housing and Urban Affairs Website**: [mohua.gov.in](https://mohua.gov.in)
+
+**Missing Context**:
+- Specific details about the latest updates or changes in the PMAY scheme are not provided. For the most accurate and up-to-date information, please visit the official PMAY website or contact the helpline.
+
+RETRIEVAL SUMMARY
+----------------------------------------------------------------------
+schemes_index docs: 0
+citizen_faq_index docs: 0
+processing_time_seconds: 11.10

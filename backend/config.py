@@ -33,8 +33,11 @@ class Settings(BaseSettings):
     S3_REPORTS_BUCKET: str = "gramsaarthi-reports-dev"
 
     # Bedrock Settings
-    BEDROCK_MODEL_ID: str = "anthropic.claude-3-sonnet-20240229-v1:0"
+    BEDROCK_MODEL_ID: str = "amazon.nova-lite-v1:0"
+    BEDROCK_INFERENCE_PROFILE_ID: str = "apac.amazon.nova-lite-v1:0"
     BEDROCK_EMBEDDING_MODEL_ID: str = "amazon.titan-embed-text-v1"
+    BEDROCK_MAX_TOKENS: int = 512
+    BEDROCK_TEMPERATURE: float = 0.2
 
     # ChromaDB Settings
     CHROMA_PERSIST_DIRECTORY: str = "./chroma_db"
