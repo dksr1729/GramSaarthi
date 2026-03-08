@@ -16,8 +16,10 @@ from auth import get_current_user, require_persona
 import logging
 from typing import List
 from datetime import datetime
+from pathlib import Path
 from io import BytesIO
 from uuid import uuid4
+import pandas as pd
 from pypdf import PdfReader
 from vector_store import vector_store
 
@@ -81,6 +83,18 @@ def _resolve_dashboard_mandal(current_user: dict, requested_mandal: str = "") ->
         selected_mandal = user_mandal.strip()
 
     return selected_mandal, available_mandals, is_admin
+
+
+def _load_scheme_recommendations() -> pd.DataFrame:
+    csv_path = Path(__file__).resolve().parents[1] / "resources" / "core_scheme_recommendations.csv"
+    if not csv_path.exists():
+        raise FileNotFoundError(f"Recommendations CSV not found at {csv_path}")
+
+    df = pd.read_csv(csv_path, low_memory=False)
+    for col in ["District", "Mandal", "GP_Name"]:
+        if col in df.columns:
+            df[col] = df[col].astype(str).str.strip().str.title()
+    return df
 
 # Create FastAPI app
 app = FastAPI(
@@ -707,6 +721,70 @@ async def dashboard_chat(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to answer dashboard question"
+        )
+
+
+@app.get("/api/recommend")
+async def get_recommendations(
+    top_k: int = 12,
+    current_user: dict = Depends(get_current_user),
+):
+    """Get scheme recommendations from core_scheme_recommendations.csv."""
+    try:
+        if top_k < 1 or top_k > 50:
+            raise HTTPException(status_code=400, detail="top_k must be between 1 and 50")
+
+        df = _load_scheme_recommendations()
+        district = (current_user.get("district") or "").strip().title()
+        mandal = (current_user.get("mandal") or "").strip().title()
+        village = (current_user.get("village") or "").strip().title()
+        persona = current_user.get("persona", "")
+
+        if district and "District" in df.columns:
+            df = df[df["District"] == district]
+        if persona != PersonaEnum.DISTRICT_ADMIN.value and mandal and "Mandal" in df.columns:
+            df = df[df["Mandal"] == mandal]
+        if persona == PersonaEnum.RURAL_USER.value and village and "GP_Name" in df.columns:
+            df = df[df["GP_Name"] == village]
+
+        if "recommendation_rank" in df.columns:
+            df = df.sort_values(["recommendation_rank", "recommendation_score"], ascending=[True, False])
+        elif "recommendation_score" in df.columns:
+            df = df.sort_values("recommendation_score", ascending=False)
+
+        selected = df.head(top_k).copy()
+        response_rows = []
+        for _, row in selected.iterrows():
+            response_rows.append({
+                "title": row.get("Scheme Name") or "Scheme",
+                "theme": row.get("theme") or "",
+                "sector": row.get("sector") or "",
+                "what_to_do": row.get("rationale") or "Review this scheme for local implementation planning.",
+                "recommendation_rank": int(row.get("recommendation_rank")) if pd.notna(row.get("recommendation_rank")) else None,
+                "recommendation_score": round(float(row.get("recommendation_score")), 2) if pd.notna(row.get("recommendation_score")) else None,
+                "priority_tier": row.get("priority_tier") or "",
+                "district": row.get("District") or "",
+                "mandal": row.get("Mandal") or "",
+                "gp_name": row.get("GP_Name") or "",
+                "predicted_drought_flag": row.get("predicted_drought_flag") or "",
+                "predicted_rainfall_mm": round(float(row.get("predicted_rainfall_mm")), 2) if pd.notna(row.get("predicted_rainfall_mm")) else None,
+            })
+
+        return {
+            "recommendations": response_rows,
+            "total": int(len(df)),
+            "returned": int(len(response_rows)),
+            "source": "resources/core_scheme_recommendations.csv",
+        }
+    except HTTPException:
+        raise
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error getting recommendations: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to load recommendations"
         )
 
 

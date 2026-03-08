@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import Reports from './pages/Reports'
 import Schemes from './pages/Schemes'
+import Recommend from './pages/Recommend'
 import Ingest from './pages/Ingest'
 import Profile from './pages/Profile'
 import Layout from './components/Layout'
@@ -31,6 +32,7 @@ function App() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="reports" element={<Reports />} />
+        <Route path="recommend" element={<Recommend />} />
         <Route path="schemes" element={<Schemes />} />
         <Route path="ingest" element={<Ingest />} />
         <Route path="profile" element={<Profile />} />

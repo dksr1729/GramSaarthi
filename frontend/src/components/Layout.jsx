@@ -20,6 +20,7 @@ import {
   Dashboard as DashboardIcon,
   Description as ReportIcon,
   LocalOffer as SchemeIcon,
+  AutoAwesome as RecommendIcon,
   CloudUpload as IngestIcon,
   AccountCircle as ProfileIcon,
   Logout as LogoutIcon,
@@ -48,6 +49,7 @@ function Layout() {
     const baseItems = [
       { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
       { text: 'Reports', icon: <ReportIcon />, path: '/reports' },
+      { text: 'Budget Insights', icon: <RecommendIcon />, path: '/recommend' },
       { text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
     ]
 
