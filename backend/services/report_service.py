@@ -80,12 +80,56 @@ class ReportService:
             collection_name="citizen_faq_index",
         )
 
+        # If filtered retrieval returns nothing, retry globally without filters.
+        # Chunks are intentionally shared across personas/users once ingested.
+        fallback_used = False
+        if filters and not schemes_docs and not faq_docs:
+            fallback_used = True
+            schemes_docs = vector_store.search(
+                query,
+                top_k=top_k,
+                filters=None,
+                collection_name="schemes_index",
+            )
+            faq_docs = vector_store.search(
+                query,
+                top_k=top_k,
+                filters=None,
+                collection_name="citizen_faq_index",
+            )
+
         context_docs = sorted(schemes_docs + faq_docs, key=lambda x: x.get("score", 0), reverse=True)[:top_k]
         return {
             "context_docs": context_docs,
             "schemes_count": len(schemes_docs),
             "faq_count": len(faq_docs),
+            "fallback_used": fallback_used,
         }
+
+    def _format_context_chunks(self, context_docs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        chunks: List[Dict[str, Any]] = []
+        for idx, doc in enumerate(context_docs):
+            meta = doc.get("metadata") or {}
+            source = meta.get("filename") or meta.get("scheme_name") or doc.get("id") or f"chunk-{idx + 1}"
+            chunks.append(
+                {
+                    "id": doc.get("id", f"chunk-{idx + 1}"),
+                    "collection": meta.get("target_index", "unknown"),
+                    "source": source,
+                    "score": float(doc.get("score", 0.0)),
+                    "text": (doc.get("text") or "").strip(),
+                }
+            )
+        return chunks
+
+    def _to_dynamodb_compatible(self, value: Any) -> Any:
+        if isinstance(value, float):
+            return Decimal(str(value))
+        if isinstance(value, list):
+            return [self._to_dynamodb_compatible(v) for v in value]
+        if isinstance(value, dict):
+            return {k: self._to_dynamodb_compatible(v) for k, v in value.items()}
+        return value
 
     def _call_bedrock(self, prompt: str) -> str:
         body = {
@@ -124,9 +168,38 @@ class ReportService:
             f"Topic: {topic}\n"
             f"Task: {question_instruction}\n\n"
             "Write only this section content with useful bullet points where relevant. "
-            "If context is missing, explicitly mention what is missing.\n\n"
-            f"Retrieved Context:\n{context_text if context_text else 'No context found.'}"
+            "If context is sparse, still provide a practical best-effort answer from general public knowledge. "
+            "Do not output phrases like 'No context found'.\n\n"
+            f"Retrieved Context:\n{context_text if context_text else 'Context not available from retrieval for this query.'}"
         )
+
+    def _sanitize_answer(self, text: str) -> str:
+        if not text:
+            return ""
+
+        cleaned = text
+        banned_phrases = [
+            "No context found.",
+            "no context found.",
+            "No context available.",
+            "no context available.",
+            "Context not available from retrieval for this query.",
+        ]
+        for phrase in banned_phrases:
+            cleaned = cleaned.replace(phrase, "").strip()
+
+        cleaned_lines: List[str] = []
+        for line in cleaned.splitlines():
+            stripped = line.strip()
+            lower = stripped.lower()
+            if lower.startswith("section:") or lower.startswith("topic:") or lower.startswith("task:"):
+                continue
+            if lower.startswith("answer:"):
+                stripped = stripped.split(":", 1)[1].strip()
+            if stripped:
+                cleaned_lines.append(stripped)
+
+        return "\n".join(cleaned_lines).strip()
 
     def _format_report_text(
         self,
@@ -201,6 +274,7 @@ class ReportService:
         raise ValueError("Unsupported file format")
 
     async def ask_question(self, query: str, scheme_type_filter: str = "", top_k: int = 8) -> Dict[str, Any]:
+        start = time.time()
         retrieval = self._retrieve_context(query=query, top_k=top_k, scheme_type_filter=scheme_type_filter)
         prompt = self._compose_prompt(
             title="QUESTION RESPONSE",
@@ -208,7 +282,12 @@ class ReportService:
             question_instruction="Answer this question directly and concisely for users.",
             context_docs=retrieval["context_docs"],
         )
-        answer = self._call_bedrock(prompt)
+        answer = self._sanitize_answer(self._call_bedrock(prompt))
+        if not answer:
+            answer = (
+                "I could not find matching local documents for this question, but based on general guidance: "
+                "please verify details from official scheme portals or relevant government departments."
+            )
 
         sources = []
         for doc in retrieval["context_docs"]:
@@ -220,11 +299,20 @@ class ReportService:
         if not sources:
             sources = ["AWS Bedrock Nova Lite"]
 
+        context_chunks = self._format_context_chunks(retrieval["context_docs"])
+        duration = time.time() - start
         return {
             "question": query,
             "answer": answer,
             "sources": sources,
             "confidence": 0.85,
+            "context_chunks": context_chunks,
+            "retrieval_summary": {
+                "schemes_index_docs": retrieval["schemes_count"],
+                "citizen_faq_index_docs": retrieval["faq_count"],
+                "processing_time_seconds": round(duration, 2),
+                "fallback_used": bool(retrieval.get("fallback_used", False)),
+            },
         }
 
     async def generate_report(
@@ -237,6 +325,8 @@ class ReportService:
         start = time.time()
         report_id = self._report_id(topic)
         location_key = get_location_key(current_user)
+        primary_retrieval = self._retrieve_context(query=topic, top_k=top_k, scheme_type_filter=scheme_type_filter)
+        context_chunks = self._format_context_chunks(primary_retrieval["context_docs"])
 
         section_outputs: List[Dict[str, str]] = []
         total_schemes = 0
@@ -254,7 +344,12 @@ class ReportService:
                 question_instruction=question_instruction,
                 context_docs=retrieval["context_docs"],
             )
-            content = self._call_bedrock(prompt)
+            content = self._sanitize_answer(self._call_bedrock(prompt))
+            if not content:
+                content = (
+                    "Best-effort answer generated from general scheme knowledge. "
+                    "Please verify exact details from official government sources."
+                )
             section_outputs.append({"title": title, "content": content})
 
         confidence = 0.9
@@ -278,21 +373,37 @@ class ReportService:
             "report_id": report_id,
             "question": topic,
             "report_text": report_text,
+            "sections": section_outputs,
             "file_path": file_path,
             "report_mode": "dedicated_10q",
             "scheme_type_filter": scheme_type_filter,
             "top_k": int(top_k),
             "confidence": Decimal(str(confidence)),
+            "context_chunks": context_chunks,
+            "retrieval_summary": {
+                "schemes_index_docs": int(primary_retrieval["schemes_count"]),
+                "citizen_faq_index_docs": int(primary_retrieval["faq_count"]),
+                "processing_time_seconds": Decimal(str(round(duration, 2))),
+                "fallback_used": bool(primary_retrieval.get("fallback_used", False)),
+            },
             "generated_at": now,
             "updated_at": now,
         }
-        db_client.put_item(self.reports_table, item)
+        db_client.put_item(self.reports_table, self._to_dynamodb_compatible(item))
 
         return {
             "report_id": report_id,
             "question": topic,
             "report_text": report_text,
+            "sections": section_outputs,
             "confidence": confidence,
+            "context_chunks": context_chunks,
+            "retrieval_summary": {
+                "schemes_index_docs": int(primary_retrieval["schemes_count"]),
+                "citizen_faq_index_docs": int(primary_retrieval["faq_count"]),
+                "processing_time_seconds": round(duration, 2),
+                "fallback_used": bool(primary_retrieval.get("fallback_used", False)),
+            },
             "generated_at": now,
         }
 
@@ -323,11 +434,19 @@ class ReportService:
             "report_id": report.get("report_id"),
             "question": report.get("question", ""),
             "report_text": report.get("report_text", ""),
+            "sections": report.get("sections", []),
             "confidence": float(report.get("confidence", 0.0)),
             "generated_at": report.get("generated_at", ""),
             "scheme_type_filter": report.get("scheme_type_filter", ""),
             "top_k": int(report.get("top_k", 8)),
             "report_mode": report.get("report_mode", "dedicated_10q"),
+            "context_chunks": report.get("context_chunks", []),
+            "retrieval_summary": {
+                "schemes_index_docs": int((report.get("retrieval_summary") or {}).get("schemes_index_docs", 0)),
+                "citizen_faq_index_docs": int((report.get("retrieval_summary") or {}).get("citizen_faq_index_docs", 0)),
+                "processing_time_seconds": float((report.get("retrieval_summary") or {}).get("processing_time_seconds", 0.0)),
+                "fallback_used": bool((report.get("retrieval_summary") or {}).get("fallback_used", False)),
+            },
         }
 
     async def regenerate_report(self, current_user: Dict[str, Any], report_id: str) -> Dict[str, Any]:

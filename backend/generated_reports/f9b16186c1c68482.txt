@@ -1,0 +1,168 @@
+DUALRAG REPORT
+======================================================================
+Question: What is eligibility criteria for Aayushman Bharat scheme
+Generated Hash: f9b16186c1c68482
+Confidence: 90%
+
+FINAL ANSWER
+----------------------------------------------------------------------
+## FINAL ANSWER
+### Aayushman Bharat Scheme Eligibility Criteria
+- **Objective**: To provide health insurance coverage to economically disadvantaged families.
+- **Eligible Population**:
+- Families listed in the Socio-Economic Caste Census (SECC) 2011.
+- Rural families.
+- Urban poor not covered under health insurance schemes by other government or private insurers.
+- **Coverage**:
+- Up to 500,000 INR per family per year for secondary and tertiary healthcare.
+- **Identification**:
+- Beneficiaries are identified through a unique health card.
+- **Exclusions**:
+- Individuals paying income tax.
+- Individuals from higher income groups.
+- Members of certain professional categories (doctors, engineers, etc.).
+- **States and Union Territories**:
+- All states and union territories are covered under the scheme.
+- **Enrollment**:
+- Eligible families can enroll at public health facilities or through designated centers.
+
+ELIGIBILITY
+----------------------------------------------------------------------
+### ELIGIBILITY
+**Who is eligible for the Aayushman Bharat scheme?**
+- **Residents of India**: Only Indian citizens are eligible.
+- **Deprived Criteria**: Individuals identified based on socio-economic criteria.
+- **Rural Population**: Families living in rural areas.
+- **Unorganized Sector Workers**: Workers not covered under any social security schemes.
+- **Excluded Groups**:
+- **Members of Armed Forces**: Individuals serving in the armed forces.
+- **Members of Parliament and State Legislatures**: Politicians and their family members.
+- **Pensioners**: Individuals receiving a pension from the government.
+- **Other Insured Individuals**: Those covered under any other health insurance scheme.
+
+BENEFITS
+----------------------------------------------------------------------
+### BENEFITS
+#### Eligibility Criteria for Aayushman Bharat Scheme
+- **Residents of India**: Only Indian citizens are eligible.
+- **Deprived Criteria**: Beneficiaries are identified based on socio-economic criteria from the latest available data.
+- **Excluded Groups**: Individuals with access to other government health schemes, such as those covered under CGHS, ESIC, or having private health insurance, are not eligible.
+#### Key Benefits
+- **Coverage Limit**: Up to INR 5 lakhs per family per year.
+- **Treatment Covered**: Includes pre- and post-hospitalization expenses, daycare procedures, and treatments for secondary and tertiary care.
+- **Hospitalization**: Coverage for treatments in both public and empanelled private hospitals.
+- **No Cap on Family Size**: The coverage limit applies to the family as a whole, not per individual.
+- **No Age Limit**: No upper age limit for enrollment.
+- **No Pre-existing Conditions**: Coverage includes treatments for pre-existing conditions after a waiting period.
+
+HOW TO APPLY
+----------------------------------------------------------------------
+### How to Apply: Eligibility Criteria for Aayushman Bharat Scheme
+#### Eligibility Criteria
+- **Resident of India**: Must be a resident and belong to the economically weaker section (EWS) or below the poverty line (BPL).
+- **Families on List**: Families listed in the Socio-Economic and Caste Census 2011.
+- **Occupation**: Families engaged in certain occupations such as agriculture laborers, casual laborers, etc.
+#### Step-by-Step Application Flow
+1. **Visit Official Website**: Go to the official Aayushman Bharat website.
+2. **Select State**: Choose your state from the list provided.
+3. **Find Your Name**: Use the "Find Your Name" feature to check eligibility.
+4. **Enter Details**: Input required details such as name, age, gender, and family ID.
+5. **Submit Application**: Submit the application form.
+6. **Await Approval**: Wait for the approval notification.
+7. **Collect Card**: Once approved, collect the Aayushman Bharat card from the designated center.
+
+DOCUMENTS REQUIRED
+----------------------------------------------------------------------
+### DOCUMENTS REQUIRED
+- **Proof of Residence**: Utility bill (electricity, water, gas, telephone, or rent agreement)
+- **Proof of Identity**: Aadhaar card or EID
+- **Proof of Socioeconomic Status**: BPL (Below Poverty Line) card or any other government-issued certificate indicating low income
+- **Family Head Details**: Name, age, and relationship to other family members
+- **Bank Account Details**: Bank passbook or account statement
+- **Photographs**: Recent passport-sized photographs of family members
+- **Mobile Number**: Registered mobile number for communication purposes
+
+DEADLINES
+----------------------------------------------------------------------
+- Eligibility criteria for Aayushman Bharat scheme are typically based on socio-economic status and are determined by a validated list of beneficiaries.
+- The scheme generally does not specify explicit deadlines for eligibility criteria itself, as it is based on continuous assessment and updating of beneficiary lists.
+- Beneficiary lists are updated periodically, but specific timelines for these updates are not publicly detailed.
+
+FINANCIAL DETAILS
+----------------------------------------------------------------------
+### FINANCIAL DETAILS
+#### Eligibility Criteria for Aayushman Bharat Scheme
+- **Target Beneficiaries:**
+- Families listed in the Socio-Economic Caste Census (SECC) 2011.
+- Rural families.
+- Unorganized sector workers.
+- **Coverage:**
+- Up to 500,000 Indian rupees per family per year for secondary and tertiary care hospitalization.
+- **Subsidy/Assistance:**
+- The government covers the entire cost of hospitalization for eligible beneficiaries.
+- No direct cash assistance provided; instead, the scheme covers medical expenses.
+- **Limits:**
+- Annual limit of 500,000 rupees per family for medical expenses.
+- No specific limits on the number of family members covered under one family unit.
+- **Loan Support:**
+- No direct loan support under the scheme; it is a cashless and paperless insurance scheme.
+
+COMMON PITFALLS
+----------------------------------------------------------------------
+### COMMON PITFALLS
+#### What is eligibility criteria for Aayushman Bharat scheme
+#### What mistakes cause rejection or delays?
+- **Incomplete or Incorrect Documentation:**
+- Missing or inaccurate personal information.
+- Incomplete family details.
+- Incorrect or outdated address proof.
+- **Failure to Update Information:**
+- Not updating the database with current income status.
+- Not reflecting recent changes in family composition.
+- **Non-compliance with Socioeconomic Status:**
+- Discrepancies in reported income and actual income.
+- Not meeting the criteria for low-income households.
+- **Technical Errors:**
+- Errors in the biometric data entry.
+- Issues with the digital enrollment process.
+- **Lack of Awareness:**
+- Not being aware of the eligibility criteria.
+- Misunderstanding the application process.
+- **Fraudulent Claims:**
+- Providing false information to qualify.
+- Duplication of beneficiary cards.
+
+PRACTICAL TIPS
+----------------------------------------------------------------------
+### PRACTICAL TIPS: Eligibility Criteria for Aayushman Bharat Scheme
+- **Residence Verification**: Ensure you reside in a listed rural or urban area under the scheme. Check the latest beneficiary list available at local health and wellness centers or online portals.
+- **Identification Proof**: Have your Aadhaar card ready, as it is the primary identification document required for verification.
+- **Family Head**: If you are the head of the family, ensure all family members’ details are accurately recorded under your name.
+- **Economic Status**: Be prepared to provide proof of your economic status, such as income certificates or ration cards, if required.
+- **Occupation**: Note that certain occupations may qualify you for different categories under the scheme. Verify if your occupation is listed.
+- **Pre-existing Conditions**: Be aware of any pre-existing medical conditions and carry relevant documents if needed.
+- **Local Health Camps**: Attend local health camps or drives where eligibility checks and enrollments are facilitated.
+- **Digital Platforms**: Utilize digital platforms and mobile apps for real-time updates and to check your eligibility status.
+- **Community Support**: Seek assistance from local community leaders or government help desks for guidance on the application process.
+
+HELPLINE
+----------------------------------------------------------------------
+### Section: HELPLINE
+#### Topic: What is eligibility criteria for Aayushman Bharat scheme
+- **Eligibility Criteria:**
+- Households not covered under any other health insurance/security schemes.
+- Households identified in the latest Socio-Economic Caste Census (SECC) 2011 data.
+- **Official Help Channels:**
+- **Toll-Free Helpline Number:** 14555
+- **Website:** [pmjay.gov.in](https://pmjay.gov.in)
+- **Mobile App:** Ayushman Bharat Health Account (ABHA) App
+- **Where to Verify Latest Updates:**
+- Official website: [pmjay.gov.in](https://pmjay.gov.in)
+- Ministry of Health and Family Welfare website: [mohfw.gov.in](https://www.mohfw.gov.in)
+- Follow official social media handles for timely updates.
+
+RETRIEVAL SUMMARY
+----------------------------------------------------------------------
+schemes_index docs: 0
+citizen_faq_index docs: 0
+processing_time_seconds: 50.66

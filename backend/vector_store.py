@@ -103,8 +103,12 @@ class VectorStore:
                 try:
                     target_collection = self.client.get_collection(name=collection_name)
                 except Exception:
-                    logger.info(f"Collection not found for search: {collection_name}")
-                    return []
+                    # Create empty collection on first access so search path remains stable.
+                    target_collection = self._get_or_create_collection(collection_name)
+                    logger.warning(
+                        f"Collection {collection_name} was missing; created empty collection. "
+                        "Ingest documents to get results."
+                    )
 
             # Search in collection
             results = target_collection.query(

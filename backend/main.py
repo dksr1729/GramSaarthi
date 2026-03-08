@@ -460,14 +460,21 @@ async def get_district_data(current_user: dict = Depends(get_current_user)):
     try:
         district = current_user.get("district", "")
         state = current_user.get("state", "telangana")
-        
+
         # Get location hierarchy
         hierarchy = location_service.get_location_hierarchy(state, district)
-        
+        mandals = hierarchy.get("mandals", [])
+        total_villages = 0
+
+        # Aggregate village counts across all mandals in the district.
+        for mandal in mandals:
+            villages = location_service.get_villages(state, district, mandal)
+            total_villages += len(villages)
+
         return {
             "district": district,
-            "total_mandals": len(hierarchy.get("mandals", [])),
-            "total_villages": 0,  # TODO: Calculate total villages
+            "total_mandals": len(mandals),
+            "total_villages": total_villages,
             "statistics": {}
         }
     except Exception as e:

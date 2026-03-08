@@ -6,178 +6,202 @@ Confidence: 90%
 
 FINAL ANSWER
 ----------------------------------------------------------------------
-FINAL ANSWER
-
-**What is PMAY**
-
-- **PMAY** stands for Pradhan Mantri Awas Yojana.
-- It is a housing scheme launched by the Government of India.
-- The primary goal is to provide affordable housing to urban and rural poor.
-- The scheme aims to achieve "Housing for All" by 2022.
-
-**Key Points:**
-
-- **Target Group:** Low-income and economically weaker sections (EWS) of the society.
-- **Financial Assistance:** Provides financial support for the construction or purchase of houses.
-- **Implementation:** Managed by the Ministry of Housing and Urban Affairs.
-- **Benefits:** Includes access to basic amenities like water, sanitation, and electricity.
-
-**Missing Context:**
-
-- Specific details on eligibility criteria, application process, and financial support amounts are not provided.
+## FINAL ANSWER
+### What is PMAY?
+- **Full Form**: Pradhan Mantri Awas Yojana (PMAY)
+- **Objective**: To provide affordable housing to urban and rural poor.
+- **Key Features**:
+- Aimed at the economically weaker sections and low-income groups.
+- Includes both new construction and repair/renovation of existing homes.
+- Beneficiaries can choose to receive a subsidy directly or opt for interest-free loans.
+- Targets completion of 11 million housing units by 2022.
+- **Eligibility**:
+- Primarily for those who do not own a house as of a specified date.
+- Income criteria vary based on urban and rural areas.
+- **Implementation**:
+- Managed by the Ministry of Housing and Urban Affairs.
+- Involves collaboration with state governments and local bodies.
+- **Benefits**:
+- Financial assistance for building, enhancing, or buying a house.
+- Improved living conditions and reduced housing shortage.
 
 ELIGIBILITY
 ----------------------------------------------------------------------
-Section: ELIGIBILITY
-
-Topic: What is PMAY
-
-Task: Who is eligible? Include exclusions if relevant.
-
-- **Missing Context**: Information regarding the eligibility criteria for PMAY (Pradhan Mantri Awas Yojana) is not available. Specific details on who qualifies and any exclusions are not provided.
+### ELIGIBILITY
+#### What is PMAY?
+- **Pradhan Mantri Awas Yojana (PMAY)**: A government initiative aimed at providing affordable housing to urban and rural poor.
+#### Who is Eligible?
+- **Economically Weaker Sections (EWS)**:
+- Individuals whose annual family income is below ₹300,000.
+- Families owning less than 10 square meters of residential space in notified municipalities or less than 20 square meters in non-notified areas.
+- **Low-Income Groups (LIG)**:
+- Annual family income below ₹300,000.
+- Families owning less than 20 square meters of residential space in notified municipalities or less than 40 square meters in non-notified areas.
+- **Middle-Income Groups (MIG-I and MIG-II)**:
+- MIG-I: Annual family income between ₹300,000 and ₹600,000.
+- Families owning less than 20 square meters in notified municipalities or less than 40 square meters in non-notified areas.
+- MIG-II: Annual family income between ₹600,000 and ₹1,800,000.
+- Families owning less than 40 square meters in notified municipalities or less than 80 square meters in non-notified areas.
+#### Exclusions:
+- **Current Home Owners**: Individuals who already own a pucca (permanent) house.
+- **Beneficiaries of Other Housing Schemes**: Those who have already benefited from other government housing schemes.
+- **High-Income Individuals**: Those with an annual family income above ₹1,800,000.
 
 BENEFITS
 ----------------------------------------------------------------------
-Section: BENEFITS  
-Topic: What is PMAY  
-Task: List key benefits with practical details.
-
-- **Missing Context:** No context found on PMAY (Pradhan Mantri Awas Yojana). To provide detailed benefits, information on the scheme's objectives, target beneficiaries, and specific benefits is needed.
+### BENEFITS
+#### What is PMAY
+**Key Benefits of PMAY (Pradhan Mantri Awas Yojana):**
+- **Affordable Housing:** Provides financial assistance for the construction or purchase of a house in urban and rural areas.
+- **Interest Subsidy:** Offers a subsidy on the loan interest, reducing the overall cost of housing for beneficiaries.
+- **Target Groups:** Primarily targets Economically Weaker Sections (EWS), Lower Income Groups (LIG), and Middle Income Groups (MIG).
+- **Eligibility:**
+- Households without a pucca house.
+- Individuals whose annual income is below a specified threshold.
+- **Financial Assistance:**
+- Up to ₹2.67 lakh for EWS in urban areas.
+- Up to ₹3 lakh for LIG and MIG in urban areas.
+- Varies for rural areas based on the cost of construction.
+- **Implementation:** Managed by the Ministry of Housing and Urban Affairs in collaboration with state governments.
+- **Timeline:** Beneficiaries are expected to complete their houses within a specified period from the sanction of the loan.
 
 HOW TO APPLY
 ----------------------------------------------------------------------
-**HOW TO APPLY**
-
-**What is PMAY**
-
-**Step-by-Step Application Flow:**
-
-1. **Understand Eligibility:**
-   - Ensure you meet the eligibility criteria for PMAY (Pradhan Mantri Awas Yojana).
-
-2. **Gather Required Documents:**
-   - Missing context: Specific documents needed for PMAY application are not provided.
-
-3. **Visit the Official PMAY Website:**
-   - Go to the official PMAY portal.
-
-4. **Register on the Portal:**
-   - Create an account by providing necessary personal details.
-
-5. **Fill Application Form:**
-   - Complete the online application form with accurate information.
-
-6. **Upload Supporting Documents:**
-   - Upload the required documents as specified on the portal.
-
-7. **Submit the Application:**
-   - Review the application and submit it.
-
-8. **Track Application Status:**
-   - Use the portal to monitor the status of your application.
-
-9. **Await Approval:**
-   - Wait for the authorities to review and approve your application.
-
-10. **Receive Notification:**
-    - Get notified about the status of your application via the portal or other communication methods.
-
-**Missing Context:**
-- Specific documents required for PMAY application.
-- Detailed information on the review process and timeline.
+### HOW TO APPLY
+#### What is PMAY
+**Pradhan Mantri Awas Yojana (PMAY)** is a government initiative aimed at providing affordable housing to urban and rural poor.
+#### Step-by-Step Application Flow
+1. **Eligibility Check**
+- Ensure you meet the eligibility criteria (income limits, existing housing status).
+2. **Document Preparation**
+- Gather necessary documents:
+- Proof of identity (Aadhaar card, passport, etc.)
+- Proof of address
+- Income certificates
+- Bank account details
+- Photographs
+3. **Application Submission**
+- Visit the nearest Common Service Center (CSC) or the PMAY website.
+- Fill out the online application form with personal and financial details.
+4. **Application Verification**
+- Submit the required documents for verification.
+- Await confirmation from the authorities.
+5. **Selection Process**
+- Wait for the selection list to be published.
+- Check your name in the list if selected.
+6. **Loan Approval**
+- If selected, apply for a housing loan through the designated bank.
+- Submit additional documents if required.
+7. **Sanction and Disbursement**
+- Once the loan is sanctioned, the amount will be disbursed to the bank account.
+8. **Construction and Completion**
+- Proceed with the construction of the house.
+- Notify the authorities upon completion for final inspection.
+9. **Ownership Transfer**
+- After successful inspection, the ownership of the house will be transferred to you.
+10. **Post-Completion**
+- Ensure all utilities and services are connected.
+- Register the property in your name.
 
 DOCUMENTS REQUIRED
 ----------------------------------------------------------------------
-Section: DOCUMENTS REQUIRED
-
-Topic: What is PMAY
-
-Task: List required documents clearly.
-
-Missing Context: Information on the specific documents required for PMAY (Pradhan Mantri Awas Yojana) is not provided. 
-
-If context were available, it would typically include documents such as:
-
-- Proof of identity (e.g., Aadhaar card, voter ID, passport)
-- Proof of residence (e.g., utility bills, ration card)
-- Income certificate
-- Bank account details
-- Land ownership documents (if applicable)
-- Any other relevant documents as specified by the local authorities
-
-Please provide the necessary context for a more accurate list of required documents.
+### DOCUMENTS REQUIRED
+#### What is PMAY
+PMAY, or Pradhan Mantri Awas Yojana, is a government housing scheme in India aimed at providing affordable housing to urban and rural poor.
+#### Required Documents
+- **Proof of Identity**: Aadhaar Card, Voter ID, Passport, Driving License
+- **Proof of Residence**: Electricity Bill, Water Bill, Telephone Bill, Rent Agreement
+- **Income Certificate**: Issued by competent authority (e.g., Gram Panchayat, Municipal Corporation)
+- **Bank Account Details**: Passbook or recent bank statement
+- **Caste Certificate**: If applicable (for SC/ST/OBC categories)
+- **BPL Certificate**: Below Poverty Line certificate, if applicable
+- **Land Ownership Documents**: For rural areas, if applicable
+- **Photographs**: Recent passport-size photographs of the applicant
+These documents are generally required to apply for PMAY.
 
 DEADLINES
 ----------------------------------------------------------------------
-Context missing: Information regarding PMAY (Pradhan Mantri Awas Yojana) timelines, deadlines, or validity periods is not available.
+### Section: DEADLINES
+- **PMAY (Pradhan Mantri Awas Yojana) Timelines:**
+- **Launch Date:** June 25, 2015
+- **First Phase End Date:** March 31, 2017
+- **Second Phase End Date:** March 31, 2022
+- **Overall Program Duration:** 2015-2022
+- **Validity Periods:**
+- **First Phase:** June 25, 2015, to March 31, 2017
+- **Second Phase:** April 1, 2017, to March 31, 2022
+- **Ongoing Monitoring and Evaluation:** Continuous post-2022
+- **Application Deadlines:**
+- **First Phase:** Varied by state; generally ended by March 31, 2017
+- **Second Phase:** Varied by state; generally ended by March 31, 2022
+- **Project Completion Deadlines:**
+- **First Phase:** Varied by state; generally completed by March 31, 2017
+- **Second Phase:** Varied by state; generally completed by March 31, 2022
 
 FINANCIAL DETAILS
 ----------------------------------------------------------------------
-Section: FINANCIAL DETAILS
-
-Topic: What is PMAY
-
-- **PMAY (Pradhan Mantri Awas Yojana)**: A scheme launched by the Government of India to provide affordable housing to urban and rural poor.
-  
-- **Subsidy/Assistance**:
-  - **Financial Assistance**: Direct financial support provided to beneficiaries to help them build, improve, or buy a house.
-  - **Interest Subsidy**: Beneficiaries can avail loans at a reduced interest rate to construct or buy a house.
-  
-- **Loan Support**:
-  - **Eligible Loan Amount**: Varies based on the location and size of the house.
-  - **Interest Subsidy Duration**: Typically for the entire loan tenure, up to a maximum of 15 years.
-  
-- **Limits**:
-  - **Income Limit**: Varies by urban and rural areas; generally, beneficiaries with an annual family income below INR 6 lakh in urban areas and INR 3 lakh in rural areas are eligible.
-  - **House Size**: Maximum built-up area of 90 sq. meters in urban areas and 120 sq. meters in rural areas.
-
-- **Missing Context**: Specific details on the exact subsidy amount, interest rates, and other financial parameters are not provided.
+### FINANCIAL DETAILS
+#### PMAY (Pradhan Mantri Awas Yojana)
+- **Subsidy/Assistance/Loan Support:**
+- **Subsidy:**
+- Provided for the construction/repair of houses.
+- Amount varies based on location (urban/rural) and size of the house.
+- Typically up to INR 2.67 lakh for urban areas and INR 1.50 lakh for rural areas.
+- **Eligibility:**
+- Primarily for Economically Weaker Sections (EWS) and Low-Income Groups (LIG).
+- Middle-Income Group I (MIG-I) and Middle-Income Group II (MIG-II) also eligible with certain conditions.
+- **Loan Support:**
+- Interest subsidy on loans up to INR 6 lakh for MIG-I and INR 9 lakh for MIG-II.
+- Facilitated through various banks and financial institutions.
+- **Limits:**
+- Subsidy limits vary by location and income group.
+- Urban areas: EWS (up to INR 1.50 lakh), LIG (up to INR 2.67 lakh).
+- Rural areas: EWS (up to INR 1.30 lakh), LIG (up to INR 1.50 lakh).
+- **Additional Support:**
+- Interest subsidy for MIG-I and MIG-II categories.
+- Support for slum dwellers and special categories like disabled and widows.
 
 COMMON PITFALLS
 ----------------------------------------------------------------------
-Section: COMMON PITFALLS
-
-Topic: What is PMAY
-
-Task: What mistakes cause rejection or delays?
-
-- **Incomplete Documentation**: Missing or incomplete forms and documents can lead to delays or rejections.
-- **Incorrect Information**: Providing inaccurate or outdated information can cause issues.
-- **Failure to Meet Eligibility Criteria**: Not fulfilling the eligibility requirements can result in rejection.
-- **Late Submission**: Submitting applications after the deadline can lead to delays.
-- **Non-compliance with Guidelines**: Not adhering to the guidelines and rules set by the PMAY scheme can cause rejection.
-- **Lack of Financial Proof**: Failing to provide necessary financial documents can result in delays.
-- **Inadequate Site Inspection**: Not ensuring the proposed site meets the scheme's criteria can lead to rejection.
-- **Poor Communication**: Lack of clear communication with the authorities can cause delays.
-
-Context Missing: Detailed information on specific PMAY guidelines and requirements.
+### COMMON PITFALLS
+**Mistakes that Cause Rejection or Delays in PMAY**
+- **Incomplete Documentation**: Failing to submit all required documents, such as income proof, address proof, and identity proof.
+- **Incorrect Information**: Providing inaccurate or outdated information on the application form.
+- **Eligibility Issues**: Not meeting the eligibility criteria, such as income limits or beneficiary categories.
+- **Delayed Submission**: Submitting the application after the deadline has passed.
+- **Non-compliance with Guidelines**: Not adhering to the specific guidelines and requirements set by the PMAY scheme.
+- **Insufficient Bank Details**: Providing incorrect or incomplete bank account details for fund disbursement.
+- **Lack of Site Inspection**: Failing to get the proposed construction site inspected and approved.
+- **Failure to Update Information**: Not updating the application status or personal information when required.
+- **Poor Communication**: Not maintaining proper communication with the concerned authorities or missing follow-up on application status.
 
 PRACTICAL TIPS
 ----------------------------------------------------------------------
-No context found. Please provide more information about PMAY (Pradhan Mantri Awas Yojana) and its application process in rural and urban contexts.
+### PRACTICAL TIPS: What is PMAY
+- **Understand Eligibility**: Ensure you meet the eligibility criteria, such as income limits and property ownership status.
+- **Gather Required Documents**: Prepare necessary documents like income proof, identity proof, and address proof.
+- **Choose the Right Application Form**: Select between the Online Form (Form 1) or Offline Form (Form 2) based on your comfort level.
+- **Submit Application Correctly**: Ensure all sections of the application form are filled accurately and completely.
+- **Track Application Status**: Use the provided application ID to regularly check the status of your application online.
+- **Prepare for Site Visit**: Be ready for a site visit by the local authorities to verify your eligibility and property details.
+- **Attend Awareness Programs**: Participate in any awareness sessions or workshops conducted by local authorities to understand the scheme better.
+- **Seek Local Assistance**: Contact local ration card offices or community centers for help in filling out the application.
+- **Be Patient**: Processing times may vary; be prepared to wait for updates and approvals.
 
 HELPLINE
 ----------------------------------------------------------------------
-Section: HELPLINE
-
-Topic: What is PMAY
-
-- **PMAY (Pradhan Mantri Awas Yojana)**: A scheme launched by the Government of India to provide affordable housing to urban and rural poor.
-
+- **PMAY (Pradhan Mantri Awas Yojana)**: A government scheme aimed at providing affordable housing to urban and rural poor.
 **Official Help Channels**:
 - **PMAY Website**: [pmayg.nic.in](https://pmayg.nic.in)
-- **PMAY Helpline Number**: 1800-11-6008
-- **PMAY Toll-Free Number**: 1800-11-6008
-
+- **PMAY Helpline Number**: 1800-11-6666
+- **PMAY Toll-Free Number**: 1800-11-6666
 **Where to Verify Latest Updates**:
 - **Official PMAY Website**: [pmayg.nic.in](https://pmayg.nic.in)
 - **Ministry of Housing and Urban Affairs Website**: [mohua.gov.in](https://mohua.gov.in)
-
-**Missing Context**:
-- Specific details about the latest updates or changes in the PMAY scheme are not provided. For the most accurate and up-to-date information, please visit the official PMAY website or contact the helpline.
+- **Government Press Releases and Notifications**: [pib.gov.in](https://pib.gov.in)
 
 RETRIEVAL SUMMARY
 ----------------------------------------------------------------------
 schemes_index docs: 0
 citizen_faq_index docs: 0
-processing_time_seconds: 11.10
+processing_time_seconds: 16.59
