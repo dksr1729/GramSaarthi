@@ -146,7 +146,7 @@ function Ingest() {
         Document Ingestion
       </Typography>
       <Typography variant="body2" sx={{ color: '#5f7488', mb: 3 }}>
-        Ingests documents into local ChromaDB collections.
+        Ingests documents into vector store
       </Typography>
 
       <Paper sx={{ p: 3, border: '1px solid #c7dcd7', borderRadius: 2, boxShadow: '0 10px 30px rgba(27,43,67,0.08)' }}>

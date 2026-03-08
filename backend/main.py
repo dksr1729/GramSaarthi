@@ -975,7 +975,7 @@ async def ingest_file(
             "target_index": target_index,
             "chunks_ingested": len(chunks),
             "index_count": vector_store.count_documents(collection_name=target_index),
-            "message": "Document ingested into local ChromaDB successfully"
+            "message": "Document ingested into open search store successfully"
         }
     except HTTPException:
         raise

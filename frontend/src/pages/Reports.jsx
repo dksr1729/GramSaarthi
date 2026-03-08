@@ -534,15 +534,6 @@ function Reports() {
             >
               PDF
             </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              startIcon={downloading === 'json' ? <CircularProgress size={14} /> : <DownloadIcon />}
-              onClick={() => handleDownload('json')}
-              disabled={!selectedReportId || downloading !== ''}
-            >
-              JSON
-            </Button>
           </Box>
         </Box>
 
