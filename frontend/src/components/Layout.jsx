@@ -21,6 +21,7 @@ import {
   Description as ReportIcon,
   LocalOffer as SchemeIcon,
   AutoAwesome as RecommendIcon,
+  Analytics as AnalysisIcon,
   CloudUpload as IngestIcon,
   AccountCircle as ProfileIcon,
   Logout as LogoutIcon,
@@ -50,6 +51,7 @@ function Layout() {
       { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
       { text: 'Reports', icon: <ReportIcon />, path: '/reports' },
       { text: 'Budget Insights', icon: <RecommendIcon />, path: '/recommend' },
+      { text: 'Analysis', icon: <AnalysisIcon />, path: '/analysis' },
       { text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
     ]
 

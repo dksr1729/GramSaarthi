@@ -65,11 +65,107 @@ class RainfallService:
         self.artifact_dir = project_root / "backend" / "artifacts"
         self.model_path = self.artifact_dir / "rainfall_drought_model.pkl"
         self.monthly_path = self.artifact_dir / "rainfall_monthly_features.csv"
+        self.script_model_path = self.output_dir / "drought_model.pkl"
+        self.script_risk_path = self.output_dir / "mandal_drought_risk.csv"
 
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.artifact_dir.mkdir(parents=True, exist_ok=True)
 
         self._model_bundle: Optional[Dict[str, Any]] = None
+
+    def _load_script05_bundle(self) -> Dict[str, Any]:
+        """Load script-05 model bundle from resources/outputs."""
+        if not self.script_model_path.exists():
+            # Fallback to service-trained artifact if script output does not exist yet.
+            return self._retrain_script05_bundle()
+
+        try:
+            with open(self.script_model_path, "rb") as handle:
+                bundle = pickle.load(handle)
+        except Exception as exc:
+            logger.warning(
+                f"Script-05 model could not be loaded ({exc}); retraining a compatible model now."
+            )
+            return self._retrain_script05_bundle()
+
+        if not {"model", "label_encoder"}.issubset(set(bundle.keys())):
+            raise ValueError(f"Invalid script model bundle at {self.script_model_path}")
+
+        features = bundle.get("features") or FEATURES
+        bundle["features"] = list(features)
+        return bundle
+
+    def _retrain_script05_bundle(self) -> Dict[str, Any]:
+        """
+        Rebuild Script-05 compatible bundle using risk CSV when pickle is incompatible
+        (e.g. sklearn version mismatch like missing '_loss').
+        """
+        df = self._load_script05_risk_df()
+        if "drought_risk_level" not in df.columns:
+            raise ValueError("drought_risk_level is missing in risk data")
+
+        work = df.dropna(subset=["drought_risk_level"]).copy()
+        work = work[work["drought_risk_level"].isin(RISK_ORDER)].copy()
+        if work.empty:
+            raise ValueError("No valid drought risk rows available for model retraining")
+
+        # Keep feature preparation aligned to Script-05.
+        for feature in FEATURES:
+            if feature not in work.columns:
+                work[feature] = 0.0
+            work[feature] = pd.to_numeric(work[feature], errors="coerce")
+            work[feature] = work[feature].replace([np.inf, -np.inf], np.nan)
+            work[feature] = work[feature].fillna(work[feature].median() if work[feature].notna().any() else 0.0)
+
+        le = LabelEncoder()
+        le.fit(RISK_ORDER)
+        y = le.transform(work["drought_risk_level"])
+        X = work[FEATURES].values
+
+        model = GradientBoostingClassifier(
+            n_estimators=150,
+            max_depth=4,
+            learning_rate=0.1,
+            subsample=0.8,
+            random_state=42,
+        )
+        model.fit(X, y)
+
+        bundle = {
+            "model": model,
+            "label_encoder": le,
+            "features": FEATURES,
+            "trained_at": datetime.utcnow().isoformat(),
+        }
+
+        try:
+            with open(self.script_model_path, "wb") as handle:
+                pickle.dump(bundle, handle)
+            logger.info(f"Rebuilt Script-05 model saved: {self.script_model_path}")
+        except Exception as exc:
+            logger.warning(f"Could not persist rebuilt Script-05 model: {exc}")
+
+        return bundle
+
+    def _load_script05_risk_df(self) -> pd.DataFrame:
+        """Load Script-05 risk input data from resources/outputs."""
+        if self.script_risk_path.exists():
+            df = pd.read_csv(self.script_risk_path)
+        else:
+            # Fallback to service cache if script output is absent.
+            df = self._load_monthly_df()
+
+        for col in [DISTRICT_COL, MANDAL_COL]:
+            if col not in df.columns:
+                raise ValueError(f"Required column missing in risk data: {col}")
+            df[col] = df[col].astype(str).str.strip().str.title()
+
+        for col in ["Year", "Month"]:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors="coerce")
+
+        df = df.sort_values([DISTRICT_COL, MANDAL_COL, "Year", "Month"], na_position="last").reset_index(drop=True)
+        return df
 
     def _initialize_bedrock_client(self):
         client_kwargs = {"region_name": settings.AWS_REGION}
@@ -501,6 +597,161 @@ class RainfallService:
         # Refresh uses saved model artifacts (no retraining), and recomputes forecast.
         self._model_bundle = None
         return self.forecast_for_mandal(district=district, mandal=mandal, months_ahead=months_ahead)
+
+    def district_yearly_drought_analysis(self, district: str, months_ahead: int = 12) -> Dict[str, Any]:
+        """
+        Predict drought possibility for each mandal in the district for the next year
+        using script-05 artifacts in resources/outputs.
+        """
+        district_name = (district or "").strip().title()
+        if not district_name:
+            raise ValueError("District is required")
+
+        horizon = max(1, min(12, int(months_ahead)))
+        bundle = self._load_script05_bundle()
+        model = bundle["model"]
+        le: LabelEncoder = bundle["label_encoder"]
+        feature_names = bundle.get("features") or FEATURES
+
+        df = self._load_script05_risk_df()
+        scoped = df[df[DISTRICT_COL].str.lower() == district_name.lower()].copy()
+        if scoped.empty:
+            raise ValueError(f"No drought risk data found for district: {district_name}")
+
+        normals = (
+            scoped.groupby([DISTRICT_COL, MANDAL_COL, "Month"])["normal_rain_mm"]
+            .mean()
+            .fillna(0)
+            .to_dict()
+            if "normal_rain_mm" in scoped.columns
+            else {}
+        )
+
+        results: List[Dict[str, Any]] = []
+        for mandal, group in scoped.groupby(MANDAL_COL):
+            group = group.sort_values(["Year", "Month"]).reset_index(drop=True)
+            current = group.iloc[-1].to_dict()
+
+            monthly: List[Dict[str, Any]] = []
+            drought_probs: List[float] = []
+            predicted_levels: List[str] = []
+
+            for _ in range(horizon):
+                cur_month = int(current.get("Month", 1))
+                cur_year = int(current.get("Year", datetime.utcnow().year))
+                next_month = (cur_month % 12) + 1
+                next_year = cur_year + (1 if cur_month == 12 else 0)
+
+                normal_rain = float(
+                    normals.get((district_name, mandal, next_month), current.get("normal_rain_mm", current.get("total_rain_mm", 0.0)))
+                )
+                prev_rain = float(current.get("total_rain_mm", 0.0))
+                prev_risk_score = float(current.get("drought_risk_score", 0.0))
+
+                feature_row = {
+                    "total_rain_mm": prev_rain,
+                    "rain_days": float(current.get("rain_days", 0.0)),
+                    "max_daily_rain": float(current.get("max_daily_rain", 0.0)),
+                    "avg_min_humidity": float(current.get("avg_min_humidity", 0.0)),
+                    "avg_max_humidity": float(current.get("avg_max_humidity", 0.0)),
+                    "max_dry_streak": float(current.get("max_dry_streak", 0.0)),
+                    "normal_rain_mm": normal_rain,
+                    "rain_deviation_pct": float(current.get("rain_deviation_pct", 0.0)),
+                    "Month": float(next_month),
+                    "prev_month_rain": prev_rain,
+                    "prev_month_risk_score": prev_risk_score,
+                }
+
+                X_next = np.array([[float(feature_row.get(f, 0.0)) for f in feature_names]])
+                pred_encoded = int(model.predict(X_next)[0])
+                proba = model.predict_proba(X_next)[0]
+                classes = list(le.classes_)
+                risk_level = str(le.inverse_transform([pred_encoded])[0])
+
+                proba_map = {str(classes[idx]): float(proba[idx]) for idx in range(len(classes))}
+                # Weighted drought probability avoids extreme 100% yearly saturation.
+                # NORMAL contributes 0, MILD contributes partially, MODERATE/SEVERE contribute strongly.
+                drought_prob = float(
+                    (0.35 * proba_map.get("MILD", 0.0))
+                    + (0.7 * proba_map.get("MODERATE", 0.0))
+                    + (1.0 * proba_map.get("SEVERE", 0.0))
+                )
+                severe_prob = float(proba_map.get("SEVERE", 0.0))
+
+                drought_probs.append(drought_prob)
+                predicted_levels.append(risk_level)
+
+                monthly.append(
+                    {
+                        "year": next_year,
+                        "month": next_month,
+                        "month_label": f"{next_year}-{next_month:02d}",
+                        "predicted_risk_level": risk_level,
+                        "drought_probability_pct": round(drought_prob * 100, 2),
+                        "severe_probability_pct": round(severe_prob * 100, 2),
+                    }
+                )
+
+                predicted_rain = round(normal_rain * RAIN_MULTIPLIER_MAP.get(risk_level, 1.0), 2)
+                current["Year"] = next_year
+                current["Month"] = next_month
+                current["total_rain_mm"] = predicted_rain
+                current["normal_rain_mm"] = normal_rain
+                current["drought_risk_level"] = risk_level
+                current["drought_risk_score"] = RISK_SCORE_MAP.get(risk_level, 40.0)
+                current["rain_deviation_pct"] = 0.0 if normal_rain == 0 else round(((predicted_rain - normal_rain) / normal_rain) * 100, 1)
+                current["max_daily_rain"] = max(predicted_rain * 0.35, 0.0)
+                current["rain_days"] = max(1.0, min(31.0, round(predicted_rain / 8.0, 1)))
+                current["max_dry_streak"] = max(0.0, 30.0 - current["rain_days"])
+
+            annual_possibility = round(float(np.mean(drought_probs)) * 100, 2) if drought_probs else 0.0
+            avg_monthly = round(float(np.mean(drought_probs)) * 100, 2) if drought_probs else 0.0
+            max_monthly = round(float(np.max(drought_probs)) * 100, 2) if drought_probs else 0.0
+            severe_months = int(sum(1 for m in monthly if m["predicted_risk_level"] == "SEVERE"))
+            high_risk_months = int(sum(1 for m in monthly if m["drought_probability_pct"] >= 60))
+            predominant = pd.Series(predicted_levels).mode().iloc[0] if predicted_levels else "UNKNOWN"
+
+            risk_band = "Low"
+            if annual_possibility >= 70:
+                risk_band = "Very High"
+            elif annual_possibility >= 50:
+                risk_band = "High"
+            elif annual_possibility >= 30:
+                risk_band = "Moderate"
+
+            results.append(
+                {
+                    "district": district_name,
+                    "mandal": mandal,
+                    "annual_drought_possibility_pct": annual_possibility,
+                    "avg_monthly_drought_probability_pct": avg_monthly,
+                    "max_monthly_drought_probability_pct": max_monthly,
+                    "severe_months": severe_months,
+                    "high_risk_months": high_risk_months,
+                    "predominant_risk_level": predominant,
+                    "risk_band": risk_band,
+                    "monthly_forecast": monthly,
+                }
+            )
+
+        results = sorted(results, key=lambda row: row["annual_drought_possibility_pct"], reverse=True)
+        summary = {
+            "total_mandals": len(results),
+            "high_or_very_high_mandals": int(sum(1 for row in results if row["risk_band"] in {"High", "Very High"})),
+            "avg_district_annual_possibility_pct": round(float(np.mean([row["annual_drought_possibility_pct"] for row in results])), 2) if results else 0.0,
+        }
+
+        return {
+            "district": district_name,
+            "months_ahead": horizon,
+            "generated_at": datetime.utcnow().isoformat(),
+            "summary": summary,
+            "mandals": results,
+            "model_info": {
+                "model_path": str(self.script_model_path if self.script_model_path.exists() else self.model_path),
+                "features": feature_names,
+            },
+        }
 
     def answer_dashboard_question(
         self,

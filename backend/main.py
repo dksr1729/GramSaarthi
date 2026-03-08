@@ -724,6 +724,34 @@ async def dashboard_chat(
         )
 
 
+@app.get("/api/analysis/drought-yearly")
+async def get_drought_yearly_analysis(
+    months_ahead: int = 12,
+    current_user: dict = Depends(get_current_user),
+):
+    """District-wide drought possibility analysis for the next one year."""
+    try:
+        district = (current_user.get("district") or "").strip()
+        if not district:
+            raise HTTPException(status_code=400, detail="District is required for analysis")
+
+        result = rainfall_service.district_yearly_drought_analysis(
+            district=district,
+            months_ahead=months_ahead,
+        )
+        return result
+    except HTTPException:
+        raise
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error generating drought yearly analysis: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to generate drought analysis"
+        )
+
+
 @app.get("/api/recommend")
 async def get_recommendations(
     top_k: int = 12,
