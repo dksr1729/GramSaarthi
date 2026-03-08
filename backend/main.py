@@ -10,6 +10,8 @@ from services.auth_service import auth_service
 from services.location_service import location_service
 from services.chat_service import chat_service
 from services.report_service import report_service
+from services.rainfall_service import rainfall_service
+from services.s3_scheme_service import s3_scheme_service
 from auth import get_current_user, require_persona
 import logging
 from typing import List
@@ -52,6 +54,33 @@ def _extract_pdf_text(content: bytes) -> str:
     reader = PdfReader(BytesIO(content))
     pages = [page.extract_text() or "" for page in reader.pages]
     return "\n".join(pages).strip()
+
+
+def _get_dashboard_mandals(state: str, district: str) -> List[str]:
+    data_mandals = rainfall_service.get_available_mandals(district)
+    location_mandals = location_service.get_mandals(state, district)
+    if not location_mandals:
+        return data_mandals
+
+    location_set = {m.strip().lower() for m in location_mandals}
+    intersected = [m for m in data_mandals if m.strip().lower() in location_set]
+    return intersected if intersected else data_mandals
+
+
+def _resolve_dashboard_mandal(current_user: dict, requested_mandal: str = "") -> tuple[str, List[str], bool]:
+    district = current_user.get("district", "")
+    state = current_user.get("state", "telangana")
+    persona = current_user.get("persona", "")
+    user_mandal = current_user.get("mandal", "")
+    available_mandals = _get_dashboard_mandals(state, district)
+    is_admin = persona == PersonaEnum.DISTRICT_ADMIN.value
+
+    if is_admin:
+        selected_mandal = requested_mandal.strip() or user_mandal.strip() or (available_mandals[0] if available_mandals else "")
+    else:
+        selected_mandal = user_mandal.strip()
+
+    return selected_mandal, available_mandals, is_admin
 
 # Create FastAPI app
 app = FastAPI(
@@ -437,15 +466,61 @@ async def download_report(
 
 # Dashboard endpoints
 @app.get("/api/dashboard/rainfall")
-async def get_rainfall_data(current_user: dict = Depends(get_current_user)):
-    """Get rainfall data for user's location"""
+async def get_rainfall_data(
+    mandal: str = "",
+    months_ahead: int = 4,
+    current_user: dict = Depends(get_current_user),
+):
+    """Get rainfall history + forecast for dashboard."""
     try:
-        # TODO: Implement rainfall data retrieval
+        district = current_user.get("district", "")
+        selected_mandal, available_mandals, is_admin = _resolve_dashboard_mandal(current_user, mandal)
+
+        if not selected_mandal:
+            return {
+                "location": {
+                    "district": district,
+                    "mandal": "",
+                    "scope": "mandal",
+                },
+                "data": [],
+                "history": [],
+                "forecast": [],
+                "available_mandals": available_mandals,
+                "can_select_mandal": is_admin,
+                "suggested_crops": "No rainfall records available for this district.",
+                "model_info": {},
+                "last_updated": datetime.utcnow().isoformat(),
+            }
+
+        result = rainfall_service.forecast_for_mandal(
+            district=district,
+            mandal=selected_mandal,
+            months_ahead=months_ahead,
+        )
+
         return {
-            "location": f"{current_user.get('district', '')} - {current_user.get('mandal', '')}",
-            "data": [],
-            "last_updated": "2024-01-01T00:00:00Z"
+            "location": {
+                "state": current_user.get("state", ""),
+                "district": district,
+                "mandal": result.selected_mandal,
+                "village": current_user.get("village", ""),
+                "scope": "mandal",
+            },
+            "data": result.chart_data,
+            "history": result.history,
+            "forecast": result.forecast,
+            "available_mandals": result.available_mandals,
+            "can_select_mandal": is_admin,
+            "suggested_crops": result.suggested_crops,
+            "model_info": result.model_info,
+            "last_updated": datetime.utcnow().isoformat(),
         }
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
     except Exception as e:
         logger.error(f"Error getting rainfall data: {e}")
         raise HTTPException(
@@ -475,7 +550,9 @@ async def get_district_data(current_user: dict = Depends(get_current_user)):
             "district": district,
             "total_mandals": len(mandals),
             "total_villages": total_villages,
-            "statistics": {}
+            "statistics": {
+                "available_mandals": _get_dashboard_mandals(state, district)
+            }
         }
     except Exception as e:
         logger.error(f"Error getting district data: {e}")
@@ -485,18 +562,241 @@ async def get_district_data(current_user: dict = Depends(get_current_user)):
         )
 
 
+@app.post("/api/dashboard/refresh")
+async def refresh_dashboard_forecast(
+    payload: dict,
+    current_user: dict = Depends(get_current_user),
+):
+    """Refresh forecast by running saved rainfall model."""
+    try:
+        district = current_user.get("district", "")
+        requested_mandal = (payload.get("mandal") or "").strip()
+        months_ahead = int(payload.get("months_ahead") or 4)
+        selected_mandal, _, is_admin = _resolve_dashboard_mandal(current_user, requested_mandal)
+
+        if not selected_mandal:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No mandal available to refresh"
+            )
+
+        result = rainfall_service.refresh_forecast(
+            district=district,
+            mandal=selected_mandal,
+            months_ahead=months_ahead,
+        )
+
+        return {
+            "message": "Forecast refreshed using saved model",
+            "location": {
+                "district": district,
+                "mandal": result.selected_mandal,
+                "scope": "mandal",
+            },
+            "data": result.chart_data,
+            "history": result.history,
+            "forecast": result.forecast,
+            "available_mandals": result.available_mandals,
+            "can_select_mandal": is_admin,
+            "suggested_crops": result.suggested_crops,
+            "model_info": result.model_info,
+            "last_updated": datetime.utcnow().isoformat(),
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error refreshing dashboard forecast: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to refresh forecast"
+        )
+
+
+@app.post("/api/dashboard/suggested-crops")
+async def generate_dashboard_suggested_crops(
+    payload: dict,
+    current_user: dict = Depends(get_current_user),
+):
+    """Generate suggested crops text explicitly from forecasted rainfall."""
+    try:
+        district = current_user.get("district", "")
+        requested_mandal = (payload.get("mandal") or "").strip()
+        months_ahead = int(payload.get("months_ahead") or 4)
+        selected_mandal, available_mandals, is_admin = _resolve_dashboard_mandal(current_user, requested_mandal)
+
+        if not selected_mandal:
+            raise HTTPException(status_code=400, detail="No mandal available for crop suggestion")
+
+        result = rainfall_service.forecast_for_mandal(
+            district=district,
+            mandal=selected_mandal,
+            months_ahead=months_ahead,
+        )
+
+        return {
+            "location": {
+                "district": district,
+                "mandal": result.selected_mandal,
+                "scope": "mandal",
+            },
+            "available_mandals": available_mandals,
+            "can_select_mandal": is_admin,
+            "suggested_crops": result.suggested_crops,
+            "generated_at": datetime.utcnow().isoformat(),
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating suggested crops: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to generate suggested crops"
+        )
+
+
+@app.post("/api/dashboard/chat")
+async def dashboard_chat(
+    payload: dict,
+    current_user: dict = Depends(get_current_user),
+):
+    """Answer dashboard rainfall/crop questions using location + forecast context."""
+    try:
+        question = (payload.get("question") or "").strip()
+        requested_mandal = (payload.get("mandal") or "").strip()
+        months_ahead = int(payload.get("months_ahead") or 4)
+        selected_mandal, _, _ = _resolve_dashboard_mandal(current_user, requested_mandal)
+
+        if not selected_mandal:
+            raise HTTPException(status_code=400, detail="No mandal available for dashboard chat")
+
+        district = current_user.get("district", "")
+        state = current_user.get("state", "")
+        village = current_user.get("village", "")
+
+        result = rainfall_service.forecast_for_mandal(
+            district=district,
+            mandal=selected_mandal,
+            months_ahead=months_ahead,
+        )
+
+        answer = rainfall_service.answer_dashboard_question(
+            question=question,
+            state=state,
+            district=district,
+            mandal=selected_mandal,
+            village=village,
+            history=result.history,
+            forecast=result.forecast,
+        )
+
+        return {
+            "question": question,
+            "answer": answer,
+            "location": {
+                "state": state,
+                "district": district,
+                "mandal": selected_mandal,
+                "village": village,
+            },
+            "generated_at": datetime.utcnow().isoformat(),
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in dashboard chat: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to answer dashboard question"
+        )
+
+
 # Schemes endpoints
 @app.get("/api/schemes")
-async def get_schemes(current_user: dict = Depends(get_current_user)):
-    """Get available schemes"""
+async def get_schemes(
+    sync_from_local: bool = True,
+    current_user: dict = Depends(get_current_user),
+):
+    """Get scheme PDFs from S3 (with optional local->S3 sync)."""
     try:
-        # TODO: Implement scheme retrieval from RAG service
-        return {"schemes": []}
+        sync_result = {"local_files": 0, "uploaded": 0}
+        if sync_from_local:
+            sync_result = s3_scheme_service.sync_local_pdfs()
+
+        schemes = s3_scheme_service.list_scheme_pdfs()
+        return {
+            "schemes": schemes,
+            "sync": sync_result,
+            "bucket": settings.S3_SCHEMES_BUCKET,
+            "prefix": settings.S3_SCHEMES_PREFIX,
+        }
     except Exception as e:
         logger.error(f"Error getting schemes: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to get schemes"
+        )
+
+
+@app.post("/api/schemes/sync")
+async def sync_schemes_from_local(
+    current_user: dict = Depends(require_persona([PersonaEnum.DISTRICT_ADMIN]))
+):
+    """Manually sync local resources/schemes PDFs to S3."""
+    try:
+        sync_result = s3_scheme_service.sync_local_pdfs()
+        return {
+            "status": "completed",
+            "sync": sync_result,
+            "bucket": settings.S3_SCHEMES_BUCKET,
+            "prefix": settings.S3_SCHEMES_PREFIX,
+        }
+    except Exception as e:
+        logger.error(f"Error syncing schemes to S3: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to sync local scheme PDFs to S3"
+        )
+
+
+@app.post("/api/schemes/upload")
+async def upload_scheme_file(
+    file: UploadFile = File(...),
+    title: str = Form(""),
+    current_user: dict = Depends(require_persona([PersonaEnum.DISTRICT_ADMIN]))
+):
+    """Upload any scheme-supporting file to S3 for schemes page listing."""
+    try:
+        if not file.filename:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="File name is missing"
+            )
+
+        content = await file.read()
+        if not content:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Uploaded file is empty"
+            )
+
+        uploaded = s3_scheme_service.upload_scheme_file(
+            file_bytes=content,
+            original_filename=file.filename,
+            title=title,
+        )
+
+        return {
+            "status": "completed",
+            "message": "File uploaded to schemes S3 bucket",
+            "file": uploaded,
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error uploading scheme file to S3: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to upload file to S3"
         )
 
 

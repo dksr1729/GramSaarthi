@@ -1,0 +1,57 @@
+
+GramSaarthi — ML Drought Prediction Model Report
+==================================================
+Model        : Gradient Boosting Classifier
+Features     : total_rain_mm, rain_days, max_daily_rain, avg_min_humidity, avg_max_humidity, max_dry_streak, normal_rain_mm, rain_deviation_pct, Month, prev_month_rain, prev_month_risk_score
+Target       : drought_risk_level (NORMAL / MILD / MODERATE / SEVERE)
+
+CROSS-VALIDATION (5-fold)
+--------------------------
+Mean Accuracy : 0.9875
+Std Dev       : 0.0029
+All Folds     : [np.float64(0.9868), np.float64(0.9874), np.float64(0.9883), np.float64(0.9921), np.float64(0.983)]
+
+CLASSIFICATION REPORT (held-out 20% test set)
+----------------------------------------------
+              precision    recall  f1-score   support
+
+        MILD       0.98      0.99      0.98      1349
+    MODERATE       0.99      0.96      0.97       494
+      NORMAL       1.00      0.99      1.00      2136
+      SEVERE       0.99      1.00      0.99       556
+
+    accuracy                           0.99      4535
+   macro avg       0.99      0.98      0.99      4535
+weighted avg       0.99      0.99      0.99      4535
+
+
+CONFUSION MATRIX
+-----------------
+Classes: [np.str_('MILD'), np.str_('MODERATE'), np.str_('NORMAL'), np.str_('SEVERE')]
+[[1334    5   10    0]
+ [  15  473    0    6]
+ [  11    0 2125    0]
+ [   0    1    0  555]]
+
+TOP FEATURES BY IMPORTANCE
+---------------------------
+              feature  importance_pct
+   rain_deviation_pct           48.31
+       max_dry_streak           20.46
+        total_rain_mm           13.12
+       max_daily_rain            8.25
+                Month            2.56
+            rain_days            2.41
+     avg_max_humidity            2.31
+       normal_rain_mm            2.21
+     avg_min_humidity            0.15
+prev_month_risk_score            0.13
+      prev_month_rain            0.09
+
+NEXT-MONTH FORECAST SUMMARY
+-----------------------------
+predicted_risk_level
+NORMAL      539
+MILD         46
+SEVERE       33
+MODERATE      3

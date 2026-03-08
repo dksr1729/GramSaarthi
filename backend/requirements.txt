@@ -25,6 +25,7 @@ langchain-community==0.0.19
 # Data Processing
 pandas==2.2.0
 numpy==1.26.3
+scikit-learn==1.4.2
 prophet==1.1.5
 pypdf==5.4.0
 reportlab==4.4.10

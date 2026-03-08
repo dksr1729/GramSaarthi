@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import Reports from './pages/Reports'
 import Schemes from './pages/Schemes'
 import Ingest from './pages/Ingest'
+import Profile from './pages/Profile'
 import Layout from './components/Layout'
 
 function ProtectedRoute({ children }) {
@@ -32,6 +33,7 @@ function App() {
         <Route path="reports" element={<Reports />} />
         <Route path="schemes" element={<Schemes />} />
         <Route path="ingest" element={<Ingest />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>
   )

@@ -1,0 +1,622 @@
+District,Mandal,Year,Month,total_rain_mm,current_risk_level,predicted_risk_level,confidence_pct,prob_normal,prob_mild,prob_moderate,prob_severe
+Sangareddy,Naykal,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Kagaznagar,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Bhadradri Kothagudem,Aswapuram,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Nalgonda,Kethepalle,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Kouthala,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Kerameri,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Bhadradri Kothagudem,Cherla,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Nalgonda,Miryalaguda,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Hyderabad,Tirumalgiri,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Mancherial,Jannaram,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Nalgonda,Nalgonda,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Hyderabad,Shaikpet,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Sangareddy,Jharasangam,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Jayashankar,Malharrao,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Asifabad,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Bejjur,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Rangareddy,Yacharam,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Penchikalpet,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Rangareddy,Moinabad,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Yadadri Bhuvanagiri,Alair,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Wankdi,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Medak,Narsingi,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Sangareddy,Sirgapoor,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Adilabad,Bela,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Hanumakonda,Nadikuda,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Nalgonda,33,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Rangareddy,Balapur,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Chintalamanepally,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Hanumakonda,Kamalapur,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Medak,Regode,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Kumuram Bheem,Sirpur_T,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Yadadri Bhuvanagiri,Bhongiri,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Karimnagar,Chigurumamidi,2026,2,0.0,SEVERE,SEVERE,100.0,0.0,0.0,0.0,100.0
+Sangareddy,Kangti,2026,2,0.4,MODERATE,MODERATE,89.4,0.1,0.1,89.4,10.4
+Peddapalli,Dharmaram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Yeda_Palle,2026,2,0.2,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Peddapalli,Elgaid,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Varni,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Yergatla,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nizamabad,Vailpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Peddapalli,Antargoan,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Nizamabad,Rudrur,2026,2,1.2,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Nizamabad,Sirkonda,2026,2,0.5,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Peddapalli,Kamanpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Jakranpalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Kammarpalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Kotgiri,2026,2,1.4,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Nizamabad,Makloor,2026,2,2.4,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Nizamabad,Mendora,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nizamabad,Mortad,2026,2,0.3,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Nizamabad,Mosra,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Nizamabad,Mugpal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Mupkal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Nandipet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Navipet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Nizamabad_North,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nizamabad,Nizamabad_Rural,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Nizamabad_South,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Ranjal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Peddapalli,Julapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,19,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Peddapalli,Manthani,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rajanna Sircilla,Rudrangi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Hayathnagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Gandipet,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Rangareddy,Farooqnagar,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rangareddy,Chowdergudem,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Chevella,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Amangal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Abdullapurmet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rajanna Sircilla,Yellareddypeta,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rajanna Sircilla,Vemulawada_Rural,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rajanna Sircilla,Vemulawada,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rajanna Sircilla,Veernapalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rajanna Sircilla,Thangallapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rajanna Sircilla,Sirsilla,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rajanna Sircilla,Mustabad,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Peddapalli,Mutharam_Manthani,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rajanna Sircilla,Konaraopeta,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rajanna Sircilla,Gambhiraopeta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Rajanna Sircilla,Ellanthakunta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rajanna Sircilla,Chandurthi,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rajanna Sircilla,Boinpalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Peddapalli,Sultanabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Peddapalli,Srirampur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Peddapalli,Ramagundam,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Dichpalle,2026,2,3.0,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Peddapalli,Ramagiri,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Peddapalli,Peddapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Peddapalli,Palakurthy,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Peddapalli,Odela,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nizamabad,Indalwai,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,31,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Dharpalle,2026,2,2.2,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Nalgonda,Pedda_Adiserlapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Marriguda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Munugode,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Nakrekal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Nampalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Narketpalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Neredugommu,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Nidamanur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nalgonda,Peddavura,2026,2,0.8,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Nizamabad,Chandur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Saligouraram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Thipparthi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Thripuraram,2026,2,0.3,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Nalgonda,Tirumalagiri_Sagar,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nalgonda,Vemulapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,14,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,15,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Madugulapally,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nalgonda,Kondamallapally,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Nalgonda,Kattangoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Nalgonda,Kangal,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nagarkurnool,Uppunuthala,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Urkonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Vangoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Veldanda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,32,2026,2,0.0,NORMAL,NORMAL,99.7,99.7,0.2,0.0,0.0
+Nalgonda,Adavi Devula Palli,2026,2,0.4,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Nalgonda,Anumula_Haliya,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nalgonda,Chandampet,2026,2,0.3,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Nalgonda,Chandur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Chinthapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Chityala,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Damaracherla,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nalgonda,Devarakonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Nalgonda,Gundlapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nalgonda,Gurrampode,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Narayanpet,Damaragidda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Dhanwada,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Kosgi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Mamda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Narsapur_G,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Nirmal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Nirmal_Rural,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Pembi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Sarangapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Soan,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Tanur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,30,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Rangareddy,Kadthal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,32,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nizamabad,33,2026,2,3.3,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Nizamabad,Armur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nizamabad,Balkonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nizamabad,Bheemgal,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nizamabad,Bodhan,2026,2,1.2,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Nirmal,Mudhole,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Lokeswaram,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Narayanpet,Krishna,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Laxmanchanda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Maddur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Maganoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Makthal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Marikal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Narayanpet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Narva,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Narayanpet,Utkoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Basar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Bhainsa,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nirmal,Dastuarabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Dilawarpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Kaddampeddur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Khanpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Kubeer,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nirmal,Kuntala,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Ibrahimpatnam,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Nandigam,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rangareddy,Kandukur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Doulatabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Kotepally,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Kulkacharla,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Marpalle,2026,2,0.4,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Vikarabad,Mominpet,2026,2,3.2,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Vikarabad,Nawabpet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Pargi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Peddemul,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Pudur,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Vikarabad,Tandur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Vikarabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Yelal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,15,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Amarchinta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Atmakur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Wanaparthy,Chinnambavi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Kodangal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Doma,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Gopalpeta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Dharur,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Suryapet,Munagala,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Suryapet,Nadigudem,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Suryapet,Nagaram,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Suryapet,Neredcherla,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Suryapet,Noothankal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Palakeedu,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Penpahad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Suryapet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Thirumalagiri,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Thungathurthi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,20,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Bantwaram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Vikarabad,Basheerabad,2026,2,3.0,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Vikarabad,Bomraspeta,2026,2,4.5,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Vikarabad,Chowdapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Ghanpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Kothakota,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Mellachervu,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Warangal,Sangem,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Warangal,Wardhannapet,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Yadadri Bhuvanagiri,Addagudur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Atmakur_M,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Yadadri Bhuvanagiri,Bibinagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Bommalaramaram,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Choutuppal,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Yadadri Bhuvanagiri,Gundala,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Mootakondur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Mothkur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Yadadri Bhuvanagiri,Narayanapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Pochampalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Yadadri Bhuvanagiri,Rajapet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Ramannapeta,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Yadadri Bhuvanagiri,Turkapalle_M,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Valigonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Warangal,Warangal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Warangal,Raiparthy,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Madanapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Warangal,Parvathagiri,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Wanaparthy,Pangal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Pebbair,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Peddamandadi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Revelly,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Srirangapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Veepangandla,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Wanaparthy,Wanaparthy,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Warangal,Chennaraopeta,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Warangal,Duggondi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Warangal,Geesugonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Warangal,Khanapur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Warangal,Khilla_Warangal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Warangal,Nallabelly,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Warangal,Narsampet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Warangal,Nekkonda,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Suryapet,Mothey,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Mattampalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Keshampeta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Gummadidala,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Jinnaram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Kalher,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Kandi,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Sangareddy,Kohir,2026,2,0.4,MODERATE,MODERATE,99.9,0.0,0.1,99.9,0.0
+Sangareddy,Kondapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Manoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Mogdampalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Munipalli,2026,2,1.2,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Sangareddy,Nagalgidda,2026,2,0.2,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Sangareddy,Narayankhed,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Patancheruvu,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Pulkal,2026,2,0.9,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Sangareddy,Raikode,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Ramachandrapuram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Sadasivpet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Hathanoora,2026,2,2.0,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Sangareddy,Chowtakur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Watpalle,2026,2,0.3,MODERATE,MODERATE,99.8,0.0,0.2,99.8,0.0
+Sangareddy,Andhole,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rangareddy,Kondurg,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Kothur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rangareddy,Madgul,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Maheshwaram,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Rangareddy,Manchal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Telkapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Rangareddy,Rajendranagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Saroornagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Serilingampally,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Shabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Shamshabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Shankarpalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Rangareddy,Talakondapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,28,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Sangareddy,Ameenapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Sangareddy,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Sangareddy,Zahirabad,2026,2,6.3,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Suryapet,Maddirala,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Mulug,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Narayanraopet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Rayapole,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Siddipet_Rural,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Siddipet_Urban,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Thoguta,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Wargal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Ananthagiri,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Suryapet,Atmakur_S,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Chilkur,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Suryapet,Chinthala Palem,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Suryapet,Chivvemla,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Garidepalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Suryapet,Huzur Nagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Suryapet,Jajireddigudem,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Suryapet,Kodad,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Siddipet,Nanganur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Mirdoddi,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,25,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Markook,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,26,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Anthakkapeta,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Bejjanki,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Cheriyal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Chinnakodur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Dhoolmitta,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Doultabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Dubbak,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Gajwel,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Husnabad,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Jagadevpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Koheda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Komaravelly,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Siddipet,Kondapak,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Siddipet,Maddur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nagarkurnool,Thimmajipeta,2026,2,0.0,NORMAL,NORMAL,99.7,99.7,0.2,0.0,0.0
+Nagarkurnool,Bijinapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Nagarkurnool,Tadoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jangaon,Narmetta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jangaon,Raghunathpalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jangaon,Tharigoppula,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jangaon,Zaffergadh,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jayashankar,12,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jayashankar,Bhupalpalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jayashankar,Chityal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Jayashankar,Ghanapur_Mulug,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jayashankar,Kataram,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jayashankar,Mahadevpur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jayashankar,Mogullapalle,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Jayashankar,Mutharam_Mahadevpur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jayashankar,Palmela,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jayashankar,Regonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jayashankar,Tekumatla,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Jogulamba Gadwal,13,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jangaon,Palakurthi,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jangaon,Lingalaghanpur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jagtial,Jagtial,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jangaon,Kodakandla,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Kodimial,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Koratla,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jagtial,Malial,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Mallapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Medipalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jagtial,Metpalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jagtial,Pegadapalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jagtial,Raikal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Sarangapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Velgatoor,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jangaon,Bachannapeta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jangaon,Chilpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jangaon,Devaruppala,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jangaon,Ganpur_Stn,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jangaon,Jangaon,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jogulamba Gadwal,Aiza,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Alampur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Dharur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Gadwal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Jukkal,2026,2,1.7,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Kamareddy,Kamareddy,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Lingampet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Machareddy,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Madnur,2026,2,0.2,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Kamareddy,Naga_Reddipet,2026,2,1.0,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Kamareddy,Nasurullabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Nizamsagar,2026,2,0.6,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Kamareddy,Pedda Kodapgal,2026,2,1.6,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Kamareddy,Pitlam,2026,2,11.3,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Kamareddy,Rajampet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Ramareddy,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Sadasivanagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Tadwai,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Yellareddy,2026,2,2.5,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Kamareddy,Gandhari,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Domakonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Birkoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Undavelli,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Ghattu,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Itikyal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Kaloor_Timmanadoddi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Maldakal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Manopad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Rajoli,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jogulamba Gadwal,Waddepalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Bichkunda,2026,2,0.5,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Kamareddy,23,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,24,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Kamareddy,25,2026,2,1.5,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Kamareddy,Banswada,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Bhiknur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kamareddy,Bibipet,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jagtial,Kathlapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Jagityal_Rural,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Ellandakunta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Utnur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Annapureddipalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Aswaraopeta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Bhadrachalam,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Burgampadu,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Bhadradri Kothagudem,Chandrugonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Chunchupally,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Dammapeta,2026,2,0.3,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Bhadradri Kothagudem,Dummugudem,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Bhadradri Kothagudem,Gundala,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Julurpad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Karakagudem,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Bhadradri Kothagudem,Kothagudem,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Bhadradri Kothagudem,Laxmidevipalli,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Manuguru,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Mulakalapalle,2026,2,0.3,MILD,MILD,99.9,0.1,99.9,0.0,0.0
+Bhadradri Kothagudem,Allapalli,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Tamsi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Ibrahimpatnam,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Talamadugu,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,21,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Adilabad Rural,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Adilabad Urban,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Bazarhathnoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Bheempoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Boath,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Gadiguda,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Adilabad,Gudihathnur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Ichoda,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Adilabad,Inderavelly,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Jainad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Mavala,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Narnoor,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Adilabad,Neradigonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Adilabad,Sirikonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Palawancha,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Pinapaka,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Bhadradri Kothagudem,Sujathanagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Tekulapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hyderabad,Charminar,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Hyderabad,Golkonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hyderabad,Himayatnagar,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Hyderabad,Khairatabad,2026,2,0.7,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Hyderabad,Maredpally,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hyderabad,Musheerabad,2026,2,0.1,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Hyderabad,Nampally,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Hyderabad,Saidabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hyderabad,Secunderabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,19,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,20,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Beerpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Buggaram,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Jagtial,Dharmapuri,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Jagtial,Gollapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hyderabad,Bandlaguda,2026,2,0.1,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Hyderabad,Bahadurpura,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hyderabad,Asifnagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hanumakonda,Hanumakonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Bhadradri Kothagudem,Yellandu,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hanumakonda,Atmakur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Hanumakonda,Bheemadevarapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hanumakonda,Damera,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Hanumakonda,Dharmasagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hanumakonda,Elkathurthi,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Hanumakonda,Hasanparthy,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Hyderabad,Ameerpet,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Hanumakonda,Inole,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hanumakonda,Khazipet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hanumakonda,Parkal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hanumakonda,Shayampet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hanumakonda,Velair,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Hyderabad,Amberpet,2026,2,0.1,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Karimnagar,Choppadandi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Gangadhara,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Pentlavelli,2026,2,0.3,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Medak,Chilipched,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Kowdipalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Kulcharam,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Medak,Manoharabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Masaipet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Medak,2026,2,0.4,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Medak,Narsapur,2026,2,0.4,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Medak,Nizampet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Papannapet,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Medak,Ramayampet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Shankarampet_A,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Shankarampet_R,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Shivampet,2026,2,0.3,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Medak,Tekmal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Tupran,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Yeldurthy,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Medak,Havelighanpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Medak,Chegunta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Bellampalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medak,Alladurg,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Bhimaram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Chennur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Dandepalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Hajipur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Jaipur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mancherial,Kannepalli,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mancherial,Kasipet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Kotapalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mancherial,Luxettipet,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mancherial,Mancherial,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Mandamarri,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Naspur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Nennal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Tandur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mancherial,Vemanpalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Alwal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Bachpalle,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Medchal-Malkajgiri,Balanagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Dundigal_Gandimaisamma,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mulugu,Venkatapur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mulugu,Venkatapuram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mulugu,Wazeed,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Achampet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Amrabad,2026,2,0.4,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Nagarkurnool,Balmoor,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Adilabad,20,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Charakonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Kalwakurthy,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nagarkurnool,Kodair,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Nagarkurnool,Kollapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Lingal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Nagarkurnool,Nagar_Kurnool,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Nagarkurnool,Padra,2026,2,0.9,MILD,MILD,99.9,0.0,99.9,0.0,0.0
+Nagarkurnool,Peddakothapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mulugu,Tadvai,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mulugu,Mulug,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mulugu,Mangapet,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Medchal-Malkajgiri,Medipally,2026,2,4.5,MILD,MILD,92.2,7.8,92.2,0.0,0.0
+Medchal-Malkajgiri,Ghatkesar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Kapra,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Keesara,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.1,0.0,0.0
+Medchal-Malkajgiri,Kukatpally,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Malkajgiri,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Medchel,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Muduchinthalapally,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mulugu,Kannaigudem,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Quthbullapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Shamirpet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Medchal-Malkajgiri,Uppal,2026,2,0.2,MILD,MILD,100.0,0.0,100.0,0.0,0.0
+Mulugu,21,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mulugu,Eturunagaram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mulugu,Govindaraopet,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Mancherial,Bheemini,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Rajapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Gannervaram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Khammam_Urban,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Kusumanchi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Madhira,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Khammam,Mudigonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Nelakondapalle,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Khammam,Penuballi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Raghunadhapalem,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Sathupalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Khammam,Singareni,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Khammam,Thallada,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Thirumalayapalem,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Khammam,Vemsoor,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Wyra,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.0,0.0,0.0
+Khammam,Yerrupalem,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kumuram Bheem,Dahegaon,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kumuram Bheem,Jainoor,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0
+Khammam,Konijerla,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Khammam,Khammam_Rural,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mahabubnagar,Nawabpet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Kamepalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Huzurabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Jammikunta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Karimnagar,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.1,0.0,0.0
+Karimnagar,Karimnagar_Rural,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Kothapalle,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Karimnagar,Manakondur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Ramadugu,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Shankarapatnam,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Karimnagar,Thimmapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,V_Saidapur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Karimnagar,Veenavanka,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Khammam,Bonakal,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Khammam,Chinthakani,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Khammam,Enkuru,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Khammam,Kalluru,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kumuram Bheem,Lingapur,2026,2,0.0,NORMAL,NORMAL,99.7,99.7,0.2,0.0,0.0
+Kumuram Bheem,Rebbana,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kumuram Bheem,Sirpur_U,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Kumuram Bheem,Tiryani,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mahabubnagar,28,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Addakal,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Balanagar,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Bhoothpur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Chinna_Chintha_Kunta,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Devarkadara,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Gandeed,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Hanwada,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Jadcherla,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Koilkonda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Mahabubnagar_Rural,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Mahabubnagar_Urban,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Midjil,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Mohammamdabad,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubnagar,Musapet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Thorrur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Peddavangara,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mahabubabad,Nellikudur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Ganagavaram,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mahabubabad,17,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mahabubabad,18,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Bayyaram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Chinnagudur,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Danthalapalle,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Dornakal,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mahabubabad,Garla,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Narsimhulapet,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Gudur,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mahabubabad,Kesamudram,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Kothaguda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Kuravi,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Mahabubabad,Mahabubabad,2026,2,0.0,NORMAL,NORMAL,100.0,100.0,0.0,0.0,0.0
+Mahabubabad,Maripeda,2026,2,0.0,NORMAL,NORMAL,99.9,99.9,0.1,0.0,0.0
+Yadadri Bhuvanagiri,Yadagirigutta,2026,2,0.0,NORMAL,NORMAL,99.8,99.8,0.2,0.0,0.0

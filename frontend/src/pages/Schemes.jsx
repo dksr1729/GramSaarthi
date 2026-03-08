@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import api from '../api/axios'
+import { useAuthStore } from '../store/authStore'
 import {
   Box,
   Grid,
-  Paper,
   Typography,
   Card,
   CardContent,
@@ -11,47 +11,74 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Paper,
   TextField,
-  InputAdornment,
+  Alert,
 } from '@mui/material'
 import {
-  Search as SearchIcon,
-  OpenInNew as OpenIcon,
+  Download as DownloadIcon,
+  Description as DescriptionIcon,
+  UploadFile as UploadFileIcon,
 } from '@mui/icons-material'
 
 function Schemes() {
+  const { user } = useAuthStore()
+  const isDistrictAdmin = user?.persona === 'District Admin'
   const [loading, setLoading] = useState(true)
-  const [schemes, setSchemes] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filteredSchemes, setFilteredSchemes] = useState([])
+  const [schemeFiles, setSchemeFiles] = useState([])
+  const [uploadFile, setUploadFile] = useState(null)
+  const [uploadTitle, setUploadTitle] = useState('')
+  const [uploading, setUploading] = useState(false)
+  const [message, setMessage] = useState({ type: '', text: '' })
 
   useEffect(() => {
     fetchSchemes()
   }, [])
 
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      const filtered = schemes.filter(
-        (scheme) =>
-          scheme.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          scheme.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          scheme.category?.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-      setFilteredSchemes(filtered)
-    } else {
-      setFilteredSchemes(schemes)
-    }
-  }, [searchQuery, schemes])
-
   const fetchSchemes = async () => {
     try {
       const response = await api.get('/api/schemes')
-      setSchemes(response.data.schemes || [])
-      setFilteredSchemes(response.data.schemes || [])
+      setSchemeFiles(response.data.schemes || [])
     } catch (err) {
       console.error('Error fetching schemes:', err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const formatSize = (bytes = 0) => {
+    if (!bytes) return '0 KB'
+    const kb = bytes / 1024
+    if (kb < 1024) return `${kb.toFixed(1)} KB`
+    return `${(kb / 1024).toFixed(1)} MB`
+  }
+
+  const handleUpload = async () => {
+    if (!uploadFile) {
+      setMessage({ type: 'error', text: 'Please choose a file to upload.' })
+      return
+    }
+
+    setUploading(true)
+    setMessage({ type: '', text: '' })
+    try {
+      const payload = new FormData()
+      payload.append('file', uploadFile)
+      payload.append('title', uploadTitle)
+      await api.post('/api/schemes/upload', payload, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      setMessage({ type: 'success', text: 'File uploaded successfully.' })
+      setUploadFile(null)
+      setUploadTitle('')
+      await fetchSchemes()
+    } catch (err) {
+      setMessage({
+        type: 'error',
+        text: err.response?.data?.detail || 'Failed to upload file.',
+      })
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -66,88 +93,110 @@ function Schemes() {
   return (
     <Box>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
-        Government Schemes
+        Scheme Documents
       </Typography>
 
-      <Paper sx={{ p: 2, mb: 3 }}>
-        <TextField
-          fullWidth
-          placeholder="Search schemes by name, description, or category..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Paper>
+      {isDistrictAdmin && (
+        <Paper sx={{ p: 2, mb: 3 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+            Upload Document
+          </Typography>
+          {message.text && (
+            <Alert severity={message.type} sx={{ mb: 2 }}>
+              {message.text}
+            </Alert>
+          )}
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={4}>
+              <Button
+                variant="outlined"
+                component="label"
+                startIcon={<UploadFileIcon />}
+                fullWidth
+              >
+                {uploadFile ? uploadFile.name : 'Choose File'}
+                <input
+                  hidden
+                  type="file"
+                  onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                />
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <TextField
+                fullWidth
+                label="Title (optional)"
+                value={uploadTitle}
+                onChange={(e) => setUploadTitle(e.target.value)}
+                placeholder="Display title for card"
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <Button
+                variant="contained"
+                onClick={handleUpload}
+                disabled={!uploadFile || uploading}
+                fullWidth
+              >
+                {uploading ? 'Uploading...' : 'Upload to S3'}
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      )}
 
-      {filteredSchemes.length === 0 ? (
+      {schemeFiles.length === 0 ? (
         <Paper sx={{ p: 4, textAlign: 'center' }}>
           <Typography color="text.secondary">
-            {searchQuery ? 'No schemes found matching your search.' : 'No schemes available.'}
+            No files available in S3.
           </Typography>
         </Paper>
       ) : (
         <Grid container spacing={3}>
-          {filteredSchemes.map((scheme) => (
-            <Grid item xs={12} md={6} key={scheme.scheme_id}>
+          {schemeFiles.map((file) => (
+            <Grid item xs={12} md={6} key={file.s3_key}>
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
                     <Typography variant="h6" sx={{ fontWeight: 600, flexGrow: 1 }}>
-                      {scheme.name}
+                      {file.title || file.file_name}
                     </Typography>
-                    {scheme.category && (
-                      <Chip label={scheme.category} color="primary" size="small" />
-                    )}
+                    <DescriptionIcon color="primary" />
                   </Box>
 
-                  <Typography variant="body2" color="text.secondary" paragraph>
-                    {scheme.description}
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    {file.file_name}
                   </Typography>
 
                   <Box sx={{ mt: 2 }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                      Eligibility:
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {scheme.eligibility}
-                    </Typography>
-                  </Box>
-
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                      Application Process:
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {scheme.application_process}
-                    </Typography>
-                  </Box>
-
-                  {scheme.deadline && (
-                    <Box sx={{ mt: 2 }}>
+                    <Chip
+                      label={`Size: ${formatSize(file.size_bytes)}`}
+                      size="small"
+                      variant="outlined"
+                      sx={{ mr: 1, mb: 1 }}
+                    />
+                    {file.last_modified && (
                       <Chip
-                        label={`Deadline: ${scheme.deadline}`}
-                        color={new Date(scheme.deadline) < new Date() ? 'error' : 'success'}
+                        label={`Updated: ${new Date(file.last_modified).toLocaleDateString()}`}
                         size="small"
+                        variant="outlined"
+                        sx={{ mb: 1 }}
                       />
-                    </Box>
-                  )}
-
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="caption" color="text.secondary">
-                      Source: {scheme.source}
-                    </Typography>
+                    )}
                   </Box>
                 </CardContent>
 
                 <CardActions>
-                  <Button size="small" startIcon={<OpenIcon />}>
-                    Learn More
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={<DownloadIcon />}
+                    href={file.download_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    disabled={!file.download_url}
+                  >
+                    Download
                   </Button>
                 </CardActions>
               </Card>

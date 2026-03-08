@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     # S3 Buckets
     S3_DATA_BUCKET: str = "gramsaarthi-data-dev"
     S3_REPORTS_BUCKET: str = "gramsaarthi-reports-dev"
+    S3_SCHEMES_BUCKET: str = "gramsaarthi-schemes-dev"
+    S3_SCHEMES_PREFIX: str = "schemes"
 
     # Bedrock Settings
     BEDROCK_MODEL_ID: str = "amazon.nova-lite-v1:0"

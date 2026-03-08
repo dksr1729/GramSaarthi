@@ -6,6 +6,7 @@ import {
   Toolbar,
   Typography,
   IconButton,
+  Button,
   Drawer,
   List,
   ListItem,
@@ -13,7 +14,6 @@ import {
   ListItemIcon,
   ListItemText,
   Container,
-  Chip,
 } from '@mui/material'
 import {
   Menu as MenuIcon,
@@ -21,6 +21,7 @@ import {
   Description as ReportIcon,
   LocalOffer as SchemeIcon,
   CloudUpload as IngestIcon,
+  AccountCircle as ProfileIcon,
   Logout as LogoutIcon,
 } from '@mui/icons-material'
 import { useState } from 'react'
@@ -47,6 +48,7 @@ function Layout() {
     const baseItems = [
       { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
       { text: 'Reports', icon: <ReportIcon />, path: '/reports' },
+      { text: 'Profile', icon: <ProfileIcon />, path: '/profile' },
     ]
 
     if (user?.persona === 'District Admin') {
@@ -162,16 +164,19 @@ function Layout() {
             <MenuIcon />
           </IconButton>
           
-          <Box sx={{ flexGrow: 1 }}>
+          <Box sx={{ flexGrow: 1, minWidth: 0 }}>
             <Typography
               variant="h6"
-              noWrap
               component="div"
               sx={{
                 fontWeight: 700,
                 background: 'linear-gradient(90deg, #0f766e 0%, #2aa294 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
+                fontSize: { xs: '1rem', sm: '1.25rem' },
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >
               {user?.village && user?.mandal ? (
@@ -190,6 +195,21 @@ function Layout() {
               {user?.name} • {user?.persona}
             </Typography>
           </Box>
+
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<ProfileIcon />}
+            onClick={() => navigate('/profile')}
+            sx={{
+              mr: 1,
+              display: { xs: 'none', sm: 'inline-flex' },
+              borderColor: '#bfd6cf',
+              color: '#0f766e',
+            }}
+          >
+            Profile
+          </Button>
 
           <IconButton color="inherit" onClick={handleLogout}>
             <LogoutIcon />
@@ -233,14 +253,14 @@ function Layout() {
           position: 'relative',
           zIndex: 1,
           flexGrow: 1,
-          p: 3,
+          p: { xs: 1.5, sm: 2, md: 3 },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           minHeight: '100vh',
           backgroundColor: 'transparent',
         }}
       >
         <Toolbar />
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" disableGutters>
           <Outlet />
         </Container>
       </Box>
