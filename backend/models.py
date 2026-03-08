@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, AliasChoices, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from enum import Enum
@@ -22,8 +22,18 @@ class UserRegister(BaseModel):
 
 
 class UserLogin(BaseModel):
-    gmail: EmailStr
+    gmail: EmailStr = Field(
+        validation_alias=AliasChoices("gmail", "email"),
+        serialization_alias="gmail",
+    )
     password: str
+
+    @field_validator("gmail", mode="before")
+    @classmethod
+    def normalize_gmail(cls, value):
+        if isinstance(value, str):
+            return value.strip().lower()
+        return value
 
 
 class UserResponse(BaseModel):
